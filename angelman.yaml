@@ -29205,12 +29205,10 @@ consent_sections:
   information_link: 10OCT2022_Angelman_Syndrome_Information_Sheet.pdf
   information_text: |-
     <p><b>Parent/Carer/ Guardian Information </br></b></p>
-
     <h2><p><center><b> Global Angelman Syndrome Registry</h2></p></center></b>
     <p><b> Protocol Number: HREC/13/MHS/76</p></b>
-
     <p><b> Project Sponsor: Foundation for Angelman Syndrome Therapeutics Australia</p></b>
-    <p><b>Coordinating Principal Investigator: A/Prof Honey Heussler, Children’s Health Queensland Hospital and Health Services, Brisbane</b> <br>
+    <p><b>Coordinating Principal Investigator: A/Prof Honey Heussler, Children's Health Queensland Hospital and Health Services, Brisbane</b> <br>
     Email: <a href="mailto:h.heussler@health.qld.gov.au"target="_top">h.heussler@health.qld.gov.au</a> <br>
     Phone: + 61(7) 3163 1636 </p>
     <p><b> Site Principal Investigator: Professor Matthew Bellgard, Queensland University of Technology, Brisbane</b><br>
@@ -29218,40 +29216,52 @@ consent_sections:
     Phone: +61(7) 3138 9749</p>
     <p>Registry curator: Megan Tones, Queensland University of Technology, Brisbane<br>
     Email: <a href="mailto:curator@angelmanregistry.info"target="_top">curator@angelmanregistry.info</a> <br>
-
     <h4><p><b>Welcome to the Global Angelman Syndrome Registry. </h4></p></b>
-
     <p>Please watch this video before you decide to take part. You may also wish to show this video to other people involved in caring for your child or adult with AS including relatives, friends or clinicians. </p>
-
     <p>If you have any questions, please contact the registry curator:<br>
     Megan Tones (registry curator), Queensland University of Technology, Brisbane<br>
     Email: <a href="mailto:curator@angelmanregistry.info"target="_top">curator@angelmanregistry.info</a></p>
-
-
-    <video
-        id="test-video"
-        class="video-js"
-        controls
-        preload="auto"
+    <video id="ConsentVideo" class="video-js" controls preload="auto"
         poster="https://d4d7dpr65gp9x.cloudfront.net/angelman/01G6PFFT70CMQR8VS9G6W8N94C/poster/consent_20220629.0000001.jpg"
-        data-setup='{"fluid": true}'
-      >
-        <source src="https://d4d7dpr65gp9x.cloudfront.net/angelman/01G6PFFT70CMQR8VS9G6W8N94C/cmaf/consent_20220629.m3u8" type="application/x-mpegURL" />
-        <source src="https://d4d7dpr65gp9x.cloudfront.net/angelman/01G6PFFT70CMQR8VS9G6W8N94C/hls/consent_20220629.m3u8" type="application/x-mpegURL" />
-        <source src="https://d4d7dpr65gp9x.cloudfront.net/angelman/01G6PFFT70CMQR8VS9G6W8N94C/hls/consent_20220629.m3u8" type="application/x-mpegURL" />
-        <source src="https://d4d7dpr65gp9x.cloudfront.net/angelman/01G6PFFT70CMQR8VS9G6W8N94C/mp4/consent_20220629_avc_720p.mp4" type="video/mp4" />
+        data-setup='{"fluid": true}'>
+        <source src="https://d4d7dpr65gp9x.cloudfront.net/angelman/01G6PFFT70CMQR8VS9G6W8N94C/cmaf/consent_20220629.m3u8"
+            type="application/x-mpegURL" />
+        <source src="https://d4d7dpr65gp9x.cloudfront.net/angelman/01G6PFFT70CMQR8VS9G6W8N94C/hls/consent_20220629.m3u8"
+            type="application/x-mpegURL" />
+        <source src="https://d4d7dpr65gp9x.cloudfront.net/angelman/01G6PFFT70CMQR8VS9G6W8N94C/hls/consent_20220629.m3u8"
+            type="application/x-mpegURL" />
+        <source
+            src="https://d4d7dpr65gp9x.cloudfront.net/angelman/01G6PFFT70CMQR8VS9G6W8N94C/mp4/consent_20220629_avc_720p.mp4"
+            type="video/mp4" />
         <source src="angelman/01G6PFFT70CMQR8VS9G6W8N94C/mp4/consent_20220629_avc_480p.mp4" type="video/mp4" />
         <p class="vjs-no-js">
-          To view this video please enable JavaScript, and consider upgrading to a
-          web browser that
-          <a href="https://videojs.com/html5-video-support/" target="_blank"
-            >supports HTML5 video</a
-          >
+            To view this video please enable JavaScript, and consider upgrading to a
+            web browser that
+            <a href="https://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
         </p>
-      </video>
-
-
-    <a class="btn btn-link btn-sm" style="text-decoration: underline" href="https://youtu.be/82aZCfgsmY0" target=”_blank”>Watch on YouTube</a>
+    </video>
+    <script>
+        const available_text_tracks = new Set(['en', 'pt', 'pl', 'hi', 'es']); // Manage this array manually by checking the available text tracks in aws
+        $(document).ready(function () {
+            const player = videojs('ConsentVideo');
+            const all_available_languages = {{ all_available_languages | safe }};
+            const [current_language_code, current_language_label] = {{ current_language | safe }};
+            player.ready(() => {
+                for (const [language_code, language_label] of all_available_languages) {
+                    if (available_text_tracks.has(language_code)) {
+                        const src = `https://d4d7dpr65gp9x.cloudfront.net/angelman/01G6PFFT70CMQR8VS9G6W8N94C/subtitle/${language_code}.vtt`;
+                        player.addRemoteTextTrack({
+                            src: src,
+                            kind: 'subtitles',
+                            srclang: language_code,
+                            label: language_label,
+                            default: current_language_code == language_code || current_language_label == language_label
+                        });
+                    }
+                }
+            });
+        });
+    </script>
   questions:
   - code: angnewconsent1
     instructions: ''
