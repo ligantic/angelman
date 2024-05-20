@@ -29241,23 +29241,20 @@ consent_sections:
         </p>
     </video>
     <script>
-        const available_text_tracks = new Set(['en', 'pt', 'pl', 'hi', 'es']); // Manage this array manually by checking the available text tracks in aws
+        const DEFAULT_CURRENT_LANGUAGE = 'en';
+        const available_text_tracks = {'en': 'English', 'pt': 'Português', 'pl': 'Język polski', 'hi': 'हिन्दी', 'es': 'Español' }; // Manage this array manually by checking the available text tracks in aws
         $(document).ready(function () {
             const player = videojs('ConsentVideo');
-            const all_available_languages = {{ all_available_languages | safe }};
-            const [current_language_code, current_language_label] = {{ current_language | safe }};
+            const current_language = document.cookie.split('; ').find((cookie)=> cookie.startsWith('django_language'))?.split('=').at(1) ?? DEFAULT_LANGUAGE_CODE;
             player.ready(() => {
-                for (const [language_code, language_label] of all_available_languages) {
-                    if (available_text_tracks.has(language_code)) {
-                        const src = `https://d4d7dpr65gp9x.cloudfront.net/angelman/01G6PFFT70CMQR8VS9G6W8N94C/subtitle/${language_code}.vtt`;
-                        player.addRemoteTextTrack({
-                            src: src,
-                            kind: 'subtitles',
-                            srclang: language_code,
-                            label: language_label,
-                            default: current_language_code == language_code || current_language_label == language_label
-                        });
-                    }
+                for (const language_code in available_text_tracks) {
+                    player.addRemoteTextTrack({
+                        src: `https://d4d7dpr65gp9x.cloudfront.net/angelman/01G6PFFT70CMQR8VS9G6W8N94C/subtitle/${language_code}.vtt`,
+                        kind: 'subtitles',
+                        srclang: language_code,
+                        label: available_text_tracks[language_code],
+                        default: current_language === language_code
+                    });
                 }
             });
         });
