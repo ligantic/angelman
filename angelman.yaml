@@ -29204,60 +29204,67 @@ consent_sections:
   code: AngNewConsentSection
   information_link: 10OCT2022_Angelman_Syndrome_Information_Sheet.pdf
   information_text: |-
-    <p><b>Parent/Carer/ Guardian Information </br></b></p>
-    <h2><p><center><b> Global Angelman Syndrome Registry</h2></p></center></b>
-    <p><b> Protocol Number: HREC/13/MHS/76</p></b>
-    <p><b> Project Sponsor: Foundation for Angelman Syndrome Therapeutics Australia</p></b>
-    <p><b>Coordinating Principal Investigator: A/Prof Honey Heussler, Children's Health Queensland Hospital and Health Services, Brisbane</b> <br>
-    Email: <a href="mailto:h.heussler@health.qld.gov.au"target="_top">h.heussler@health.qld.gov.au</a> <br>
-    Phone: + 61(7) 3163 1636 </p>
-    <p><b> Site Principal Investigator: Professor Matthew Bellgard, Queensland University of Technology, Brisbane</b><br>
-    Email: <a href="mailto:matthew.bellgard@qut.edu.au"target="_top">matthew.bellgard@qut.edu.au</a> <br>
-    Phone: +61(7) 3138 9749</p>
-    <p>Registry curator: Megan Tones, Queensland University of Technology, Brisbane<br>
-    Email: <a href="mailto:curator@angelmanregistry.info"target="_top">curator@angelmanregistry.info</a> <br>
-    <h4><p><b>Welcome to the Global Angelman Syndrome Registry. </h4></p></b>
-    <p>Please watch this video before you decide to take part. You may also wish to show this video to other people involved in caring for your child or adult with AS including relatives, friends or clinicians. </p>
-    <p>If you have any questions, please contact the registry curator:<br>
-    Megan Tones (registry curator), Queensland University of Technology, Brisbane<br>
-    Email: <a href="mailto:curator@angelmanregistry.info"target="_top">curator@angelmanregistry.info</a></p>
+    <p><b>Parent/Carer/ Guardian Information</b></p><br>
+    <h2><p><center><b>Global Angelman Syndrome Registry</b></center></p></h2>
+    <p><b>Protocol Number: HREC/13/MHS/76</b></p>
+    <p><b>Project Sponsor: Foundation for Angelman Syndrome Therapeutics Australia</b></p>
+    <p>
+      <b>Coordinating Principal Investigator: A/Prof Honey Heussler, Children's Health Queensland Hospital and Health Services, Brisbane</b><br>
+      Email: <a href="mailto:h.heussler@health.qld.gov.au" target="_top">h.heussler@health.qld.gov.au</a><br>
+      Phone: + 61(7) 3163 1636 
+    </p>
+    <p>
+      <b>Site Principal Investigator: Professor Matthew Bellgard, Queensland University of Technology, Brisbane</b><br>
+      Email: <a href="mailto:matthew.bellgard@qut.edu.au" target="_top">matthew.bellgard@qut.edu.au</a><br>
+      Phone: +61(7) 3138 9749
+    </p>
+    <p>
+      <b>Registry curator: Megan Tones, Queensland University of Technology, Brisbane</b><br>
+      Email: <a href="mailto:curator@angelmanregistry.info" target="_top">curator@angelmanregistry.info</a>
+    </p><br>
+    <h4><b>Welcome to the Global Angelman Syndrome Registry.</b></h4>
+    <p>Please watch this video before you decide to take part. You may also wish to show this video to other people involved in caring for your child or adult with AS including relatives, friends or clinicians.</p>
+    <p>
+      If you have any questions, please contact the registry curator:<br>
+      Megan Tones (registry curator), Queensland University of Technology, Brisbane<br>
+      Email: <a href="mailto:curator@angelmanregistry.info" target="_top">curator@angelmanregistry.info</a>
+    </p>
     <video id="ConsentVideo" class="video-js" controls preload="auto"
-        poster="https://d4d7dpr65gp9x.cloudfront.net/angelman/01G6PFFT70CMQR8VS9G6W8N94C/poster/consent_20220629.0000001.jpg"
-        data-setup='{"fluid": true}'>
-        <source src="https://d4d7dpr65gp9x.cloudfront.net/angelman/01G6PFFT70CMQR8VS9G6W8N94C/cmaf/consent_20220629.m3u8"
-            type="application/x-mpegURL" />
-        <source src="https://d4d7dpr65gp9x.cloudfront.net/angelman/01G6PFFT70CMQR8VS9G6W8N94C/hls/consent_20220629.m3u8"
-            type="application/x-mpegURL" />
-        <source src="https://d4d7dpr65gp9x.cloudfront.net/angelman/01G6PFFT70CMQR8VS9G6W8N94C/hls/consent_20220629.m3u8"
-            type="application/x-mpegURL" />
-        <source
-            src="https://d4d7dpr65gp9x.cloudfront.net/angelman/01G6PFFT70CMQR8VS9G6W8N94C/mp4/consent_20220629_avc_720p.mp4"
-            type="video/mp4" />
-        <source src="angelman/01G6PFFT70CMQR8VS9G6W8N94C/mp4/consent_20220629_avc_480p.mp4" type="video/mp4" />
-        <p class="vjs-no-js">
-            To view this video please enable JavaScript, and consider upgrading to a
-            web browser that
-            <a href="https://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
-        </p>
+      poster="https://d4d7dpr65gp9x.cloudfront.net/angelman/01G6PFFT70CMQR8VS9G6W8N94C/poster/consent_20220629.0000001.jpg"
+      data-setup='{"fluid": true}'>
+      <source src="https://d4d7dpr65gp9x.cloudfront.net/angelman/01G6PFFT70CMQR8VS9G6W8N94C/cmaf/consent_20220629.m3u8"
+        type="application/x-mpegURL" />
+      <source src="https://d4d7dpr65gp9x.cloudfront.net/angelman/01G6PFFT70CMQR8VS9G6W8N94C/hls/consent_20220629.m3u8"
+        type="application/x-mpegURL" />
+      <source src="https://d4d7dpr65gp9x.cloudfront.net/angelman/01G6PFFT70CMQR8VS9G6W8N94C/hls/consent_20220629.m3u8"
+        type="application/x-mpegURL" />
+      <source
+        src="https://d4d7dpr65gp9x.cloudfront.net/angelman/01G6PFFT70CMQR8VS9G6W8N94C/mp4/consent_20220629_avc_720p.mp4"
+        type="video/mp4" />
+      <source src="angelman/01G6PFFT70CMQR8VS9G6W8N94C/mp4/consent_20220629_avc_480p.mp4" type="video/mp4" />
+      <p class="vjs-no-js">
+        To view this video please enable JavaScript, and consider upgrading to a web browser that
+        <a href="https://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+      </p>
     </video>
     <script>
-        const DEFAULT_CURRENT_LANGUAGE = 'en';
-        const available_text_tracks = {'en': 'English', 'pt': 'Português', 'pl': 'Język polski', 'hi': 'हिन्दी', 'es': 'Español' }; // Manage this array manually by checking the available text tracks in aws
-        $(document).ready(function () {
-            const player = videojs('ConsentVideo');
-            const current_language = document.cookie.split('; ').find((cookie)=> cookie.startsWith('django_language'))?.split('=').at(1) ?? DEFAULT_LANGUAGE_CODE;
-            player.ready(() => {
-                for (const language_code in available_text_tracks) {
-                    player.addRemoteTextTrack({
-                        src: `https://d4d7dpr65gp9x.cloudfront.net/angelman/01G6PFFT70CMQR8VS9G6W8N94C/subtitle/${language_code}.vtt`,
-                        kind: 'subtitles',
-                        srclang: language_code,
-                        label: available_text_tracks[language_code],
-                        default: current_language === language_code
-                    });
-                }
+      const DEFAULT_CURRENT_LANGUAGE = 'en';
+      const available_text_tracks = {'en': 'English', 'pt': 'Português', 'pl': 'Język polski', 'hi': 'हिन्दी', 'es': 'Español' }; // Manage this array manually by checking the available text tracks in aws
+      $(document).ready(function () {
+        const player = videojs('ConsentVideo');
+        const current_language = document.cookie.split('; ').find((cookie)=> cookie.startsWith('django_language'))?.split('=').at(1) ?? DEFAULT_LANGUAGE_CODE;
+        player.ready(() => {
+          for (const language_code in available_text_tracks) {
+            player.addRemoteTextTrack({
+              src: `https://d4d7dpr65gp9x.cloudfront.net/angelman/01G6PFFT70CMQR8VS9G6W8N94C/subtitle/${language_code}.vtt`,
+              kind: 'subtitles',
+              srclang: language_code,
+              label: available_text_tracks[language_code],
+              default: current_language === language_code
             });
+          }
         });
+      });
     </script>
   questions:
   - code: angnewconsent1
