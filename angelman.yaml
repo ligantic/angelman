@@ -29249,7 +29249,7 @@ consent_sections:
     </video>
     <script>
       const DEFAULT_CURRENT_LANGUAGE = 'en';
-      const available_text_tracks = {'en': 'English', 'pt': 'Português', 'pl': 'Język polski', 'hi': 'हिन्दी', 'es': 'Español' }; // Manage this array manually by checking the available text tracks in aws
+      const available_text_tracks = {'en': 'English', 'pt-BR': 'Português (Brasil)', 'pl': 'Język polski', 'hi': 'हिन्दी', 'es': 'Español' }; // Manage this array manually by checking the available text tracks in aws
       $(document).ready(function () {
         const player = videojs('ConsentVideo');
         const current_language = document.cookie.split('; ').find((cookie)=> cookie.startsWith('django_language'))?.split('=').at(1) ?? DEFAULT_LANGUAGE_CODE;
