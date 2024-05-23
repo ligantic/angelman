@@ -2,7 +2,7 @@ from operator import attrgetter
 
 import pycountry
 from django.forms import CharField, ChoiceField, DateField, BooleanField
-from django.forms.widgets import RadioSelect, Select
+from django.forms.widgets import RadioSelect, Select, HiddenInput
 from django.utils.translation import gettext_lazy as _
 
 from angelman.registry.groups.registration.angelman_registration import DIAGNOSIS_CDE
@@ -91,7 +91,7 @@ class ANGPatientRegistrationForm(RegistrationFormCaseInsensitiveCheck):
             if field in self.password_fields:
                 self.fields[field].widget.render_value = True
 
-    preferred_languages = ChoiceField(required=False, choices=language_choices)
+    preferred_languages = ChoiceField(required=False, choices=language_choices, widget=HiddenInput)
     first_name = CharField(required=True, max_length=30)
     surname = CharField(required=True, max_length=30)
     date_of_birth = DateField(required=True)
