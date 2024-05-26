@@ -1,4 +1,4 @@
-EXPORT_TIME: '2023-10-20 13:03:27.581724'
+EXPORT_TIME: '2024-05-27 09:09:23.837123'
 EXPORT_TYPE: REGISTRY_PLUS_CDES
 RDRF_VERSION: 1.0.0
 REGISTRY_VERSION: '1.49'
@@ -5987,8 +5987,8 @@ cdes:
   name: BMI
   pattern: ''
   pv_group: null
-  widget_name: ''
-  widget_settings: ''
+  widget_name: CalculatedFieldWidget
+  widget_settings: '{}'
 - abbreviated_name: At what age did they start behavioural therapy
   allow_multiple: false
   calculation: ''
@@ -29202,7 +29202,7 @@ consent_rules:
 consent_sections:
 - applicability_condition: ''
   code: AngNewConsentSection
-  information_link: 10OCT2022_Angelman_Syndrome_Information_Sheet.pdf
+  information_link: 08NOV2023_Angelman_Syndrome_Information_Sheet.pdf
   information_text: |-
     <p><b>Parent/Carer/ Guardian Information</b></p><br>
     <h2><p><center><b>Global Angelman Syndrome Registry</b></center></p></h2>
@@ -29211,7 +29211,7 @@ consent_sections:
     <p>
       <b>Coordinating Principal Investigator: A/Prof Honey Heussler, Children's Health Queensland Hospital and Health Services, Brisbane</b><br>
       Email: <a href="mailto:h.heussler@health.qld.gov.au" target="_top">h.heussler@health.qld.gov.au</a><br>
-      Phone: + 61(7) 3163 1636 
+      Phone: + 61(7) 3163 1636
     </p>
     <p>
       <b>Site Principal Investigator: Professor Matthew Bellgard, Queensland University of Technology, Brisbane</b><br>
@@ -29423,8 +29423,8 @@ context_form_groups:
 demographic_fields:
 - field: date_of_death
   groups:
-  - Working Group Curators
   - Parents
+  - Working Group Curators
   is_section: false
   registry: ang
   status: 2
@@ -29436,22 +29436,22 @@ demographic_fields:
   status: 2
 - field: ethnic_origin
   groups:
-  - Working Group Curators
   - Parents
+  - Working Group Curators
   is_section: false
   registry: ang
   status: 2
 - field: maiden_name
   groups:
-  - Working Group Curators
   - Parents
+  - Working Group Curators
   is_section: false
   registry: ang
   status: 2
 - field: next_of_kin_parent_place_of_birth
   groups:
-  - Working Group Curators
   - Parents
+  - Working Group Curators
   is_section: false
   registry: ang
   status: 2
@@ -29542,6 +29542,49 @@ email_notifications:
     description: Longitudinal followup
     language: en
     subject: Angelman Registry - Longitudinal Followup
+  - body: |-
+      <p>Ciao {{patient.parentguardian_set.first.first_name}},</p>
+      <p>L'obiettivo principale del registro globale della sindrome di Angelman è quello di saperne di più sulla sindrome di Angelman e su come influisce sugli individui nel tempo. Ecco perché potremmo contattarti di tanto in tanto per chiedere aggiornamenti. L'aggiornamento semestrale è solo un rapido check-in e non ti richiederà molto tempo. È inoltre possibile che ti venga chiesto di completare altri moduli una volta all'anno o ogni due anni.</p>
+      <p>
+      È necessario dare seguito ai seguenti moduli presenti nel registro per conto di {{patient.given_names}}:
+      <ul>
+      {% for name, entries in longitudinal_followups.items %}
+      <li><a href="https://trrf.angelmanregistry.info{{ entries.0.longitudinal_followup.context_form_group.link }}">{{ entries.0.longitudinal_followup.description }}</a></li>
+      {% endfor %}
+      </ul>
+      <p>
+
+      <p>
+      Saluti,
+      </p>
+      <p>
+      Curatrice
+      </p>
+    description: Longitudinal followup
+    language: it
+    subject: Registro Angelman - Follow-up longitudinale
+  - body: |-
+      <p>Witaj {{patient.parentguardian_set.first.first_name}},</p>
+      <p>Głównym celem Globalnego Rejestru Zespołu Angelmana jest dowiedzenie się więcej o zespole Angelmana i jego wpływie na poszczególne osoby na przestrzeni czasu. Dlatego od czasu do czasu możemy kontaktować się z Tobą i poprosić o aktualizacje. Sześciomiesięczna aktualizacja jest szybka i nie zajmie Ci dużo czasu. Możesz również zostać poproszony o ukończenie innych modułów raz w roku lub co dwa lata.</p>
+      <p>
+      Powinieneś wypełnić następujące formularze w rejestrze w imieniu
+       {{patient.given_names}}:
+      <ul>
+      {% for name, entries in longitudinal_followups.items %}
+      <li><a href="https://trrf.angelmanregistry.info{{ entries.0.longitudinal_followup.context_form_group.link }}">{{ entries.0.longitudinal_followup.description }}</a></li>
+      {% endfor %}
+      </ul>
+      <p>
+
+      <p>
+      Z poważaniem,
+      </p>
+      <p>
+      Kurator
+      </p>
+    description: Longitudinal followup
+    language: pl
+    subject: Rejestr Angelmana – obserwacja podłużna
   group_recipient: null
   recipient: '{{patient.parentguardian_set.first.user.email}}'
 - description: new-patient-user-registered
@@ -29549,79 +29592,28 @@ email_notifications:
   email_from: noreply@angelman.prod.registryframework.net
   email_templates:
   - body: |-
-      <p>प्रिय {{parent.first_name}} {{parent.last_name|title}}, </p>
-      <p>विश्व स्तर पर एंजेलमैन सिंड्रोम वाले व्यक्तियों की बेहतर समझ विकसित करने में मदद करने के लिए अपने प्रियजन {{patient.given_names}} {{patient.family_name|title}} को साइन अप करने के लिए धन्यवाद। <b>ग्लोबल सर्च एंड रेस्क्यू प्रोजेक्ट </b> में एंजेलमैन सिंड्रोम (विश्व स्तर पर और प्रत्येक देश के भीतर) के वास्तविक प्रसार को समझने में मदद के लिए आपके डी-आइडेंटिफाइड डेटा, जैसे जीनोटाइप, उम्र और जन्म के देश का उपयोग किया जाएगा। (<a href=" https://www.angelmansearchandrescue.org/">https://www.angelmansearchandrescue.org/) </a> यह, बदले में, यह सुनिश्चित करने में मदद करेगा कि समुदाय और शिक्षा सहायता सभी के लिए उपलब्ध है। इस प्लेटफॉर्म के बाहर आपका नाम, पता और ईमेल पता साझा नहीं किया जाएगा। </p>
-      <p>हम व्यवहार, विकास, दवाएं, दौरे, उपचार और नींद जैसे मॉड्यूल की एक श्रृंखला को पूरा करके <b>ग्लोबल एंजेलमैन सिंड्रोम रजिस्ट्री </b> में अनुसंधान और समझ को आगे बढ़ाने के लिए और अधिक विवरण प्रदान करने के लिए आपको आमंत्रित करना चाहते हैं। इन मॉड्यूलों को एक बार में पूरा किया जा सकता है, या आपके पास समय के अनुसार एक-एक करके पूरा किया जा सकता है। </p>
-      <p>कृपया अपने एंजेलमैन रजिस्ट्री खाते को सत्यापित करने के लिए निम्नलिखित सक्रियण लिंक पर क्लिक करें, या वेब ब्राउज़र में कॉपी और पेस्ट करें और रजिस्ट्री में लॉग इन करें। यह लिंक 2 दिनों में समाप्त हो जाएगा। </p>
-      <p><a href="https://trrf.angelmanregistry.info{% url 'registration_activate' registration.activation_key %}">सक्रियण लिंक </a></p>
-      <p>https://trrf.angelmanregistry.info{% url 'registration_activate' registration.activation_key %}</p>
-      <p>यदि आवश्यक हो, तो रजिस्ट्री डेटा क्यूरेटर आपके ई-मेल पते के माध्यम से आपसे संपर्क करेगा {{parent.user.email}}।यदि आपके कोई प्रश्न हैं, तो कृपया नीचे दिए गए ईमेल पते पर रजिस्ट्री क्यूरेटर से संपर्क करें। आप <a href="https://angelmanregistry.info/">ग्लोबल एंजेलमैन सिंड्रोम रजिस्ट्री वेबसाइटपर भी विस्तृत जानकारी पा सकते हैं। </a></p>
-      <p>हम आपको इस वेबसाइट को इन वेबसाइटस को देखने के लिए प्रोत्साहित करते हैं <a href="https://www.angelmansearchandrescue.org/">https://www.angelmansearchandrescue.org/ </a> तथा <a href="https://www.angelmanregistry.info/partners/">https://www.angelmanregistry.info/partners/ </a> ताकि आप अपने देश और क्षेत्र में रोगी संगठनों को ढूंढने और उनकी मेलिंग सूचियों में साइन अप कर सकें और वे आपको अद्यतित रख सकें और स्थानीय स्तर पर आपकी वकालत कर सकें। </p>
-      <p>सादर, <br>
-      मेगन टोन <br>
-      डेटा क्यूरेटर <br>
-      ग्लोबल एंजेलमैन सिंड्रोम रजिस्ट्री <br>
-      ईमेल:क्यूरेटर@angelmanregistry.info
+      <p>प्रिय {{parent.first_name}} {{parent.last_name|title}},</p>
+      <p>दुनिया भर में एंजेलमैन सिंड्रोम वाले व्यक्तियों की बेहतर समझ पैदा करने में मदद करने के लिए ग्लोबल एंजेलमैन सिंड्रोम रजिस्ट्री में नामांकन {{patient.given_names}} {{patient.family_name|title}} के लिए धन्यवाद।</p>
+      <p>इस परियोजना में तीन अलग-अलग तत्व हैं;</p><ol>
+      <p><li><b> मूलभूत जनसांख्यिकी:</b> आपके द्वारा भरा गया ऑनलाइन फ़ॉर्म ग्लोबल <b>सर्च एंड रेस्क्यू प्रोजेक्ट</b> (<a href="https://www.angelmansearchandrescue.org/">https://www.angelmansearchandrescue.org/)</a> में वैश्विक स्तर पर और प्रत्येक देश के भीतर एंजेलमैन सिंड्रोम की व्यापकता का निर्धारण करने के लिए आवश्यक जानकारी प्रदान करता है। आपके डेटा, जिसमें जीनोटाइप, उम्र और जन्म का देश शामिल है, गुमनाम रूप से रिपोर्ट किया जाएगा। रजिस्ट्री के बाहर कोई भी व्यक्तिगत पहचान जानकारी साझा नहीं की जाएगी।
+      जब तक आप बिंदु 2 में बताई गई प्रक्रिया को पूरा नहीं कर लेते, तब तक आपके लिए उपलब्ध किसी भी शोध, परीक्षण या अन्य अवसरों के बारे में आपसे संपर्क नहीं किया जा सकता है।</li><br>
+      <li><b> बेसलाइन डेटा,</b>  इसे किसी चिकित्सक की पहली मुलाकात के रूप में सोचें, यह {{patient.given_names}} का अब तक का पूरा इतिहास है। इसे व्यवहार, विकास, दवाओं, दौरे, चिकित्सा और नींद जैसे मॉड्यूल की एक श्रृंखला में विभाजित किया गया है। इन मॉड्यूल्स को एक बार में या आपके पास समय होने पर एक-एक करके पूरा किया जा सकता है।<br>
+      डेटा दर्ज करना शुरू करने के लिए आपको सहमति के संबंध में एक छोटा वीडियो दिखाया जाएगा, कुछ अनिवार्य हैं और कुछ वैकल्पिक हैं (ये इस बारे में हैं कि आगे के शोध और परीक्षणों के बारे में आपसे कैसे संपर्क किया जा सकता है)<br>
+      अपने खाते को सत्यापित करने, सहमति प्रदान करने और आधारभूत डेटा दर्ज करना शुरू करने के लिए, कृपया इस <a href="https://trrf.angelmanregistry.info{% url 'registration_activate' registration.activation_key %}">सक्रियण लिंक</a> पर क्लिक करें या इसे वेब ब्राउज़र में कॉपी और पेस्ट करें। लिंक 2 दिनों में समाप्त हो जाएगा।<br>
+      https://trrf.angelmanregistry.info{% url 'registration_activate' registration.activation_key %}
+      </li><br>
+
+      <li><b> अनुदैर्ध्य डेटा समय </b>के साथ उसके विकास को ट्रैक करेगा {{patient.given_names}}, जिसमें मील के पत्थर और परिवर्तनों के अपडेट के लिए रिमाइंडर भेजे जाएंगे।</li></ol></p>
+
+      <p>आपका ईमानदारी से, <br>
+      मेगन टोन्स<br>
+      डेटा क्यूरेटर<br>
+      ग्लोबल एंजेलमैन सिंड्रोम रजिस्ट्री<br>
+      ईमेल: curator@angelmanregistry.info
     description: Email notification containing verification link sent to patients
       upon registration in the registry
     language: hi
     subject: एंजेलमैन अनुसंधान में भाग लेने के लिए धन्यवाद!
-  - body: |-
-      <p>Caro {{parent.first_name}} {{parent.last_name|title}},</p>
-
-      <p>Grazie per aver registrato la persona amata {{patient.given_names}} {{patient.family_name|title}} al fine di migliorare la comprensione delle persone affette da Sindrome di Angelman a livello globale.
-      I tuoi dati anonimizzati, relativi a genotipo, età e Paese di nascita verranno utilizzati per aiutare a comprendere la reale prevalenza della Sindrome di Angelman (a livello globale e all'interno di ciascun paese) nel <b>progetto Global Search & Rescue</b> (<a href="https://www.angelmansearchandrescue.org/">https://www.angelmansearchandrescue.org/)</a> Ciò, a sua volta, contribuirà a garantire che i supporti della comunità e dell'istruzione siano disponibili per tutti.
-      I tuoi nomi, indirizzo e indirizzo email non saranno condivisi al di fuori di questa piattaforma.</p>
-
-      <p>Vorremmo invitarti a fornire ulteriori dettagli per far progredire la ricerca e la comprensione nel <b>registro globale della Sindrome di Angelman</b> completando una serie di moduli riguardanti il comportamento, lo sviluppo, i farmaci, l’epilessia, le terapie e il sonno. Questi moduli possono essere completati tutti in una volta o uno per volta.</p>
-
-      <p>Fai clic sul seguente link di attivazione per verificare il tuo account del registro Angelman, oppure copia e incolla in un browser Web e accedi al registro. Questo collegamento scadrà tra 2 giorni.</p>
-
-
-      <p><a href="https://trrf.angelmanregistry.info{% url 'registration_activate' registration.activation_key %}">Attivazione link</a></p>
-      <p>https://trrf.angelmanregistry.info{% url 'registration_activate' registration.activation_key %}</p>
-
-      <p>Se necessario, il curatore dei dati anagrafici ti contatterà tramite il tuo indirizzo e-mail {{parent.user.email}}. In caso di domande, contattare il curatore del registro all'indirizzo e-mail riportato di seguito. È inoltre possibile trovare informazioni dettagliate sul sito <a href="https://angelmanregistry.info/">Web del registro globale della Sindrome di Angelman</a>.</p>
-
-      <p>Ti invitiamo a visitare <a href="https://www.angelmansearchandrescue.org/">https://www.angelmansearchandrescue.org/</a> e <a href="https://www.angelmanregistry.info/partners/">https://www.angelmanregistry.info/partners/</a> per trovare le organizzazioni di pazienti nel tuo paese e nella tua regione e iscriverti alle loro mailing list in modo che tu possa tenerti aggiornato e sostenerti a livello locale.</p>
-
-      <p>Cordiali saluti,<br>
-      Megan Toni<br>
-      Curatore dei dati<br>
-      Registro globale della sindrome di Angelman<br>
-      Email: curator@angelmanregistry.info
-    description: Email notification containing verification link sent to patients
-      upon registration in the registry
-    language: it
-    subject: Grazie per aver partecipato alla ricerca Angelman!
-  - body: |-
-      <p><a href="https://www.angelmanregistry.info/wp-content/uploads/2023/03/15071502/Welcome-message-PORTUGUESE.pdf">Clique neste link para ver informações em português</a>.</p>
-
-      <p>Dear {{parent.first_name}} {{parent.last_name|title}},</p>
-
-      <p>Thank you for signing up your loved one {{patient.given_names}} {{patient.family_name|title}} to help generate a better understanding of individuals with Angelman syndrome globally. Your de-identified data, such as genotype, age and country of birth will be used to help understand the true prevalence of Angelman syndrome (globally and within each country) in the <b>Global Search & Rescue project</b> (<a href="https://www.angelmansearchandrescue.org/">https://www.angelmansearchandrescue.org/)</a> This, in turn, will help to ensure that community and education supports are available to all.  Your names, address and email address will not be shared outside this platform. </p>
-
-      <p>We would like to invite you to provide more further detail to advance research & understanding in the <b>Global Angelman Syndrome Registry</b> by completing a series of modules such as behaviour, development, medications, seizures, therapies, and sleep. These modules can be completed all at once, or one by one as you have time.</p>
-
-      <p>Please click the following activation link to verify your Angelman registry account, or copy and paste into a web browser and log into the registry. This link will expire in 2 days.</p>
-
-
-      <p><a href="https://trrf.angelmanregistry.info{% url 'registration_activate' registration.activation_key %}">Activation link</a></p>
-      <p>https://trrf.angelmanregistry.info{% url 'registration_activate' registration.activation_key %}</p>
-
-      <p>If needed, the registry data curator will contact you through your e-mail address {{parent.user.email}}. If you have any queries, please contact the registry curator at the email address below. You can also find detailed information on <a href="https://angelmanregistry.info/">the Global Angelman Syndrome Registry website</a>.</p>
-
-      <p>We encourage you to visit <a href="https://www.angelmansearchandrescue.org/">https://www.angelmansearchandrescue.org/</a> and <a href="https://www.angelmanregistry.info/partners/">https://www.angelmanregistry.info/partners/</a> to find the patient organisation/s in your country and region and sign up to their mailing lists so that they can keep you up to date and advocate for you at a local level.</p>
-
-      <p>Yours sincerely,<br>
-      Megan Tones<br>
-      Data Curator<br>
-      Global Angelman Syndrome Registry<br>
-      Email: curator@angelmanregistry.info
-    description: Email notification containing verification link sent to patients
-      upon registration in the registry
-    language: en
-    subject: Thank you for participating in Angelman research!
   - body: |-
       <p>Estimado {{parent.first_name}} {{parent.last_name|title}},</p>
 
@@ -29649,6 +29641,27 @@ email_notifications:
     language: es
     subject: ¡Gracias por participar en la investigación de Ang
   - body: |-
+      <p>Caro {{parent.first_name}} {{parent.last_name|title}},</p>
+      <p>Obrigado por inscrever {{patient.given_names}} {{patient.family_name|title}} no Registo Global da Síndrome de Angelman para ajudar a compreender melhor os indivíduos com esta condição em todo o mundo.</p>
+      <p>Existem três elementos diferentes neste projeto;</p><ol>
+      <p><li><b> Dados demográficos básicos:</b> O formulário online que preencheu fornece informações essenciais para determinar a prevalência da síndrome de Angelman em  nível mundial e em cada país no projeto <b>Global Search & Rescue</b> (<a href="https://www.angelmansearchandrescue.org/">https://www.angelmansearchandrescue.org/)</a>. Os seus dados não-identificados  - como genótipo, idade e o país de nascimento - serão comunicados de forma anónima. Nenhuma informação de identificação pessoal será partilhada fora do Registro.
+      Enquanto você não concluir o processo descrito no item 2 (abaixo), não poderá ser contactado em relação à qualquer investigação, ensaio clínico ou outras oportunidades que possam estar disponíveis para você.</li><br>
+      <li><b>Dados de base,</b> pense nisto como a primeira visita a um médico, isto é o historial completo de {{patient.given_names}} até ao momento. Ele é dividido em uma série de módulos, tais como: comportamento, desenvolvimento, medicamentos, convulsões, terapias e sono. Estes módulos podem ser preenchidos todos de uma só vez ou um a um, de acordo com o tempo que você tem disponível.<br>
+      Antes de começar a introduzir os dados, será exibido um curto vídeo sobre autorizações, alguns obrigatórios e outros opcionais (estes dizem respeito à forma como você poderá ser contactado sobre futuras pesquisas e ensaios clínicos)<br>
+      Para verificar a sua conta, autorizar e começar a introduzir os dados de base, clique neste <a href="https://trrf.angelmanregistry.info{% url 'registration_activate' registration.activation_key %}">link de ativação</a>  de ativação ou copie-a e cole-a num navegador de internet. O link expirará em 2 dias.<br>
+      https://trrf.angelmanregistry.info{% url 'registration_activate' registration.activation_key %}
+      </li><br>
+      <li><b>Os dados longitudinais</b> acompanharão o desenvolvimento de {{patient.given_names}} ao longo do tempo, com o envio de lembretes para atualizações sobre etapas e alterações.</li></ol></p>
+
+      Atenciosamente, <br>
+      Megan Tones <br>
+      Curadora de dados <br>
+      Registo Global da Síndrome de Angelman
+    description: Email notification containing verification link sent to patients
+      upon registration in the registry
+    language: pt-BR
+    subject: Bem-vindo ao Registro Global da Síndrome de Angelm
+  - body: |-
       <p>親愛的 {{parent.first_name}} {{parent.last_name|title}},</p>
 
       <p>感謝您為 {{patient.given_names}} {{patient.family_name|title}} 參與天使綜合症登記名冊，以幫助更瞭解全球天使綜合症患者的狀況。 您的去識別數據，如基因、年齡和出生地等，將於<b>全球研究救援項目</b>中幫助瞭解天使綜合症的真正狀況 (<a href="https://www.angelmansearchandrescue.org/">https://www.angelmansearchandrescue.org/)</a>。 這將有助確保所有患者都能獲得社區及教育支援。 您的姓名、地址和電郵地址將不會在本平台以外的地方共享。 </p>
@@ -29674,6 +29687,76 @@ email_notifications:
       upon registration in the registry
     language: zh-TW
     subject: 感謝您參與天使綜合症的研究！
+  - body: |-
+      <p>Gentile {{parent.first_name}} {{parent.last_name|title}},</p>
+      Grazie per esserti iscritto {{patient.given_names}} {{patient.family_name|title}} al Global Angelman Syndrome Registry per contribuire a generare una migliore comprensione delle persone con sindrome di Angelman in tutto il mondo.</p>
+      <p>Ci sono tre diversi elementi in questo progetto;</p><ol>
+      <p><li><b>Dati demografici di base:</b> il modulo online che hai completato fornisce informazioni essenziali per determinare la prevalenza della sindrome di Angelman a livello globale e all'interno di ciascun paese del progetto Global Search & Rescue (<a href="https://www.angelmansearchandrescue.org/">https://www.angelmansearchandrescue.org/)</a>. I tuoi dati, inclusi genotipo, età e paese di nascita, verranno segnalati in forma anonima. Nessuna informazione di identificazione personale verrà condivisa al di fuori del registro.
+      Finché non completerai la procedura descritta al punto 2, non potrai essere contattato in merito a ricerche, sperimentazioni o altre opportunità che potrebbero essere disponibili.</li><br>
+      <li><b>Dati di base,</b> pensatela come la prima visita da un medico, questa è la storia completa di {{patient.given_names}}'s fino ad ora. Questi dati sono suddivisi in una serie di moduli quali comportamento, sviluppo, farmaci, crisi epilettiche, terapie e sonno. Questi moduli possono essere completati tutti in una volta o uno per uno secondo il tempo a disposizione.<br>
+      Per iniziare a inserire i dati ti verrà mostrato un breve video relativo ai consensi, alcuni sono obbligatori e altri sono facoltativi (ecco come puoi essere contattato per ulteriori ricerche e sperimentazioni).<br>
+      Per verificare il tuo account, fornire il consenso e iniziare a inserire i dati di base, fai clic su questo <a href="https://trrf.angelmanregistry.info{% url 'registration_activate' registration.activation_key %}">Collegamento di attivazione</a> o copialo e incollalo in un browser web. Il link scadrà tra 2 giorni.<br>
+
+      <a href="https://trrf.angelmanregistry.info{% url 'registration_activate' registration.activation_key %}">Collegamento di attivazione</a>
+      https://trrf.angelmanregistry.info{% url 'registration_activate' registration.activation_key %}</li><br>
+
+      <li><b>I dati longitudinali</b> monitoreranno {{patient.given_names}}'s lo sviluppo nel tempo, con promemoria inviati per aggiornamenti su traguardi e modifiche.</li></ol></p>
+
+      <p>Cordiali saluti,<br>
+      Megan Tones<br>
+      Curatore dei dati<br>
+      Registro globale della sindrome di Angelman<br>
+      Posta elettronica: curator@angelmanregistry.info</p>
+    description: Email notification containing verification link sent to patients
+      upon registration in the registry
+    language: it
+    subject: Grazie per aver partecipato alla ricerca Angelman!
+  - body: |-
+      <p>Szanowna/y  {{parent.first_name}} {{parent.last_name|title}},</p>
+      <p>Dziękujemy za zapisanie {{patient.given_names}} {{patient.family_name|title}} do Globalnego Rejestru Zespołu Angelmana, aby pomóc w lepszym zrozumieniu osób z zespołem Angelmana na całym świecie.</p>
+      <p>Projekt ten składa się z trzech różnych elementów:</p><ol>
+      <p><li><b>Podstawowe dane demograficzne: </b>Wypełniony przez Ciebie formularz online zawiera informacje niezbędne do określenia częstości występowania zespołu Angelmana na świecie i w każdym kraju w ramach projektu Global Search & Rescue (<a href="https://www.angelmansearchandrescue.org/">https://www.angelmansearchandrescue.org/)</a>. Twoje dane, w tym genotyp, wiek i kraj urodzenia, zostaną zgłoszone anonimowo. Żadne dane osobowe nie będą udostępniane poza rejestrem.<br>
+      <p>Dopóki nie ukończysz procesu opisanego w punkcie 2, nie będzie można skontaktować się z Tobą w sprawie jakichkolwiek badań, prób lub innych możliwości, które mogą być dla Ciebie dostępne.</li><br>
+
+      <li><b>Dane wyjściowe,</b> pomyśl o tym jak o pierwszej wizycie u lekarza, to jest pełna dotychczasowa historia {{patient.given_names}}. Jest ona podzielona na szereg modułów, takich jak zachowanie, rozwój, leki, napady, terapie i sen. Moduły te można wypełnić wszystkie naraz lub jeden po drugim w miarę wolnego czasu.<br>
+      Aby rozpocząć wprowadzanie danych, zostanie wyświetlony krótki film dotyczący zgód, niektóre z nich są obowiązkowe, a niektóre opcjonalne (te dotyczą sposobu kontaktowania się z Tobą w sprawie dalszych badań i prób).<br>
+      Aby zweryfikować swoje konto, wyrazić zgodę i rozpocząć wprowadzanie danych podstawowych, kliknij ten <a href="https://trrf.angelmanregistry.info{% url 'registration_activate' registration.activation_key %}">Link aktywacyjny</a> lub skopiuj go i wklej do przeglądarki internetowej. Link wygaśnie za 2 dni.<br>
+      https://trrf.angelmanregistry.info{% url 'registration_activate' registration.activation_key %}</li><br>
+
+      <li><b>Dane podłużne</b> będą śledzić rozwój Twojego dziecka, {{patient.given_names}}'s w czasie, z przypomnieniami wysyłanymi w celu aktualizacji kamieni milowych i zmian.</li></ol></p>
+
+      <p>Z poważaniem,<br>
+      Megan Tones<br>
+      Kurator danych<br>
+      Globalny rejestr zespołu Angelmana<br>
+      E-mail: curator@angelmanregistry.info</p>
+    description: Email notification containing verification link sent to patients
+      upon registration in the registry
+    language: pl
+    subject: Witamy w Globalny Rejestr Zespołu Angelmana!
+  - body: |-
+      <p>Dear {{parent.first_name}} {{parent.last_name|title}},</p>
+
+      <p>Thank you for enrolling {{patient.given_names}} {{patient.family_name|title}} in the Global Angelman Syndrome Registry to help generate a better understanding of individuals with Angelman syndrome around the world.</p>
+      <p>There are three different elements in this project;</p><ol>
+      <p><li><b>Basic demographics:</b> The online form you completed provides essential information for determining the prevalence of Angelman syndrome globally and within each country in the <b>Global Search & Rescue project</b> (<a href="https://www.angelmansearchandrescue.org/">https://www.angelmansearchandrescue.org/)</a>.  Your data, including genotype, age, and country of birth, will be reported anonymously. No personal identifying information will be shared outside the registry.
+      Until you complete the process outlined in point 2, you cannot be contacted regarding any research, trials or other opportunities that might be available to you.</li><br>
+      <li><b>Baseline data,</b> think of this as like the first visit to a clinician, this is {{patient.given_names}}’s full history so far. This is broken down into a series of modules such as behaviour, development, medications, seizures, therapies, and sleep. These modules can be completed all at once, or one by one as you have time. <br>
+      To begin entering data you will be shown a short video regarding consents, some are mandatory and some are optional (these are around how you can be contacted about further research and trials).<br>
+      To verify your account, provide consent, and begin entering baseline data, please click this <a href="https://trrf.angelmanregistry.info{% url 'registration_activate' registration.activation_key %}">activation link</a> or copy and paste it into a web browser. The link will expire in 2 days.<br>
+      https://trrf.angelmanregistry.info{% url 'registration_activate' registration.activation_key %}
+      </li><br>
+      <li><b>Longitudinal data</b> will track {{patient.given_names}}'s development over time, with reminders sent for updates on milestones and changes. </li></ol></p>
+
+      <p>Yours sincerely,<br>
+      Megan Tones<br>
+      Data Curator<br>
+      Global Angelman Syndrome Registry<br>
+      Email: curator@angelmanregistry.info
+    description: Email notification containing verification link sent to patients
+      upon registration in the registry
+    language: en
+    subject: Thank you for participating in Angelman research!
   group_recipient: Working Group Curators
   recipient: '{{parent.user.email}}'
 - description: other-clinician
@@ -34960,7 +35043,6 @@ forms:
     ANGGeneticTestKnown visible if ANGGeneticTest == "Yes"
     ANGGeneticTestType2 hidden if ANGGeneticTest != "Yes" or ANGGeneticTestKnown != "Yes"
     ANGClinicalDx visible if ANGGeneticTest == "No"
-    section ANGResultFile hidden if ANGGeneticTest == "No" or ANGGeneticTestKnown == "No" or ANGGeneticTest is unset
   display_name: History of Diagnosis and Results
   header: |-
     <p>Please answer the following questions about your child/ adult’s early signs of Angelman syndrome and diagnosis.</p>
@@ -36676,8 +36758,7 @@ forms_allowed_groups:
   BehaviourandDevelopment:
   - Parents
   CareBurden:
-  - Burden Pilot Parents
-  - Parents
+  - AdminOnly
   ChangeInSeizureActivity:
   - Parents
   CheckUp6Months:
@@ -36790,55 +36871,6 @@ generic_sections:
 group_permissions:
 - name: Genetic Staff
   permissions: []
-- name: Clinical Staff
-  permissions:
-  - codename: can_run_reports
-    content_type:
-    - report
-    - reportdesign
-    name: Can run reports
-- name: Working Group Curators
-  permissions:
-  - codename: add_patient
-    content_type:
-    - patients
-    - patient
-    name: Can add patient
-  - codename: can_see_data_modules
-    content_type:
-    - patients
-    - patient
-    name: Can see Data Modules column
-  - codename: can_see_dob
-    content_type:
-    - patients
-    - patient
-    name: Can see Date of Birth column
-  - codename: can_see_full_name
-    content_type:
-    - patients
-    - patient
-    name: Can see Full Name column
-  - codename: can_see_working_groups
-    content_type:
-    - patients
-    - patient
-    name: Can see Working Groups column
-  - codename: change_patient
-    content_type:
-    - patients
-    - patient
-    name: Can change patient
-  - codename: delete_patient
-    content_type:
-    - patients
-    - patient
-    name: Can delete patient
-  - codename: can_run_reports
-    content_type:
-    - report
-    - reportdesign
-    name: Can run reports
 - name: AdminOnly
   permissions:
   - codename: add_logentry
@@ -37570,6 +37602,55 @@ group_permissions:
     name: Can see Data Modules column
 - name: Burden Pilot Parents
   permissions: []
+- name: Clinical Staff
+  permissions:
+  - codename: can_run_reports
+    content_type:
+    - report
+    - reportdesign
+    name: Can run reports
+- name: Working Group Curators
+  permissions:
+  - codename: add_patient
+    content_type:
+    - patients
+    - patient
+    name: Can add patient
+  - codename: can_see_data_modules
+    content_type:
+    - patients
+    - patient
+    name: Can see Data Modules column
+  - codename: can_see_dob
+    content_type:
+    - patients
+    - patient
+    name: Can see Date of Birth column
+  - codename: can_see_full_name
+    content_type:
+    - patients
+    - patient
+    name: Can see Full Name column
+  - codename: can_see_working_groups
+    content_type:
+    - patients
+    - patient
+    name: Can see Working Groups column
+  - codename: change_patient
+    content_type:
+    - patients
+    - patient
+    name: Can change patient
+  - codename: delete_patient
+    content_type:
+    - patients
+    - patient
+    name: Can delete patient
+  - codename: can_run_reports
+    content_type:
+    - report
+    - reportdesign
+    name: Can run reports
 longitudinal_followups:
 - condition: consents.get('ang.AngNewConsentSection.angnewconsent6b') and patient.living_status
     == 'Alive'
@@ -37629,9 +37710,10 @@ longitudinal_followups:
   name: Sleep_Over10
 metadata_json: '{"features": ["clinicians_have_patients", "registration", "clinician_form",
   "clinicians_have_patients", "consent_checks", "verification", "questionnaires",
-  "contexts", "user_email_activation_optional_for_admin", "longitudinal_followups"],
-  "diagnosis_code": "ANGDNAMethylAbnormalResult", "verification_cdes": [{"form": "AngelmanRegistryHistoryOfDiagnosisAndResults",
-  "section": "ANGPatientResults", "cde": "ANGGeneticTest"}, {"form": "AngelmanRegistryHistoryOfDiagnosisAndResults",
+  "contexts", "user_email_activation_optional_for_admin", "longitudinal_followups",
+  "no_translation"], "diagnosis_code": "ANGDNAMethylAbnormalResult", "verification_cdes":
+  [{"form": "AngelmanRegistryHistoryOfDiagnosisAndResults", "section": "ANGPatientResults",
+  "cde": "ANGGeneticTest"}, {"form": "AngelmanRegistryHistoryOfDiagnosisAndResults",
   "section": "ANGPatientResults", "cde": "ANGGeneticTestType"}, {"form": "AngelmanRegistryHistoryOfDiagnosisAndResults",
   "section": "ANGPatientResults", "cde": "ANGDNAMethylAbnormalResult"}, {"form": "AngelmanRegistryIllnessesOrMedicalProblems",
   "section": "ANGGastroesophagealReflux", "cde": "ANGGastroesophagealReflux"}, {"form":
