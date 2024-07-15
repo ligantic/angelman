@@ -29229,6 +29229,7 @@ consent_sections:
       Megan Tones (registry curator), Queensland University of Technology, Brisbane<br>
       Email: <a href="mailto:curator@angelmanregistry.info" target="_top">curator@angelmanregistry.info</a>
     </p>
+  information_media: |-
     <video id="ConsentVideo" class="video-js" controls preload="auto"
       poster="https://d4d7dpr65gp9x.cloudfront.net/angelman/01G6PFFT70CMQR8VS9G6W8N94C/poster/consent_20220629.0000001.jpg"
       data-setup='{"fluid": true}'>
@@ -29252,7 +29253,7 @@ consent_sections:
       const available_text_tracks = {'en': 'English', 'pt-BR': 'Português (Brasil)', 'pl': 'Język polski', 'hi': 'हिन्दी', 'es': 'Español' }; // Manage this array manually by checking the available text tracks in aws
       $(document).ready(function () {
         const player = videojs('ConsentVideo');
-        const current_language = document.cookie.split('; ').find((cookie)=> cookie.startsWith('django_language'))?.split('=').at(1) ?? DEFAULT_LANGUAGE_CODE;
+        const current_language = document.cookie.split('; ').find((cookie)=> cookie.startsWith('django_language'))?.split('=').at(1) ?? DEFAULT_CURRENT_LANGUAGE;
         player.ready(() => {
           for (const language_code in available_text_tracks) {
             player.addRemoteTextTrack({
