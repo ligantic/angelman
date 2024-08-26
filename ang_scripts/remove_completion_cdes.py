@@ -2,7 +2,6 @@ import django
 
 from rdrf.models.definition.models import Registry
 
-
 django.setup()
 
 

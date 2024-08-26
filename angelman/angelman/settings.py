@@ -6,14 +6,14 @@ import angelman
 
 
 FALLBACK_REGISTRY_CODE = "angelman"
-LOCALE_PATHS = env.getlist("locale_paths", ['/data/translations/locale'])
+LOCALE_PATHS = env.getlist("locale_paths", ["/data/translations/locale"])
 
 # Adding the angelman app first, so that its templates overrides base templates
 INSTALLED_APPS = [
     FALLBACK_REGISTRY_CODE,
 ] + INSTALLED_APPS
 
-ROOT_URLCONF = '%s.urls' % FALLBACK_REGISTRY_CODE
+ROOT_URLCONF = "%s.urls" % FALLBACK_REGISTRY_CODE
 
 SEND_ACTIVATION_EMAIL = False
 
@@ -25,16 +25,25 @@ PROJECT_TITLE_LINK = "login_router"
 
 PROJECT_LOGO = env.get("project_logo", "images/logo.png")
 
-VERSION = env.get('app_version', '%s (ang)' % angelman.VERSION)
+VERSION = env.get("app_version", "%s (ang)" % angelman.VERSION)
 
 CURATOR_EMAIL = env.get("curator_email", "curator@angelmanregistry.info")
 
-REGISTRATION_FORM = "angelman.forms.angelman_registration_form.ANGRegistrationForm"
+REGISTRATION_FORM = (
+    "angelman.forms.angelman_registration_form.ANGRegistrationForm"
+)
 REGISTRATION_CLASS = "angelman.registry.groups.registration.angelman_registration.AngelmanRegistration"
 REGISTRATION_CLASS_EMBEDDED = "angelman.registry.groups.registration.angelman_registration.EmbeddedAngelmanRegistration"
 
-CSP_FRAME_SRC += ["https://www.youtube.com", "https://angelmanregistry.info", "https://www.angelmanregistry.info"]
-CSP_OBJECT_SRC += ["https://angelmanregistry.info", "https://www.angelmanregistry.info"]
+CSP_FRAME_SRC += [
+    "https://www.youtube.com",
+    "https://angelmanregistry.info",
+    "https://www.angelmanregistry.info",
+]
+CSP_OBJECT_SRC += [
+    "https://angelmanregistry.info",
+    "https://www.angelmanregistry.info",
+]
 
 SECURITY_WHITELISTED_URLS += (
     "parent_edit",
@@ -48,7 +57,7 @@ PASSWORD_EXPIRY_WARNING_DAYS = env.get("password_expiry_warning_days", 0)
 ACCOUNT_EXPIRY_DAYS = env.get("account_expiry_days", 0)
 
 # Reports settings
-SCHEMA_MODULE = 'report.schema'
-SCHEMA_METHOD_PATIENT_FIELDS = 'get_patient_fields'
-REPORT_CONFIG_MODULE = 'angelman.report.report_configuration'
-REPORT_CONFIG_METHOD_GET = 'get_angelman_configuration'
+SCHEMA_MODULE = "report.schema"
+SCHEMA_METHOD_PATIENT_FIELDS = "get_patient_fields"
+REPORT_CONFIG_MODULE = "angelman.report.report_configuration"
+REPORT_CONFIG_METHOD_GET = "get_angelman_configuration"
