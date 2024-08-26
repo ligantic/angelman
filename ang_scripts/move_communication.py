@@ -1,16 +1,14 @@
-from copy import deepcopy
-from datetime import datetime
 import json
 import sys
 import traceback
+from copy import deepcopy
+from datetime import datetime
 
 import django
 from django.db import transaction
-
-from rdrf.models.definition.models import ClinicalData
-from rdrf.models.definition.models import Registry
 from registry.patients.models import Patient
 
+from rdrf.models.definition.models import ClinicalData, Registry
 
 django.setup()
 

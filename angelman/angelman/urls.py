@@ -1,6 +1,7 @@
 from django.conf.urls import include
 from django.urls import re_path
 from django.views.generic import RedirectView
+
 from rdrf.views.handler_views import (
     handler404,
     handler500,

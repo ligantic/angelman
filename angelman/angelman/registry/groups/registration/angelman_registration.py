@@ -2,6 +2,10 @@ import logging
 from operator import itemgetter
 
 from django.utils.translation import get_language
+from registration.models import RegistrationProfile
+from registry.groups import GROUPS
+from registry.groups.registration.base import BaseRegistration
+from registry.patients.models import AddressType, ParentGuardian, PatientAddress
 
 from rdrf.events.events import EventType
 from rdrf.models.definition.models import (
@@ -9,15 +13,9 @@ from rdrf.models.definition.models import (
     ContextFormGroup,
     RDRFContext,
 )
-from rdrf.services.io.notifications.email_notification import process_notification
-
-from registration.models import RegistrationProfile
-from registry.patients.models import ParentGuardian, PatientAddress, AddressType
-from registry.groups import GROUPS
-
-
-from registry.groups.registration.base import BaseRegistration
-
+from rdrf.services.io.notifications.email_notification import (
+    process_notification,
+)
 
 logger = logging.getLogger(__name__)
 
