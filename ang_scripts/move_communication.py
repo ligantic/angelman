@@ -67,7 +67,9 @@ def get_section(form_dict, section_code):
 
 
 def form_exists(data, form_name):
-    return len([f["name"] for f in data["forms"] if f["name"] == form_name]) == 1
+    return (
+        len([f["name"] for f in data["forms"] if f["name"] == form_name]) == 1
+    )
 
 
 def add_form(data, form_name):
@@ -173,7 +175,9 @@ class Munger:
         section_dict = get_section(form_dict, section_code)
         section_copy = deepcopy(section_dict)
         if section_dict is None:
-            self.logger.warn("%s section does not exist - skipping" % section_code)
+            self.logger.warn(
+                "%s section does not exist - skipping" % section_code
+            )
         else:
             if not form_exists(data, NEW_FORM):
                 new_form = add_form(data, NEW_FORM)
@@ -190,7 +194,8 @@ class Munger:
                 self.log("added section %s to %s" % (section_code, NEW_FORM))
             else:
                 self.error(
-                    "section %s already exists in %s?" % (section_code, NEW_FORM)
+                    "section %s already exists in %s?"
+                    % (section_code, NEW_FORM)
                 )
 
     def _delete_old_sections(self, old_form):

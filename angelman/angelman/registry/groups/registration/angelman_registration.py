@@ -65,7 +65,9 @@ class AngelmanRegistration(BaseRegistration):
             "patient": patient,
             "parent": parent_guardian,
             "registration": registration,
-            "activation_url": self.get_registration_activation_url(registration),
+            "activation_url": self.get_registration_activation_url(
+                registration
+            ),
         }
 
         process_notification(
@@ -99,7 +101,9 @@ class AngelmanRegistration(BaseRegistration):
         )
 
     def get_address_type(self, address_type):
-        address_type_obj, created = AddressType.objects.get_or_create(type=address_type)
+        address_type_obj, created = AddressType.objects.get_or_create(
+            type=address_type
+        )
         return address_type_obj
 
     def _create_parent(self):
@@ -123,7 +127,9 @@ class AngelmanRegistration(BaseRegistration):
             "context_form_group_code", "form_name", "section_code", "cde_code"
         )(DIAGNOSIS_CDE)
 
-        context_form_group = ContextFormGroup.objects.get(code=context_form_group_code)
+        context_form_group = ContextFormGroup.objects.get(
+            code=context_form_group_code
+        )
         context = RDRFContext.objects.get(
             registry=registry,
             context_form_group=context_form_group,
@@ -140,7 +146,9 @@ class AngelmanRegistration(BaseRegistration):
         first_name = form_data["parent_guardian_first_name"]
         last_name = form_data["parent_guardian_last_name"]
 
-        preferred_language = self.form.cleaned_data.get("preferred_languages", "en")
+        preferred_language = self.form.cleaned_data.get(
+            "preferred_languages", "en"
+        )
         django_user.preferred_language = preferred_language
 
         return self.setup_django_user(

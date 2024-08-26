@@ -29,10 +29,10 @@ VERSION = env.get("app_version", "%s (ang)" % angelman.VERSION)
 
 CURATOR_EMAIL = env.get("curator_email", "curator@angelmanregistry.info")
 
-REGISTRATION_FORM = "angelman.forms.angelman_registration_form.ANGRegistrationForm"
-REGISTRATION_CLASS = (
-    "angelman.registry.groups.registration.angelman_registration.AngelmanRegistration"
+REGISTRATION_FORM = (
+    "angelman.forms.angelman_registration_form.ANGRegistrationForm"
 )
+REGISTRATION_CLASS = "angelman.registry.groups.registration.angelman_registration.AngelmanRegistration"
 REGISTRATION_CLASS_EMBEDDED = "angelman.registry.groups.registration.angelman_registration.EmbeddedAngelmanRegistration"
 
 CSP_FRAME_SRC += [
@@ -40,7 +40,10 @@ CSP_FRAME_SRC += [
     "https://angelmanregistry.info",
     "https://www.angelmanregistry.info",
 ]
-CSP_OBJECT_SRC += ["https://angelmanregistry.info", "https://www.angelmanregistry.info"]
+CSP_OBJECT_SRC += [
+    "https://angelmanregistry.info",
+    "https://www.angelmanregistry.info",
+]
 
 SECURITY_WHITELISTED_URLS += (
     "parent_edit",

@@ -89,8 +89,8 @@ class ANGPatientRegistrationForm(RegistrationFormCaseInsensitiveCheck):
                 self.fields[field].label = self.labels.get(field, "")
 
             if field in self.placeholders.keys():
-                self.fields[field].widget.attrs["placeholder"] = self.placeholders.get(
-                    field, ""
+                self.fields[field].widget.attrs["placeholder"] = (
+                    self.placeholders.get(field, "")
                 )
             if field in self.password_fields:
                 self.fields[field].widget.render_value = True
@@ -101,7 +101,9 @@ class ANGPatientRegistrationForm(RegistrationFormCaseInsensitiveCheck):
     first_name = CharField(required=True, max_length=30)
     surname = CharField(required=True, max_length=30)
     date_of_birth = DateField(required=True)
-    gender = ChoiceField(choices=Patient.SEX_CHOICES, widget=RadioSelect, required=True)
+    gender = ChoiceField(
+        choices=Patient.SEX_CHOICES, widget=RadioSelect, required=True
+    )
     diagnosis = ChoiceField(
         required=True, widget=Select, choices=_get_diagnosis, initial=""
     )
@@ -161,7 +163,9 @@ class ANGRegistrationForm(ANGPatientRegistrationForm):
         choices=ANGPatientRegistrationForm.country_choices,
         initial="-1",
     )
-    parent_guardian_state = CharField(required=False, widget=Select, max_length=30)
+    parent_guardian_state = CharField(
+        required=False, widget=Select, max_length=30
+    )
     parent_guardian_postcode = CharField(required=True, max_length=30)
     parent_guardian_phone = CharField(required=True, max_length=30)
     same_address = BooleanField(required=False)
