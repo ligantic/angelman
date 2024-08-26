@@ -73,8 +73,7 @@ def form_exists(data, form_name):
 
 
 def add_form(data, form_name):
-    form_dict = {"name": form_name,
-                 "sections": []}
+    form_dict = {"name": form_name, "sections": []}
     data["forms"].append(form_dict)
     return form_dict
 
@@ -164,18 +163,19 @@ class Munger:
         self.log("saved new data ok")
 
     def _get_clinical_data_model(self):
-        return ClinicalData.objects.get(collection="cdes",
-                                        registry_code=self.registry_code,
-                                        django_model="Patient",
-                                        django_id=self.patient_id,
-                                        context_id=self.context_id)
+        return ClinicalData.objects.get(
+            collection="cdes",
+            registry_code=self.registry_code,
+            django_model="Patient",
+            django_id=self.patient_id,
+            context_id=self.context_id,
+        )
 
     def _move_data(self, data, form_dict, section_code):
         section_dict = get_section(form_dict, section_code)
         section_copy = deepcopy(section_dict)
         if section_dict is None:
-            self.logger.warn(
-                "%s section does not exist - skipping" % section_code)
+            self.logger.warn("%s section does not exist - skipping" % section_code)
         else:
             if not form_exists(data, NEW_FORM):
                 new_form = add_form(data, NEW_FORM)
@@ -185,17 +185,20 @@ class Munger:
                 self.log("form %s already exists - using" % NEW_FORM)
 
             section_count = len(
-                [s for s in new_form["sections"] if s["code"] == section_code])
+                [s for s in new_form["sections"] if s["code"] == section_code]
+            )
             if section_count == 0:
                 new_form["sections"].append(section_copy)
                 self.log("added section %s to %s" % (section_code, NEW_FORM))
             else:
-                self.error("section %s already exists in %s?" %
-                           (section_code, NEW_FORM))
+                self.error(
+                    "section %s already exists in %s?" % (section_code, NEW_FORM)
+                )
 
     def _delete_old_sections(self, old_form):
         old_form["sections"] = [
-            s for s in old_form["sections"] if s["code"] not in SECTIONS]
+            s for s in old_form["sections"] if s["code"] not in SECTIONS
+        ]
 
 
 def check_registry(reg):
@@ -234,7 +237,7 @@ def run(dry_run=True):
         m.munge()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     dry_run = True
     try:
         dry_run = sys.argv[1] != "real"
