@@ -14,10 +14,6 @@
                     "value": "$APPLICATION_NAME"
                 },
                 {
-                    "name": "LANGUAGES",
-                    "value": "$LANGUAGES"
-                },
-                {
                     "name": "DBDATABASE",
                     "value": "$DBDATABASE"
                 },
