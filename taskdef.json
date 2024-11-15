@@ -186,14 +186,6 @@
                 {
                     "name": "DBPASS",
                     "valueFrom": "$DBPASS"
-                },
-                {
-                    "name": "ENABLE_CROWDIN_IN_CONTEXT_TRANSLATION",
-                    "valueFrom": "$ENABLE_CROWDIN_IN_CONTEXT_TRANSLATION"
-                },
-                {
-                    "name": "CROWDIN_IN_CONTEXT_PROJECT_ID",
-                    "valueFrom": "$CROWDIN_IN_CONTEXT_PROJECT_ID"
                 }
             ]
         },
