@@ -22,3 +22,7 @@ jobs:
           git pull
           git merge next_release
           git push
+          git checkout prelive
+          git pull
+          git merge next_release
+          git push
