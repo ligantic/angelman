@@ -39,7 +39,8 @@ COPY rdrf/requirements/* ./rdrf/
 COPY rdrf/clients ./clients
 
 RUN --mount=type=cache,target=/root/.cache/pip \
-    pip install -r rdrf/requirements.txt \
+    pip install --upgrade pip setuptools \
+    && pip install -r rdrf/requirements.txt \
     && pip install -r rdrf/dev-requirements.txt \
     && pip install -r rdrf/test-requirements.txt \
     && pip install -r requirements.txt \
