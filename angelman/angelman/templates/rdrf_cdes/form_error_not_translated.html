@@ -1,0 +1,14 @@
+{% extends "rdrf_cdes/base.html" %}
+{% load i18n %}
+{% load get_language_endonym %}
+
+{% block content %}
+    <div class="alert alert-danger">
+      {% with endonym=LANGUAGE_CODE|get_language_endonym %}
+        {% blocktrans trimmed with endonym=endonym language_code=LANGUAGE_CODE  %}
+            <p>This form is not available in {{ endonym }} ({{ language_code }}).</p>
+            <p>We will contact you when this language is available. Please contact <a href="mailto:curator@angelmanregistry.info">curator@angelmanregistry.info</a> if you are able to assist with translation.</p>
+        {% endblocktrans %}
+      {% endwith %}
+    </div>
+{% endblock %}
