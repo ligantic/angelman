@@ -40,6 +40,10 @@ CSP_FRAME_SRC += [
     "https://angelmanregistry.info",
     "https://www.angelmanregistry.info",
 ]
+
+if "'none'" in CSP_OBJECT_SRC:
+    CSP_OBJECT_SRC.remove("'none'")
+
 CSP_OBJECT_SRC += [
     "https://angelmanregistry.info",
     "https://www.angelmanregistry.info",
