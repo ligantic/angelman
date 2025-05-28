@@ -1,4 +1,4 @@
-EXPORT_TIME: '2024-05-27 09:09:23.837123'
+EXPORT_TIME: '2025-05-27 09:16:46.407302'
 EXPORT_TYPE: REGISTRY_PLUS_CDES
 RDRF_VERSION: 1.0.0
 REGISTRY_VERSION: '1.49'
@@ -26852,6 +26852,589 @@ cdes:
   pv_group: YesNo
   widget_name: RadioSelect
   widget_settings: '{"force_vertical":true}'
+- abbreviated_name: Country location
+  allow_multiple: false
+  calculation: ''
+  calculation_query: ''
+  code: DxCountry
+  datatype: string
+  desc: ''
+  important: false
+  instructions: Country where clinic/ laboratory was located
+  is_required: false
+  max_length: null
+  max_value: null
+  min_value: null
+  name: Country location of lab or clinic
+  pattern: ''
+  pv_group: null
+  widget_name: CountryWidget
+  widget_settings: '{}'
+- abbreviated_name: Date entered
+  allow_multiple: false
+  calculation: ''
+  calculation_query: ''
+  code: DxDate
+  datatype: date
+  desc: ''
+  important: false
+  instructions: Date info is being entered
+  is_required: false
+  max_length: null
+  max_value: null
+  min_value: null
+  name: Date entered
+  pattern: ''
+  pv_group: null
+  widget_name: DateWidget
+  widget_settings: '{}'
+- abbreviated_name: DateReportLetter
+  allow_multiple: false
+  calculation: ''
+  calculation_query: ''
+  code: DxDateReport
+  datatype: date
+  desc: ''
+  important: false
+  instructions: Date of laboratory report or clinician letter
+  is_required: false
+  max_length: null
+  max_value: null
+  min_value: null
+  name: Date of report or letter
+  pattern: ''
+  pv_group: null
+  widget_name: DateWidget
+  widget_settings: '{}'
+- abbreviated_name: CMA build
+  allow_multiple: false
+  calculation: ''
+  calculation_query: ''
+  code: DxDeletionCMA
+  datatype: range
+  desc: ''
+  important: false
+  instructions: CMA build
+  is_required: false
+  max_length: null
+  max_value: null
+  min_value: null
+  name: CMA build
+  pattern: ''
+  pv_group: DxDeletionCMAPVG
+  widget_name: RadioSelect
+  widget_settings: '{"force_vertical":true}'
+- abbreviated_name: How determined
+  allow_multiple: false
+  calculation: ''
+  calculation_query: ''
+  code: DxDeletionDet
+  datatype: range
+  desc: Q5.1 how determined
+  important: false
+  instructions: How was the deletion determined?
+  is_required: false
+  max_length: null
+  max_value: null
+  min_value: null
+  name: How determined
+  pattern: ''
+  pv_group: DxDeletionPVG
+  widget_name: RadioSelect
+  widget_settings: '{"force_vertical":true}'
+- abbreviated_name: ISCN Format
+  allow_multiple: false
+  calculation: ''
+  calculation_query: ''
+  code: DxDeletionISCN
+  datatype: string
+  desc: ''
+  important: false
+  instructions: ''
+  is_required: false
+  max_length: null
+  max_value: null
+  min_value: null
+  name: Result in ISCN format
+  pattern: ''
+  pv_group: null
+  widget_name: ''
+  widget_settings: ''
+- abbreviated_name: Length deletion
+  allow_multiple: false
+  calculation: |-
+    var minstart = context.DxDeletionMinStartCoordinates;
+    var minstop = context.DxDeletionMinStop;
+
+    var length = minstart - minstop;
+
+    context.result = length;
+  calculation_query: ''
+  code: DxDeletionLength
+  datatype: calculated
+  desc: ''
+  important: false
+  instructions: (calculated from minimum start-stop)
+  is_required: false
+  max_length: null
+  max_value: null
+  min_value: null
+  name: Length of deletion
+  pattern: ''
+  pv_group: null
+  widget_name: ''
+  widget_settings: '{}'
+- abbreviated_name: Maximum start
+  allow_multiple: false
+  calculation: ''
+  calculation_query: ''
+  code: DxDeletionMaxStart
+  datatype: integer
+  desc: ''
+  important: false
+  instructions: Is there a minimum and maximum number for this?
+  is_required: false
+  max_length: null
+  max_value: null
+  min_value: null
+  name: Maximum start
+  pattern: ''
+  pv_group: null
+  widget_name: PositiveIntegerInput
+  widget_settings: '{}'
+- abbreviated_name: Or NA
+  allow_multiple: true
+  calculation: ''
+  calculation_query: ''
+  code: DxDeletionMaxStartNA
+  datatype: range
+  desc: ''
+  important: false
+  instructions: ''
+  is_required: false
+  max_length: null
+  max_value: null
+  min_value: null
+  name: Or NA
+  pattern: ''
+  pv_group: DxNA
+  widget_name: ''
+  widget_settings: '{}'
+- abbreviated_name: Maximum stop
+  allow_multiple: false
+  calculation: ''
+  calculation_query: ''
+  code: DxDeletionMaxStop
+  datatype: integer
+  desc: ''
+  important: false
+  instructions: Should there be a minimum or maximum value
+  is_required: false
+  max_length: null
+  max_value: null
+  min_value: null
+  name: Maximum stop
+  pattern: ''
+  pv_group: null
+  widget_name: PositiveIntegerInput
+  widget_settings: '{}'
+- abbreviated_name: Or NA
+  allow_multiple: true
+  calculation: ''
+  calculation_query: ''
+  code: DxDeletionMaxStopNA
+  datatype: range
+  desc: ''
+  important: false
+  instructions: ''
+  is_required: false
+  max_length: null
+  max_value: null
+  min_value: null
+  name: Or NA
+  pattern: ''
+  pv_group: DxNA
+  widget_name: ''
+  widget_settings: '{}'
+- abbreviated_name: Methylation studies
+  allow_multiple: false
+  calculation: ''
+  calculation_query: ''
+  code: DxDeletionMethylation
+  datatype: range
+  desc: ''
+  important: false
+  instructions: Methylation studies
+  is_required: false
+  max_length: null
+  max_value: null
+  min_value: null
+  name: Methylation studies
+  pattern: ''
+  pv_group: DxDeletionMethylationPVG
+  widget_name: RadioSelect
+  widget_settings: '{"force_vertical":true}'
+- abbreviated_name: Min start coord
+  allow_multiple: false
+  calculation: ''
+  calculation_query: ''
+  code: DxDeletionMinStartCoordinates
+  datatype: integer
+  desc: ''
+  important: false
+  instructions: Should there be a minimum and maximum value?
+  is_required: false
+  max_length: null
+  max_value: null
+  min_value: null
+  name: Minimum start coordinates
+  pattern: ''
+  pv_group: null
+  widget_name: PositiveIntegerInput
+  widget_settings: '{}'
+- abbreviated_name: Min stop
+  allow_multiple: false
+  calculation: ''
+  calculation_query: ''
+  code: DxDeletionMinStop
+  datatype: integer
+  desc: ''
+  important: false
+  instructions: Should this have a minimum or maximum input number?
+  is_required: false
+  max_length: null
+  max_value: null
+  min_value: null
+  name: Minimum stop
+  pattern: ''
+  pv_group: null
+  widget_name: PositiveIntegerInput
+  widget_settings: '{}'
+- abbreviated_name: Any other comments
+  allow_multiple: false
+  calculation: ''
+  calculation_query: ''
+  code: DxFinalComment
+  datatype: string
+  desc: ''
+  important: false
+  instructions: ''
+  is_required: false
+  max_length: null
+  max_value: null
+  min_value: null
+  name: Any other comments about this diagnostic file
+  pattern: ''
+  pv_group: null
+  widget_name: TextAreaWidget
+  widget_settings: '{}'
+- abbreviated_name: Further testing needed
+  allow_multiple: false
+  calculation: ''
+  calculation_query: ''
+  code: DxFurtherTest
+  datatype: range
+  desc: If no, further testing recommended
+  important: false
+  instructions: ''
+  is_required: false
+  max_length: null
+  max_value: null
+  min_value: null
+  name: If no, further testing recommended
+  pattern: ''
+  pv_group: DxFurtherTestPVG
+  widget_name: ''
+  widget_settings: '{}'
+- abbreviated_name: Genotype
+  allow_multiple: false
+  calculation: ''
+  calculation_query: ''
+  code: DxGenotype
+  datatype: range
+  desc: ''
+  important: false
+  instructions: Genotype catagory reported
+  is_required: false
+  max_length: null
+  max_value: null
+  min_value: null
+  name: Genotype
+  pattern: ''
+  pv_group: DxGenotypePVG
+  widget_name: RadioSelect
+  widget_settings: '{"force_vertical":true}'
+- abbreviated_name: Coordinates of ICD deletion
+  allow_multiple: false
+  calculation: ''
+  calculation_query: ''
+  code: DxICDCoordinates
+  datatype: string
+  desc: ''
+  important: false
+  instructions: ''
+  is_required: false
+  max_length: null
+  max_value: null
+  min_value: null
+  name: Coordinates of ICD deletion
+  pattern: ''
+  pv_group: null
+  widget_name: ''
+  widget_settings: ''
+- abbreviated_name: Variant type
+  allow_multiple: false
+  calculation: ''
+  calculation_query: ''
+  code: DxICDSpecifyVariant
+  datatype: range
+  desc: Variant type
+  important: false
+  instructions: ''
+  is_required: false
+  max_length: null
+  max_value: null
+  min_value: null
+  name: Variant type
+  pattern: ''
+  pv_group: ICDVariantPVG
+  widget_name: RadioSelect
+  widget_settings: '{"force_vertical":false}'
+- abbreviated_name: Type of ICD
+  allow_multiple: false
+  calculation: ''
+  calculation_query: ''
+  code: DxICDType
+  datatype: range
+  desc: ''
+  important: false
+  instructions: ''
+  is_required: false
+  max_length: null
+  max_value: null
+  min_value: null
+  name: Type of ICD
+  pattern: ''
+  pv_group: DxICDPVG
+  widget_name: RadioSelect
+  widget_settings: '{"force_vertical":true}'
+- abbreviated_name: Type of source
+  allow_multiple: true
+  calculation: ''
+  calculation_query: ''
+  code: DxInfoType
+  datatype: range
+  desc: ''
+  important: false
+  instructions: ''
+  is_required: false
+  max_length: null
+  max_value: null
+  min_value: null
+  name: Type of source
+  pattern: ''
+  pv_group: DxInfoTypePVG
+  widget_name: ''
+  widget_settings: '{}'
+- abbreviated_name: Inheritance
+  allow_multiple: false
+  calculation: ''
+  calculation_query: ''
+  code: DxInheritance
+  datatype: range
+  desc: ''
+  important: false
+  instructions: ''
+  is_required: false
+  max_length: null
+  max_value: null
+  min_value: null
+  name: Inheritance
+  pattern: ''
+  pv_group: DxInheritancePVG
+  widget_name: RadioSelect
+  widget_settings: '{"force_vertical":true}'
+- abbreviated_name: Language report
+  allow_multiple: false
+  calculation: ''
+  calculation_query: ''
+  code: DxLanguage
+  datatype: range
+  desc: ''
+  important: false
+  instructions: Language of report/ letter
+  is_required: false
+  max_length: null
+  max_value: null
+  min_value: null
+  name: Language of report
+  pattern: ''
+  pv_group: LanguageDx
+  widget_name: ''
+  widget_settings: '{}'
+- abbreviated_name: Percentage AS cells
+  allow_multiple: false
+  calculation: ''
+  calculation_query: ''
+  code: DxMosaicPercentAS
+  datatype: integer
+  desc: ''
+  important: false
+  instructions: ''
+  is_required: false
+  max_length: null
+  max_value: '99.00'
+  min_value: '0.00'
+  name: Percentage AS cells
+  pattern: ''
+  pv_group: null
+  widget_name: ''
+  widget_settings: '{}'
+- abbreviated_name: specific tissue
+  allow_multiple: false
+  calculation: ''
+  calculation_query: ''
+  code: DxMosaicTissue
+  datatype: range
+  desc: ''
+  important: false
+  instructions: ''
+  is_required: false
+  max_length: null
+  max_value: null
+  min_value: null
+  name: if yes, specific tissue
+  pattern: ''
+  pv_group: DxMosaicTissuePVG
+  widget_name: ''
+  widget_settings: '{}'
+- abbreviated_name: Mosaicism
+  allow_multiple: false
+  calculation: ''
+  calculation_query: ''
+  code: DxMosaicism
+  datatype: range
+  desc: ''
+  important: false
+  instructions: ''
+  is_required: false
+  max_length: null
+  max_value: null
+  min_value: null
+  name: Mosaicism
+  pattern: ''
+  pv_group: DxYNPVG
+  widget_name: RadioSelect
+  widget_settings: '{"force_vertical":true}'
+- abbreviated_name: Recommended testing
+  allow_multiple: false
+  calculation: ''
+  calculation_query: ''
+  code: DxRecommendTest
+  datatype: range
+  desc: ''
+  important: false
+  instructions: ''
+  is_required: false
+  max_length: null
+  max_value: null
+  min_value: null
+  name: Has participant had all recommended genetic testing
+  pattern: ''
+  pv_group: DxYNPVG
+  widget_name: RadioSelect
+  widget_settings: '{"force_vertical":true}'
+- abbreviated_name: Data consistent
+  allow_multiple: false
+  calculation: ''
+  calculation_query: ''
+  code: DxReportConsistent
+  datatype: range
+  desc: ''
+  important: false
+  instructions: ''
+  is_required: false
+  max_length: null
+  max_value: null
+  min_value: null
+  name: Reported data consistent with subtype
+  pattern: ''
+  pv_group: DxYNUPVG
+  widget_name: RadioSelect
+  widget_settings: '{"force_vertical":true}'
+- abbreviated_name: p nomenclature
+  allow_multiple: false
+  calculation: ''
+  calculation_query: ''
+  code: DxUBE3APNomenclature
+  datatype: string
+  desc: ''
+  important: false
+  instructions: ''
+  is_required: false
+  max_length: null
+  max_value: null
+  min_value: null
+  name: p nomenclature
+  pattern: ''
+  pv_group: null
+  widget_name: ''
+  widget_settings: ''
+- abbreviated_name: Specify variant
+  allow_multiple: false
+  calculation: ''
+  calculation_query: ''
+  code: DxUBE3ASpecifyVariant
+  datatype: string
+  desc: ''
+  important: false
+  instructions: For UBE3A - I am leaving the conditional rendering (logic skips) off
+    to allow you to look at the content :)
+  is_required: false
+  max_length: null
+  max_value: null
+  min_value: null
+  name: Specify variant (c)
+  pattern: ''
+  pv_group: null
+  widget_name: ''
+  widget_settings: ''
+- abbreviated_name: Type of testing
+  allow_multiple: false
+  calculation: ''
+  calculation_query: ''
+  code: DxUBE3ATypeTesting
+  datatype: range
+  desc: ''
+  important: false
+  instructions: ''
+  is_required: false
+  max_length: null
+  max_value: null
+  min_value: null
+  name: Type of testing
+  pattern: ''
+  pv_group: DxUBE3ATestPVG
+  widget_name: RadioSelect
+  widget_settings: '{"force_vertical":true}'
+- abbreviated_name: Type of UPD
+  allow_multiple: false
+  calculation: ''
+  calculation_query: ''
+  code: DxUPDType
+  datatype: range
+  desc: ''
+  important: false
+  instructions: ''
+  is_required: false
+  max_length: null
+  max_value: null
+  min_value: null
+  name: Type of UPD
+  pattern: ''
+  pv_group: DxUPDPVG
+  widget_name: RadioSelect
+  widget_settings: '{"force_vertical":true}'
 - abbreviated_name: EEG File
   allow_multiple: false
   calculation: ''
@@ -26888,6 +27471,24 @@ cdes:
   pv_group: YesNo
   widget_name: RadioSelect
   widget_settings: '{"force_vertical":true}'
+- abbreviated_name: Exon
+  allow_multiple: false
+  calculation: ''
+  calculation_query: ''
+  code: ExonMut
+  datatype: float
+  desc: ''
+  important: false
+  instructions: ''
+  is_required: false
+  max_length: null
+  max_value: null
+  min_value: null
+  name: Exon
+  pattern: ''
+  pv_group: null
+  widget_name: ''
+  widget_settings: '{}'
 - abbreviated_name: Are you still participating in the Roche  Genetech FREESIAS Endpoint
     Study
   allow_multiple: false
@@ -28728,6 +29329,60 @@ cdes:
   pv_group: YesNo
   widget_name: RadioSelect
   widget_settings: '{"force_vertical":true}'
+- abbreviated_name: Transcript
+  allow_multiple: false
+  calculation: ''
+  calculation_query: ''
+  code: TranscriptMut
+  datatype: range
+  desc: ''
+  important: false
+  instructions: ''
+  is_required: false
+  max_length: null
+  max_value: null
+  min_value: null
+  name: Transcript
+  pattern: ''
+  pv_group: TranscriptPVG
+  widget_name: RadioSelect
+  widget_settings: '{"force_vertical":true}'
+- abbreviated_name: Open text number
+  allow_multiple: false
+  calculation: ''
+  calculation_query: ''
+  code: TranscriptNum
+  datatype: float
+  desc: ''
+  important: false
+  instructions: ''
+  is_required: false
+  max_length: null
+  max_value: null
+  min_value: null
+  name: Open text number
+  pattern: ''
+  pv_group: null
+  widget_name: ''
+  widget_settings: '{}'
+- abbreviated_name: other open text
+  allow_multiple: false
+  calculation: ''
+  calculation_query: ''
+  code: TranscriptStri
+  datatype: string
+  desc: ''
+  important: false
+  instructions: ''
+  is_required: false
+  max_length: null
+  max_value: null
+  min_value: null
+  name: other open text
+  pattern: ''
+  pv_group: null
+  widget_name: ''
+  widget_settings: ''
 - abbreviated_name: Unknown unaware
   allow_multiple: false
   calculation: ''
@@ -28951,16 +29606,16 @@ cdes:
 code: ang
 complete_fields:
 - cdes:
+  - ResideInfancy
+  - ResideNewborn
+  form_name: NewbornAndInfancyHistory
+- cdes:
   - CBS0CareSup
   - CBS0Cost
   - CBS0Duration
   - CBS0Over18
   - CBS0USA
   form_name: CareBurden
-- cdes:
-  - ResideInfancy
-  - ResideNewborn
-  form_name: NewbornAndInfancyHistory
 - cdes:
   - ADMINDUPLICATEOTH
   - ADMINPASS
@@ -29203,32 +29858,6 @@ consent_sections:
 - applicability_condition: ''
   code: AngNewConsentSection
   information_link: 08NOV2023_Angelman_Syndrome_Information_Sheet.pdf
-  information_text: |-
-    <p><b>Parent/Carer/ Guardian Information</b></p><br>
-    <h2><p><center><b>Global Angelman Syndrome Registry</b></center></p></h2>
-    <p><b>Protocol Number: HREC/13/MHS/76</b></p>
-    <p><b>Project Sponsor: Foundation for Angelman Syndrome Therapeutics Australia</b></p>
-    <p>
-      <b>Coordinating Principal Investigator: A/Prof Honey Heussler, Children's Health Queensland Hospital and Health Services, Brisbane</b><br>
-      Email: <a href="mailto:h.heussler@health.qld.gov.au" target="_top">h.heussler@health.qld.gov.au</a><br>
-      Phone: + 61(7) 3163 1636
-    </p>
-    <p>
-      <b>Site Principal Investigator: Professor Matthew Bellgard, Queensland University of Technology, Brisbane</b><br>
-      Email: <a href="mailto:matthew.bellgard@qut.edu.au" target="_top">matthew.bellgard@qut.edu.au</a><br>
-      Phone: +61(7) 3138 9749
-    </p>
-    <p>
-      <b>Registry curator: Megan Tones, Queensland University of Technology, Brisbane</b><br>
-      Email: <a href="mailto:curator@angelmanregistry.info" target="_top">curator@angelmanregistry.info</a>
-    </p><br>
-    <h4><b>Welcome to the Global Angelman Syndrome Registry.</b></h4>
-    <p>Please watch this video before you decide to take part. You may also wish to show this video to other people involved in caring for your child or adult with AS including relatives, friends or clinicians.</p>
-    <p>
-      If you have any questions, please contact the registry curator:<br>
-      Megan Tones (registry curator), Queensland University of Technology, Brisbane<br>
-      Email: <a href="mailto:curator@angelmanregistry.info" target="_top">curator@angelmanregistry.info</a>
-    </p>
   information_media: |-
     <video id="ConsentVideo" class="video-js" controls preload="auto"
       poster="https://d4d7dpr65gp9x.cloudfront.net/angelman/01G6PFFT70CMQR8VS9G6W8N94C/poster/consent_20220629.0000001.jpg"
@@ -29267,6 +29896,31 @@ consent_sections:
         });
       });
     </script>
+  information_text: |-
+    <p><b>Parent/Carer/ Guardian Information</b></p><br>
+    <h2><p><center><b>Global Angelman Syndrome Registry</b></center></p></h2>
+    <p><b>Protocol Number: HREC/13/MHS/76</b></p>
+    <p><b>Project Sponsor: Foundation for Angelman Syndrome Therapeutics Australia</b></p>
+    <p>
+      <b>Coordinating Principal Investigator: A/Prof Honey Heussler, Children's Health Queensland Hospital and Health Services, Brisbane</b><br>
+      Email: <a href="mailto:h.heussler@health.qld.gov.au" target="_top">h.heussler@health.qld.gov.au</a><br>
+      Phone: + 61(7) 3163 1636
+    </p>
+    <p>
+      <b>Site Principal Investigator: Professor Matthew Bellgard, University of East London, UK</b><br>
+      Email: <a href="mailto:M.Bellgard@uel.ac.uk" target="_top">M.Bellgard@uel.ac.uk</a><br>
+    </p>
+    <p>
+      <b>Registry curators: Megan Tones, Queensland University of Technology, Australia, and Niki Armstrong, Foundation for Angelman Syndrome Therapeutics, USA</b><br>
+      Email: <a href="mailto:curator@angelmanregistry.info" target="_top">curator@angelmanregistry.info</a>
+    </p><br>
+    <h4><b>Welcome to the Global Angelman Syndrome Registry.</b></h4>
+    <p>Please watch this video before you decide to take part. You may also wish to show this video to other people involved in caring for your child or adult with AS including relatives, friends or clinicians.</p>
+    <p>
+      If you have any questions, please contact the registry curators<br>
+      Megan Tones and Niki Armstrong<br>
+      Email: <a href="mailto:curator@angelmanregistry.info" target="_top">curator@angelmanregistry.info</a>
+    </p>
   questions:
   - code: angnewconsent1
     instructions: ''
@@ -29303,6 +29957,17 @@ consent_sections:
   section_label: Angelman general information and consent
   validation_rule: angnewconsent1
 context_form_groups:
+- abbreviated_name: DxReportMetaCFG
+  code: DxReportMetaCFG
+  context_type: M
+  forms:
+  - DxMetaReport
+  is_default: false
+  name: Administration
+  naming_cde_to_use: null
+  naming_scheme: D
+  ordering: C
+  sort_order: 1
 - abbreviated_name: Archived Data
   code: Archive
   context_type: F
@@ -29467,7 +30132,7 @@ email_notifications:
 
       <p>Either you or somebody else has attempted to login to the Global Angelman Syndrome Registry with your e-mail address {{user.email}} and a wrong password. To protect your data against unauthorized access your user account has been temporarily blocked.</p>
 
-      <p>You may verify your account and set a new password at the following link: https://trrf.angelmanregistry.info/login_assistance</p>
+      <p>You may verify your account and set a new password at the following link: {% full_url "password_reset" %} </p>
 
       <p>Please contact the Global Angelman Syndrome Registry Curator at the email address below to obtain assistance in unlocking your account.</p>
 
@@ -29600,8 +30265,8 @@ email_notifications:
       जब तक आप बिंदु 2 में बताई गई प्रक्रिया को पूरा नहीं कर लेते, तब तक आपके लिए उपलब्ध किसी भी शोध, परीक्षण या अन्य अवसरों के बारे में आपसे संपर्क नहीं किया जा सकता है।</li><br>
       <li><b> बेसलाइन डेटा,</b>  इसे किसी चिकित्सक की पहली मुलाकात के रूप में सोचें, यह {{patient.given_names}} का अब तक का पूरा इतिहास है। इसे व्यवहार, विकास, दवाओं, दौरे, चिकित्सा और नींद जैसे मॉड्यूल की एक श्रृंखला में विभाजित किया गया है। इन मॉड्यूल्स को एक बार में या आपके पास समय होने पर एक-एक करके पूरा किया जा सकता है।<br>
       डेटा दर्ज करना शुरू करने के लिए आपको सहमति के संबंध में एक छोटा वीडियो दिखाया जाएगा, कुछ अनिवार्य हैं और कुछ वैकल्पिक हैं (ये इस बारे में हैं कि आगे के शोध और परीक्षणों के बारे में आपसे कैसे संपर्क किया जा सकता है)<br>
-      अपने खाते को सत्यापित करने, सहमति प्रदान करने और आधारभूत डेटा दर्ज करना शुरू करने के लिए, कृपया इस <a href="https://trrf.angelmanregistry.info{% url 'registration_activate' registration.activation_key %}">सक्रियण लिंक</a> पर क्लिक करें या इसे वेब ब्राउज़र में कॉपी और पेस्ट करें। लिंक 2 दिनों में समाप्त हो जाएगा।<br>
-      https://trrf.angelmanregistry.info{% url 'registration_activate' registration.activation_key %}
+      अपने खाते को सत्यापित करने, सहमति प्रदान करने और आधारभूत डेटा दर्ज करना शुरू करने के लिए, कृपया इस <a href="{{activation_url}}">सक्रियण लिंक</a> पर क्लिक करें या इसे वेब ब्राउज़र में कॉपी और पेस्ट करें। लिंक 2 दिनों में समाप्त हो जाएगा।<br>
+      {{activation_url}}
       </li><br>
 
       <li><b> अनुदैर्ध्य डेटा समय </b>के साथ उसके विकास को ट्रैक करेगा {{patient.given_names}}, जिसमें मील के पत्थर और परिवर्तनों के अपडेट के लिए रिमाइंडर भेजे जाएंगे।</li></ol></p>
@@ -29616,53 +30281,6 @@ email_notifications:
     language: hi
     subject: एंजेलमैन अनुसंधान में भाग लेने के लिए धन्यवाद!
   - body: |-
-      <p>Estimado {{parent.first_name}} {{parent.last_name|title}},</p>
-
-      <p>Gracias por inscribir a su ser querido {{patient.given_names}} {{patient.family_name|title}} para ayudar a generar una mejor comprensión de las personas con síndrome de Angelman en todo el mundo. Sus datos anonimizados, como el genotipo, la edad y el país de nacimiento, se utilizarán para ayudar a comprender la verdadera prevalencia del síndrome de Angelman (a nivel mundial y dentro de cada país) en el <b>proyecto Global Search & Rescue</b> (<a href="https://www.angelmansearchandrescue.org/">https://www.angelmansearchandrescue.org/)</a> Esto, a su vez, ayudará a garantizar que los apoyos comunitarios y educativos estén disponibles para todos. Sus nombres, dirección y dirección de correo electrónico no se compartirán fuera de esta plataforma.</p>
-
-      <p>Nos gustaría invitarlo a que brinde más detalles para avanzar en la investigación y la comprensión en el <b>Registro Global del Síndrome de Angelman</b> al completar una serie de módulos tales como comportamiento, desarrollo, medicamentos, convulsiones, terapias y sueño.  Estos módulos se pueden completar todos a la vez, o uno por uno, según tenga tiempo.</p>
-
-      <p>Haga clic en el siguiente enlace de activación para verificar su cuenta de registro de Angelman, o copie y pegue en un navegador web e inicie sesión en el registro.  Este enlace caducará en 2 días.</p>
-
-
-      <p><a href="https://trrf.angelmanregistry.info{% url 'registration_activate' registration.activation_key %}">Enlace de activación</a></p>
-      <p>https://trrf.angelmanregistry.info{% url 'registration_activate' registration.activation_key %}</p>
-
-      <p>Si es necesario, el encargado de la recopilación de datos del registro se comunicará con usted a través de su dirección de correo electrónico {{parent.user.email}}. Si tiene alguna consulta, comuníquese con el encargado del registro en la dirección de correo electrónico a continuación.  También puede encontrar información detallada en el sitio <a href="https://angelmanregistry.info/">web del Registro mundial del síndrome de Angelman</a>.</p>
-
-      <p>Le animamos a visitar <a href="https://www.angelmansearchandrescue.org/">https://www.angelmansearchandrescue.org/</a> y <a href="https://www.angelmanregistry.info/partners/">https://www.angelmanregistry.info/partners/</a> para encontrar la(s) organización(es) de pacientes en su país y región e inscribirse en sus listas de correo para que ellos puedan mantenerlo actualizado y apoyarlo a nivel local.</p>
-
-      <p>Tuyo sinceramente,<br>
-      Megan Tones<br>
-      Recopilador de datos<br>
-      Registro mundial del síndrome de Angelman<br>
-       Correo electrónico: curator@angelmanregistry.info
-    description: Email notification containing verification link sent to patients
-      upon registration in the registry
-    language: es
-    subject: ¡Gracias por participar en la investigación de Ang
-  - body: |-
-      <p>Caro {{parent.first_name}} {{parent.last_name|title}},</p>
-      <p>Obrigado por inscrever {{patient.given_names}} {{patient.family_name|title}} no Registo Global da Síndrome de Angelman para ajudar a compreender melhor os indivíduos com esta condição em todo o mundo.</p>
-      <p>Existem três elementos diferentes neste projeto;</p><ol>
-      <p><li><b> Dados demográficos básicos:</b> O formulário online que preencheu fornece informações essenciais para determinar a prevalência da síndrome de Angelman em  nível mundial e em cada país no projeto <b>Global Search & Rescue</b> (<a href="https://www.angelmansearchandrescue.org/">https://www.angelmansearchandrescue.org/)</a>. Os seus dados não-identificados  - como genótipo, idade e o país de nascimento - serão comunicados de forma anónima. Nenhuma informação de identificação pessoal será partilhada fora do Registro.
-      Enquanto você não concluir o processo descrito no item 2 (abaixo), não poderá ser contactado em relação à qualquer investigação, ensaio clínico ou outras oportunidades que possam estar disponíveis para você.</li><br>
-      <li><b>Dados de base,</b> pense nisto como a primeira visita a um médico, isto é o historial completo de {{patient.given_names}} até ao momento. Ele é dividido em uma série de módulos, tais como: comportamento, desenvolvimento, medicamentos, convulsões, terapias e sono. Estes módulos podem ser preenchidos todos de uma só vez ou um a um, de acordo com o tempo que você tem disponível.<br>
-      Antes de começar a introduzir os dados, será exibido um curto vídeo sobre autorizações, alguns obrigatórios e outros opcionais (estes dizem respeito à forma como você poderá ser contactado sobre futuras pesquisas e ensaios clínicos)<br>
-      Para verificar a sua conta, autorizar e começar a introduzir os dados de base, clique neste <a href="https://trrf.angelmanregistry.info{% url 'registration_activate' registration.activation_key %}">link de ativação</a>  de ativação ou copie-a e cole-a num navegador de internet. O link expirará em 2 dias.<br>
-      https://trrf.angelmanregistry.info{% url 'registration_activate' registration.activation_key %}
-      </li><br>
-      <li><b>Os dados longitudinais</b> acompanharão o desenvolvimento de {{patient.given_names}} ao longo do tempo, com o envio de lembretes para atualizações sobre etapas e alterações.</li></ol></p>
-
-      Atenciosamente, <br>
-      Megan Tones <br>
-      Curadora de dados <br>
-      Registo Global da Síndrome de Angelman
-    description: Email notification containing verification link sent to patients
-      upon registration in the registry
-    language: pt-BR
-    subject: Bem-vindo ao Registro Global da Síndrome de Angelm
-  - body: |-
       <p>親愛的 {{parent.first_name}} {{parent.last_name|title}},</p>
 
       <p>感謝您為 {{patient.given_names}} {{patient.family_name|title}} 參與天使綜合症登記名冊，以幫助更瞭解全球天使綜合症患者的狀況。 您的去識別數據，如基因、年齡和出生地等，將於<b>全球研究救援項目</b>中幫助瞭解天使綜合症的真正狀況 (<a href="https://www.angelmansearchandrescue.org/">https://www.angelmansearchandrescue.org/)</a>。 這將有助確保所有患者都能獲得社區及教育支援。 您的姓名、地址和電郵地址將不會在本平台以外的地方共享。 </p>
@@ -29672,8 +30290,8 @@ email_notifications:
       <p>請點擊下面的連結以驗證您的天使綜合症登記名冊帳戶，或者複製連結到瀏覽器並登入登記名冊。 此連結將於兩天後失效。</p>
 
 
-      <p><a href="https://trrf.angelmanregistry.info{% url 'registration_activate' registration.activation_key %}">連結</a></p>
-      <p>https://trrf.angelmanregistry.info{% url 'registration_activate' registration.activation_key %}</p>
+      <p><a href="{{activation_url}}">連結</a></p>
+      <p>{{activation_url}}</p>
 
       <p>如有需要，名冊管理員會透過您的電郵地址 {{parent.user.email}}. 與您聯絡。 如有任何查詢，請於以下電郵地址聯絡名冊管理員。 您也可以從 <a href="https://angelmanregistry.info/">全球天使綜合症登記名冊</a>的網站中找到詳細資料 。</p>
 
@@ -29689,30 +30307,6 @@ email_notifications:
     language: zh-TW
     subject: 感謝您參與天使綜合症的研究！
   - body: |-
-      <p>Gentile {{parent.first_name}} {{parent.last_name|title}},</p>
-      Grazie per esserti iscritto {{patient.given_names}} {{patient.family_name|title}} al Global Angelman Syndrome Registry per contribuire a generare una migliore comprensione delle persone con sindrome di Angelman in tutto il mondo.</p>
-      <p>Ci sono tre diversi elementi in questo progetto;</p><ol>
-      <p><li><b>Dati demografici di base:</b> il modulo online che hai completato fornisce informazioni essenziali per determinare la prevalenza della sindrome di Angelman a livello globale e all'interno di ciascun paese del progetto Global Search & Rescue (<a href="https://www.angelmansearchandrescue.org/">https://www.angelmansearchandrescue.org/)</a>. I tuoi dati, inclusi genotipo, età e paese di nascita, verranno segnalati in forma anonima. Nessuna informazione di identificazione personale verrà condivisa al di fuori del registro.
-      Finché non completerai la procedura descritta al punto 2, non potrai essere contattato in merito a ricerche, sperimentazioni o altre opportunità che potrebbero essere disponibili.</li><br>
-      <li><b>Dati di base,</b> pensatela come la prima visita da un medico, questa è la storia completa di {{patient.given_names}}'s fino ad ora. Questi dati sono suddivisi in una serie di moduli quali comportamento, sviluppo, farmaci, crisi epilettiche, terapie e sonno. Questi moduli possono essere completati tutti in una volta o uno per uno secondo il tempo a disposizione.<br>
-      Per iniziare a inserire i dati ti verrà mostrato un breve video relativo ai consensi, alcuni sono obbligatori e altri sono facoltativi (ecco come puoi essere contattato per ulteriori ricerche e sperimentazioni).<br>
-      Per verificare il tuo account, fornire il consenso e iniziare a inserire i dati di base, fai clic su questo <a href="https://trrf.angelmanregistry.info{% url 'registration_activate' registration.activation_key %}">Collegamento di attivazione</a> o copialo e incollalo in un browser web. Il link scadrà tra 2 giorni.<br>
-
-      <a href="https://trrf.angelmanregistry.info{% url 'registration_activate' registration.activation_key %}">Collegamento di attivazione</a>
-      https://trrf.angelmanregistry.info{% url 'registration_activate' registration.activation_key %}</li><br>
-
-      <li><b>I dati longitudinali</b> monitoreranno {{patient.given_names}}'s lo sviluppo nel tempo, con promemoria inviati per aggiornamenti su traguardi e modifiche.</li></ol></p>
-
-      <p>Cordiali saluti,<br>
-      Megan Tones<br>
-      Curatore dei dati<br>
-      Registro globale della sindrome di Angelman<br>
-      Posta elettronica: curator@angelmanregistry.info</p>
-    description: Email notification containing verification link sent to patients
-      upon registration in the registry
-    language: it
-    subject: Grazie per aver partecipato alla ricerca Angelman!
-  - body: |-
       <p>Szanowna/y  {{parent.first_name}} {{parent.last_name|title}},</p>
       <p>Dziękujemy za zapisanie {{patient.given_names}} {{patient.family_name|title}} do Globalnego Rejestru Zespołu Angelmana, aby pomóc w lepszym zrozumieniu osób z zespołem Angelmana na całym świecie.</p>
       <p>Projekt ten składa się z trzech różnych elementów:</p><ol>
@@ -29721,8 +30315,8 @@ email_notifications:
 
       <li><b>Dane wyjściowe,</b> pomyśl o tym jak o pierwszej wizycie u lekarza, to jest pełna dotychczasowa historia {{patient.given_names}}. Jest ona podzielona na szereg modułów, takich jak zachowanie, rozwój, leki, napady, terapie i sen. Moduły te można wypełnić wszystkie naraz lub jeden po drugim w miarę wolnego czasu.<br>
       Aby rozpocząć wprowadzanie danych, zostanie wyświetlony krótki film dotyczący zgód, niektóre z nich są obowiązkowe, a niektóre opcjonalne (te dotyczą sposobu kontaktowania się z Tobą w sprawie dalszych badań i prób).<br>
-      Aby zweryfikować swoje konto, wyrazić zgodę i rozpocząć wprowadzanie danych podstawowych, kliknij ten <a href="https://trrf.angelmanregistry.info{% url 'registration_activate' registration.activation_key %}">Link aktywacyjny</a> lub skopiuj go i wklej do przeglądarki internetowej. Link wygaśnie za 2 dni.<br>
-      https://trrf.angelmanregistry.info{% url 'registration_activate' registration.activation_key %}</li><br>
+      Aby zweryfikować swoje konto, wyrazić zgodę i rozpocząć wprowadzanie danych podstawowych, kliknij ten <a href="{{activation_url}}">Link aktywacyjny</a> lub skopiuj go i wklej do przeglądarki internetowej. Link wygaśnie za 2 dni.<br>
+      {{activation_url}}</li><br>
 
       <li><b>Dane podłużne</b> będą śledzić rozwój Twojego dziecka, {{patient.given_names}}'s w czasie, z przypomnieniami wysyłanymi w celu aktualizacji kamieni milowych i zmian.</li></ol></p>
 
@@ -29744,8 +30338,8 @@ email_notifications:
       Until you complete the process outlined in point 2, you cannot be contacted regarding any research, trials or other opportunities that might be available to you.</li><br>
       <li><b>Baseline data,</b> think of this as like the first visit to a clinician, this is {{patient.given_names}}’s full history so far. This is broken down into a series of modules such as behaviour, development, medications, seizures, therapies, and sleep. These modules can be completed all at once, or one by one as you have time. <br>
       To begin entering data you will be shown a short video regarding consents, some are mandatory and some are optional (these are around how you can be contacted about further research and trials).<br>
-      To verify your account, provide consent, and begin entering baseline data, please click this <a href="https://trrf.angelmanregistry.info{% url 'registration_activate' registration.activation_key %}">activation link</a> or copy and paste it into a web browser. The link will expire in 2 days.<br>
-      https://trrf.angelmanregistry.info{% url 'registration_activate' registration.activation_key %}
+      To verify your account, provide consent, and begin entering baseline data, please click this <a href="{{activation_url}}">activation link</a> or copy and paste it into a web browser. The link will expire in 2 days.<br>
+      {{activation_url}}
       </li><br>
       <li><b>Longitudinal data</b> will track {{patient.given_names}}'s development over time, with reminders sent for updates on milestones and changes. </li></ol></p>
 
@@ -29758,6 +30352,77 @@ email_notifications:
       upon registration in the registry
     language: en
     subject: Thank you for participating in Angelman research!
+  - body: |-
+      <p>Caro {{parent.first_name}} {{parent.last_name|title}},</p>
+      <p>Obrigado por inscrever {{patient.given_names}} {{patient.family_name|title}} no Registo Global da Síndrome de Angelman para ajudar a compreender melhor os indivíduos com esta condição em todo o mundo.</p>
+      <p>Existem três elementos diferentes neste projeto;</p><ol>
+      <p><li><b> Dados demográficos básicos:</b> O formulário online que preencheu fornece informações essenciais para determinar a prevalência da síndrome de Angelman em  nível mundial e em cada país no projeto <b>Global Search & Rescue</b> (<a href="https://www.angelmansearchandrescue.org/">https://www.angelmansearchandrescue.org/)</a>. Os seus dados não-identificados  - como genótipo, idade e o país de nascimento - serão comunicados de forma anónima. Nenhuma informação de identificação pessoal será partilhada fora do Registro.
+      Enquanto você não concluir o processo descrito no item 2 (abaixo), não poderá ser contactado em relação à qualquer investigação, ensaio clínico ou outras oportunidades que possam estar disponíveis para você.</li><br>
+      <li><b>Dados de base,</b> pense nisto como a primeira visita a um médico, isto é o historial completo de {{patient.given_names}} até ao momento. Ele é dividido em uma série de módulos, tais como: comportamento, desenvolvimento, medicamentos, convulsões, terapias e sono. Estes módulos podem ser preenchidos todos de uma só vez ou um a um, de acordo com o tempo que você tem disponível.<br>
+      Antes de começar a introduzir os dados, será exibido um curto vídeo sobre autorizações, alguns obrigatórios e outros opcionais (estes dizem respeito à forma como você poderá ser contactado sobre futuras pesquisas e ensaios clínicos)<br>
+      Para verificar a sua conta, autorizar e começar a introduzir os dados de base, clique neste <a href="{{activation_url}}">link de ativação</a>  de ativação ou copie-a e cole-a num navegador de internet. O link expirará em 2 dias.<br>
+      {{activation_url}}
+      </li><br>
+      <li><b>Os dados longitudinais</b> acompanharão o desenvolvimento de {{patient.given_names}} ao longo do tempo, com o envio de lembretes para atualizações sobre etapas e alterações.</li></ol></p>
+
+      Atenciosamente, <br>
+      Megan Tones <br>
+      Curadora de dados <br>
+      Registo Global da Síndrome de Angelman
+    description: Email notification containing verification link sent to patients
+      upon registration in the registry
+    language: pt-BR
+    subject: Bem-vindo ao Registro Global da Síndrome de Angelm
+  - body: |-
+      <p>Estimado {{parent.first_name}} {{parent.last_name|title}},</p>
+
+      <p>Gracias por inscribir a su ser querido {{patient.given_names}} {{patient.family_name|title}} para ayudar a generar una mejor comprensión de las personas con síndrome de Angelman en todo el mundo. Sus datos anonimizados, como el genotipo, la edad y el país de nacimiento, se utilizarán para ayudar a comprender la verdadera prevalencia del síndrome de Angelman (a nivel mundial y dentro de cada país) en el <b>proyecto Global Search & Rescue</b> (<a href="https://www.angelmansearchandrescue.org/">https://www.angelmansearchandrescue.org/)</a> Esto, a su vez, ayudará a garantizar que los apoyos comunitarios y educativos estén disponibles para todos. Sus nombres, dirección y dirección de correo electrónico no se compartirán fuera de esta plataforma.</p>
+
+      <p>Nos gustaría invitarlo a que brinde más detalles para avanzar en la investigación y la comprensión en el <b>Registro Global del Síndrome de Angelman</b> al completar una serie de módulos tales como comportamiento, desarrollo, medicamentos, convulsiones, terapias y sueño.  Estos módulos se pueden completar todos a la vez, o uno por uno, según tenga tiempo.</p>
+
+      <p>Haga clic en el siguiente enlace de activación para verificar su cuenta de registro de Angelman, o copie y pegue en un navegador web e inicie sesión en el registro.  Este enlace caducará en 2 días.</p>
+
+
+      <p><a href="{{activation_url}}">Enlace de activación</a></p>
+      <p>{{activation_url}}</p>
+
+      <p>Si es necesario, el encargado de la recopilación de datos del registro se comunicará con usted a través de su dirección de correo electrónico {{parent.user.email}}. Si tiene alguna consulta, comuníquese con el encargado del registro en la dirección de correo electrónico a continuación.  También puede encontrar información detallada en el sitio <a href="https://angelmanregistry.info/">web del Registro mundial del síndrome de Angelman</a>.</p>
+
+      <p>Le animamos a visitar <a href="https://www.angelmansearchandrescue.org/">https://www.angelmansearchandrescue.org/</a> y <a href="https://www.angelmanregistry.info/partners/">https://www.angelmanregistry.info/partners/</a> para encontrar la(s) organización(es) de pacientes en su país y región e inscribirse en sus listas de correo para que ellos puedan mantenerlo actualizado y apoyarlo a nivel local.</p>
+
+      <p>Tuyo sinceramente,<br>
+      Megan Tones<br>
+      Recopilador de datos<br>
+      Registro mundial del síndrome de Angelman<br>
+       Correo electrónico: curator@angelmanregistry.info
+    description: Email notification containing verification link sent to patients
+      upon registration in the registry
+    language: es
+    subject: ¡Gracias por participar en la investigación de Ang
+  - body: |-
+      <p>Gentile {{parent.first_name}} {{parent.last_name|title}},</p>
+      Grazie per esserti iscritto {{patient.given_names}} {{patient.family_name|title}} al Global Angelman Syndrome Registry per contribuire a generare una migliore comprensione delle persone con sindrome di Angelman in tutto il mondo.</p>
+      <p>Ci sono tre diversi elementi in questo progetto;</p><ol>
+      <p><li><b>Dati demografici di base:</b> il modulo online che hai completato fornisce informazioni essenziali per determinare la prevalenza della sindrome di Angelman a livello globale e all'interno di ciascun paese del progetto Global Search & Rescue (<a href="https://www.angelmansearchandrescue.org/">https://www.angelmansearchandrescue.org/)</a>. I tuoi dati, inclusi genotipo, età e paese di nascita, verranno segnalati in forma anonima. Nessuna informazione di identificazione personale verrà condivisa al di fuori del registro.
+      Finché non completerai la procedura descritta al punto 2, non potrai essere contattato in merito a ricerche, sperimentazioni o altre opportunità che potrebbero essere disponibili.</li><br>
+      <li><b>Dati di base,</b> pensatela come la prima visita da un medico, questa è la storia completa di {{patient.given_names}}'s fino ad ora. Questi dati sono suddivisi in una serie di moduli quali comportamento, sviluppo, farmaci, crisi epilettiche, terapie e sonno. Questi moduli possono essere completati tutti in una volta o uno per uno secondo il tempo a disposizione.<br>
+      Per iniziare a inserire i dati ti verrà mostrato un breve video relativo ai consensi, alcuni sono obbligatori e altri sono facoltativi (ecco come puoi essere contattato per ulteriori ricerche e sperimentazioni).<br>
+      Per verificare il tuo account, fornire il consenso e iniziare a inserire i dati di base, fai clic su questo <a href="{{activation_url}}">Collegamento di attivazione</a> o copialo e incollalo in un browser web. Il link scadrà tra 2 giorni.<br>
+
+      <a href="{{activation_url}}">Collegamento di attivazione</a>
+      {{activation_url}}</li><br>
+
+      <li><b>I dati longitudinali</b> monitoreranno {{patient.given_names}}'s lo sviluppo nel tempo, con promemoria inviati per aggiornamenti su traguardi e modifiche.</li></ol></p>
+
+      <p>Cordiali saluti,<br>
+      Megan Tones<br>
+      Curatore dei dati<br>
+      Registro globale della sindrome di Angelman<br>
+      Posta elettronica: curator@angelmanregistry.info</p>
+    description: Email notification containing verification link sent to patients
+      upon registration in the registry
+    language: it
+    subject: Grazie per aver partecipato alla ricerca Angelman!
   group_recipient: Working Group Curators
   recipient: '{{parent.user.email}}'
 - description: other-clinician
@@ -34744,6 +35409,79 @@ forms:
     extra: null
     header: ''
   tags: []
+- abbreviated_name: DxMetaReport
+  applicability_condition: ''
+  conditional_rendering_rules: |-
+    DxDeletionDet DxDeletionISCN DxDeletionMethylation visible if DxGenotype == "Deletion"
+
+    DxDeletionCMA visible if DxDeletionDet == DxCMACGH and DxGenotype == "Deletion"
+
+    DxDeletionMinStartCoordinates DxDeletionMinStop DxDeletionMaxStart DxDeletionMaxStartNA DxDeletionMaxStop DxDeletionMaxStopNA DxDeletionLength visible if DxDeletionDet == DxCMACGH or  DxDeletionDet == NGS
+
+    DxUPDType visible if DxGenotype == "Uniparental disomy"
+
+    DxICDType visible if DxGenotype == "Imprinting center defect"
+
+    DxICDCoordinates visible if DxICDType == "Imprinting center sequence variant" and DxGenotype == "Imprinting center defect"
+
+    DxICDSpecifyVariant DxUBE3ASpecifyVariant DxUBE3APNomenclature DxUBE3ATypeTesting ExonMut TranscriptMut visible if DxGenotype == "UBE3A mutation"
+
+    TranscriptNum visible if DxGenotype == "UBE3A mutation" and TranscriptMut == "Number (please state)"
+    TranscriptStri visible if DxGenotype == "UBE3A mutation" and TranscriptMut == "Other (Please state)"
+
+    DxMosaicTissue DxMosaicPercentAS visible if DxMosaicism == "Yes"
+
+    DxFurtherTest visible if DxRecommendTest == "No"
+  display_name: Administration
+  header: Report for diagnostic metadata
+  name: DxMetaReport
+  position: 0
+  sections:
+  - abbreviated_name: DxReportInfo
+    allow_multiple: false
+    code: DxReport
+    display_name: Diagnostic Report Info
+    elements:
+    - DxDate
+    - DxDateReport
+    - DxCountry
+    - DxLanguage
+    - DxGenotype
+    - DxDeletionDet
+    - DxDeletionCMA
+    - DxDeletionMinStartCoordinates
+    - DxDeletionMinStop
+    - DxDeletionMaxStart
+    - DxDeletionMaxStartNA
+    - DxDeletionMaxStop
+    - DxDeletionMaxStopNA
+    - DxDeletionLength
+    - DxDeletionISCN
+    - DxDeletionMethylation
+    - DxUPDType
+    - DxICDType
+    - DxICDCoordinates
+    - DxICDSpecifyVariant
+    - DxUBE3ASpecifyVariant
+    - DxUBE3APNomenclature
+    - DxUBE3ATypeTesting
+    - ExonMut
+    - TranscriptMut
+    - TranscriptNum
+    - TranscriptStri
+    - DxInheritance
+    - DxMosaicism
+    - DxMosaicTissue
+    - DxMosaicPercentAS
+    - DxRecommendTest
+    - DxFurtherTest
+    - DxReportConsistent
+    - DxInfoType
+    - DxFinalComment
+    extra: null
+    header: Diagnostic information from diagnostic reports or letters validating Angelman
+      syndrome diagnosis
+  tags: []
 - abbreviated_name: Epilepsy
   applicability_condition: ''
   conditional_rendering_rules: |-
@@ -36767,6 +37505,8 @@ forms_allowed_groups:
   ClinicalTrialsAndStudies:
   - Parents
   Communication: []
+  DxMetaReport:
+  - AdminOnly
   Epilepsy:
   - Clinical Staff
   - Genetic Staff
@@ -36823,6 +37563,7 @@ forms_readonly_groups:
   CheckUp6Months: []
   ClinicalTrialsAndStudies: []
   Communication: []
+  DxMetaReport: []
   Epilepsy: []
   GeneratedQuestionnaireForang: []
   HistoryOfDiagnosisAndResults: []
@@ -36840,6 +37581,7 @@ forms_readonly_groups:
   StoppedMedication: []
   TherapyStopped: []
   TrialStudyParticipation: []
+forms_translated: {}
 generic_sections:
 - abbreviated_name: Personal Information
   allow_multiple: false
@@ -37712,9 +38454,9 @@ longitudinal_followups:
 metadata_json: '{"features": ["clinicians_have_patients", "registration", "clinician_form",
   "clinicians_have_patients", "consent_checks", "verification", "questionnaires",
   "contexts", "user_email_activation_optional_for_admin", "longitudinal_followups",
-  "no_translation"], "diagnosis_code": "ANGDNAMethylAbnormalResult", "verification_cdes":
-  [{"form": "AngelmanRegistryHistoryOfDiagnosisAndResults", "section": "ANGPatientResults",
-  "cde": "ANGGeneticTest"}, {"form": "AngelmanRegistryHistoryOfDiagnosisAndResults",
+  "no_translation", "forms_require_translation", "xhide_untranslated_forms"], "diagnosis_code":
+  "ANGDNAMethylAbnormalResult", "verification_cdes": [{"form": "AngelmanRegistryHistoryOfDiagnosisAndResults",
+  "section": "ANGPatientResults", "cde": "ANGGeneticTest"}, {"form": "AngelmanRegistryHistoryOfDiagnosisAndResults",
   "section": "ANGPatientResults", "cde": "ANGGeneticTestType"}, {"form": "AngelmanRegistryHistoryOfDiagnosisAndResults",
   "section": "ANGPatientResults", "cde": "ANGDNAMethylAbnormalResult"}, {"form": "AngelmanRegistryIllnessesOrMedicalProblems",
   "section": "ANGGastroesophagealReflux", "cde": "ANGGastroesophagealReflux"}, {"form":
@@ -42509,6 +43251,272 @@ pvgs:
     desc: Watching videos (eg on YouTube)
     position: 1
     value: Watching videos (eg on YouTube)
+- code: DxDeletionCMAPVG
+  values:
+  - code: NR
+    desc: not reported
+    position: 7
+    value: not reported
+  - code: Jul2003
+    desc: July 2003 (NCBI34/hg16)
+    position: 6
+    value: July 2003 (NCBI34/hg16)
+  - code: May2004
+    desc: May 2004 (NCBI35/hg17)
+    position: 5
+    value: May 2004 (NCBI35/hg17)
+  - code: Mar2006
+    desc: Mar. 2006 (NCBI36/hg18)
+    position: 4
+    value: Mar. 2006 (NCBI36/hg18)
+  - code: Feb2009
+    desc: Feb. 2009 (GRCh37/hg19)
+    position: 3
+    value: Feb. 2009 (GRCh37/hg19)
+  - code: Dec2013
+    desc: Dec. 2013 (GRCh38/hg38)
+    position: 2
+    value: Dec. 2013 (GRCh38/hg38)
+  - code: Jan2022
+    desc: Jan. 2022 (T2T CHM13v2.0/hs1)
+    position: 1
+    value: Jan. 2022 (T2T CHM13v2.0/hs1)
+- code: DxDeletionMethylationPVG
+  values:
+  - code: NoneClinical
+    desc: No methylation studies, but clinical diagnosis c/w AS
+    position: 4
+    value: No methylation studies, but clinical diagnosis c/w AS
+  - code: Unknown
+    desc: Unknown
+    position: 3
+    value: Unknown
+  - code: NotConsistentAS
+    desc: Not consistent with AS
+    position: 2
+    value: Not consistent with AS
+  - code: ConsistentAS
+    desc: Consistent with AS
+    position: 1
+    value: Consistent with AS
+- code: DxDeletionPVG
+  values:
+  - code: NGS
+    desc: NGS
+    position: 5
+    value: NGS
+  - code: MLPA
+    desc: MLPA
+    position: 4
+    value: MLPA
+  - code: DxKaryotype
+    desc: Karyotype
+    position: 3
+    value: Karyotype
+  - code: DxFISH
+    desc: FISH
+    position: 2
+    value: FISH
+  - code: DxCMACGH
+    desc: CMA/CGH
+    position: 1
+    value: CMA/CGH
+- code: DxFurtherTestPVG
+  values:
+  - code: Other
+    desc: Other, please specify
+    position: 7
+    value: Other, please specify
+  - code: ParentalNeed
+    desc: Parental studies needed
+    position: 6
+    value: Parental studies needed
+  - code: ICDNeed
+    desc: ICD testing needed
+    position: 5
+    value: ICD testing needed
+  - code: UPDNeed
+    desc: UPD testing needed
+    position: 4
+    value: UPD testing needed
+  - code: UPDICDNeed
+    desc: UPD and ICD testing needed
+    position: 3
+    value: UPD and ICD testing needed
+  - code: CMANeed
+    desc: CMA needed
+    position: 2
+    value: CMA needed
+  - code: MethyNeed
+    desc: Methylation testing needed
+    position: 1
+    value: Methylation testing needed
+- code: DxGenotypePVG
+  values:
+  - code: DxUnknownC
+    desc: Unknown, abnormal methylation, FISH or CMA negative, ICD-Deletion negative
+    position: 7
+    value: Unknown, abnormal methylation, FISH or CMA negative, ICD-Deletion negative
+  - code: DxUnknownB
+    desc: Unknown, abnormal methylation, FISH or CMA negative
+    position: 6
+    value: Unknown, abnormal methylation, FISH or CMA negative
+  - code: DxUnknownA
+    desc: Unknown, abnormal methylation and no other testing
+    position: 5
+    value: Unknown, abnormal methylation and no other testing
+  - code: DxUBE3A
+    desc: UBE3A mutation
+    position: 4
+    value: UBE3A mutation
+  - code: DxICD
+    desc: Imprinting center defect
+    position: 3
+    value: Imprinting center defect
+  - code: DxUPD
+    desc: Uniparental disomy
+    position: 2
+    value: Uniparental disomy
+  - code: DxDeletion
+    desc: Deletion
+    position: 1
+    value: Deletion
+- code: DxICDPVG
+  values:
+  - code: ICDAssume
+    desc: ICD molecular analysis not performed, but ICD assumed because UPD and deletion
+      testing were negative
+    position: 5
+    value: ICD molecular analysis not performed, but ICD assumed because UPD and deletion
+      testing were negative
+  - code: NegICDSeqAb
+    desc: Negative for ICD deletion and sequencing, so abnormal ICD methylation assumed
+    position: 4
+    value: Negative for ICD deletion and sequencing, so abnormal ICD methylation assumed
+  - code: NegICDNoSeq
+    desc: Negative for ICD deletion, sequencing not performed
+    position: 3
+    value: Negative for ICD deletion, sequencing not performed
+  - code: ICDV
+    desc: Imprinting center sequence variant
+    position: 2
+    value: Imprinting center sequence variant
+  - code: ICD
+    desc: Imprinting center deletion
+    position: 1
+    value: Imprinting center deletion
+- code: DxInfoTypePVG
+  values:
+  - code: Letter
+    desc: Letter from clinician
+    position: 2
+    value: Letter from clinician
+  - code: Lab
+    desc: Laboratory report
+    position: 1
+    value: Laboratory report
+- code: DxInheritancePVG
+  values:
+  - code: unknown
+    desc: unknown
+    position: 3
+    value: unknown
+  - code: inherited
+    desc: inherited
+    position: 2
+    value: inherited
+  - code: DeNovo
+    desc: de novo
+    position: 1
+    value: de novo
+- code: DxMosaicTissuePVG
+  values:
+  - code: Other
+    desc: Other, please specify
+    position: 4
+    value: Other, please specify
+  - code: Bucca
+    desc: Buccal/saliva
+    position: 3
+    value: Buccal/saliva
+  - code: Skin
+    desc: Skin
+    position: 2
+    value: Skin
+  - code: Blood
+    desc: Blood
+    position: 1
+    value: Blood
+- code: DxNA
+  values:
+  - code: NA
+    desc: NA
+    position: 1
+    value: NA
+- code: DxUBE3ATestPVG
+  values:
+  - code: WGS
+    desc: WGS
+    position: 4
+    value: WGS
+  - code: WES
+    desc: WES
+    position: 3
+    value: WES
+  - code: NGSpanel
+    desc: NGS panel
+    position: 2
+    value: NGS panel
+  - code: Sanger
+    desc: Sanger sequencing
+    position: 1
+    value: Sanger sequencing
+- code: DxUPDPVG
+  values:
+  - code: Unknown
+    desc: Unknown
+    position: 5
+    value: Unknown
+  - code: PtSegHet
+    desc: Partial or segmental heterodisomy
+    position: 4
+    value: Partial or segmental heterodisomy
+  - code: PtSegIso
+    desc: Partial or segmental isodisomy
+    position: 3
+    value: Partial or segmental isodisomy
+  - code: HeteroCritical
+    desc: Heterodisomy of AS critical region
+    position: 2
+    value: Heterodisomy of AS critical region
+  - code: IsoCritical
+    desc: Isodisomy of AS critical region
+    position: 1
+    value: Isodisomy of AS critical region
+- code: DxYNPVG
+  values:
+  - code: 'No'
+    desc: 'No'
+    position: 2
+    value: 'No'
+  - code: 'Yes'
+    desc: 'Yes'
+    position: 1
+    value: 'Yes'
+- code: DxYNUPVG
+  values:
+  - code: Unknown
+    desc: Unknown
+    position: 3
+    value: Unknown
+  - code: 'No'
+    desc: 'No'
+    position: 2
+    value: 'No'
+  - code: 'Yes'
+    desc: 'Yes'
+    position: 1
+    value: 'Yes'
 - code: EarnASPVG
   values:
   - code: NA
@@ -43055,6 +44063,36 @@ pvgs:
     desc: 10 hours per week
     position: 1
     value: 10 hours per week
+- code: ICDVariantPVG
+  values:
+  - code: Unclear
+    desc: Unclear
+    position: 7
+    value: Unclear
+  - code: Delinsert
+    desc: Deletion/insertion
+    position: 6
+    value: Deletion/insertion
+  - code: Smalldup
+    desc: Small duplication
+    position: 5
+    value: Small duplication
+  - code: Smalldel
+    desc: Small deletion
+    position: 4
+    value: Small deletion
+  - code: Splice
+    desc: Splice site
+    position: 3
+    value: Splice site
+  - code: Missense
+    desc: Missense
+    position: 2
+    value: Missense
+  - code: Nonsense
+    desc: Nonsense
+    position: 1
+    value: Nonsense
 - code: IncomeLossPVG
   values:
   - code: NA
@@ -43161,6 +44199,68 @@ pvgs:
     desc: Walking
     position: 1
     value: Walking
+- code: LanguageDx
+  values:
+  - code: Other
+    desc: Other, please specify
+    position: 15
+    value: Other, please specify
+  - code: Italian
+    desc: Italian
+    position: 14
+    value: Italian
+  - code: Polish
+    desc: Polish
+    position: 13
+    value: Polish
+  - code: German
+    desc: German
+    position: 12
+    value: German
+  - code: Indonesian
+    desc: Indonesian
+    position: 11
+    value: Indonesian
+  - code: Urdu
+    desc: Urdu
+    position: 10
+    value: Urdu
+  - code: Russian
+    desc: Russian
+    position: 9
+    value: Russian
+  - code: Portuguese
+    desc: Portuguese
+    position: 8
+    value: Portuguese
+  - code: Bengali
+    desc: Bengali
+    position: 7
+    value: Bengali
+  - code: Arabic
+    desc: Arabic
+    position: 6
+    value: Arabic
+  - code: French
+    desc: French
+    position: 5
+    value: French
+  - code: Spanish
+    desc: Spanish
+    position: 4
+    value: Spanish
+  - code: Hindi
+    desc: Hindi
+    position: 3
+    value: Hindi
+  - code: TradChinese
+    desc: Traditional Chinese
+    position: 2
+    value: Traditional Chinese
+  - code: English
+    desc: English
+    position: 1
+    value: English
 - code: LevodopaSitePVG
   values:
   - code: 7Nashville
@@ -44179,6 +45279,32 @@ pvgs:
     desc: Dry textures
     position: 12
     value: Dry textures
+- code: TranscriptPVG
+  values:
+  - code: Other
+    desc: Other (Please state)
+    position: 6
+    value: Other (Please state)
+  - code: Unknown
+    desc: Unknown
+    position: 5
+    value: Unknown
+  - code: NM_3
+    desc: NM_000462.5
+    position: 4
+    value: NM_000462.5
+  - code: NM_2
+    desc: NM_130838.1
+    position: 3
+    value: NM_130838.1
+  - code: NM_1
+    desc: NM_130839.5
+    position: 2
+    value: NM_130839.5
+  - code: Number
+    desc: Number (please state)
+    position: 1
+    value: Number (please state)
 - code: UsualPVG
   values:
   - code: Unable
@@ -44413,6 +45539,7 @@ whitelisted_file_extensions:
 - .ogg
 - .wav
 - .webm
+- .edf
 working_group_types: []
 working_groups:
 - name: Default Working Group
