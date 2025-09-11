@@ -7,9 +7,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   # TODO check if requirements are needed
   # Base
   gettext \
-  libpcre3 \
   libpq5 \
-  mime-support \
+  media-types \
   nodejs \
   unixodbc \
   # Builder
@@ -72,9 +71,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   # Base
   # TODO check if requirements are needed
   gettext \
-  libpcre3 \
   libpq5 \
-  mime-support \
   nodejs \
   unixodbc \
   ssl-cert \
