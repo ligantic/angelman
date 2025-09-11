@@ -15,7 +15,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   build-essential \
   git \
   gzip \
-  libpcre3-dev \
   libpq-dev \
   libssl-dev \
   libyaml-dev \
