@@ -6,9 +6,8 @@ from datetime import datetime
 
 import django
 from django.db import transaction
-from registry.patients.models import Patient
-
 from rdrf.models.definition.models import ClinicalData, Registry
+from registry.patients.models import Patient
 
 django.setup()
 
