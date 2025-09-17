@@ -7,9 +7,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   # TODO check if requirements are needed
   # Base
   gettext \
-  libpcre3 \
   libpq5 \
-  mime-support \
+  media-types \
   nodejs \
   unixodbc \
 
@@ -17,7 +16,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   build-essential \
   git \
   gzip \
-  libpcre3-dev \
   libpq-dev \
   libssl-dev \
   libyaml-dev \
@@ -67,9 +65,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   # Base
   # TODO check if requirements are needed
   gettext \
-  libpcre3 \
   libpq5 \
-  mime-support \
   nodejs \
   postgresql-client \
   unixodbc \
