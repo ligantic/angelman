@@ -4,14 +4,14 @@ import pycountry
 from django.forms import BooleanField, CharField, ChoiceField, DateField
 from django.forms.widgets import HiddenInput, RadioSelect, Select
 from django.utils.translation import gettext_lazy as _
+from rdrf.forms.registration_forms import RegistrationFormCaseInsensitiveCheck
+from rdrf.helpers.utils import get_all_language_codes
+from rdrf.models.definition.models import CommonDataElement
 from registry.patients.models import Patient
 
 from angelman.registry.groups.registration.angelman_registration import (
     DIAGNOSIS_CDE,
 )
-from rdrf.forms.registration_forms import RegistrationFormCaseInsensitiveCheck
-from rdrf.helpers.utils import get_all_language_codes
-from rdrf.models.definition.models import CommonDataElement
 
 
 def _tuple(code, name):
