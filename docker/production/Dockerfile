@@ -1,5 +1,5 @@
 # Container to build our prod image
-FROM python:3.9 as builder
+FROM python:3.13 as builder
 
 ENV PYTHONUNBUFFERED 1
 
@@ -40,7 +40,7 @@ RUN pip install -r rdrf/requirements.txt
 RUN pip install -r requirements.txt
 
 # Actual image we are building
-FROM python:3.9-slim
+FROM python:3.13-slim
 
 ENV PYTHONUNBUFFERED 1
 
@@ -69,6 +69,7 @@ RUN addgroup --gid 1000 django \
 RUN apt-get update && apt-get install -y --no-install-recommends \
   # Base
   # TODO check if requirements are needed
+  git \
   gettext \
   libpq5 \
   nodejs \
