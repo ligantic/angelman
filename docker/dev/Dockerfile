@@ -1,5 +1,5 @@
 # FROM muccg/rdrf-builder
-FROM python:3.9 as builder
+FROM python:3.13 as builder
 
 ENV PYTHONUNBUFFERED 1
 
@@ -47,7 +47,7 @@ RUN --mount=type=cache,target=/root/.cache/pip \
 
 VOLUME ["/data"]
 
-FROM python:3.9-slim
+FROM python:3.13-slim
 
 ENV PYTHONPATH="/app/rdrf/rdrf/:/app/angelman/"
 ENV DJANGO_SETTINGS_MODULE angelman.settings
