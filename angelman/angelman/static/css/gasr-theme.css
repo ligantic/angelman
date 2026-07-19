@@ -1,0 +1,147 @@
+/* ==========================================================================
+   GASR UX Uplift — Design Tokens
+   Source of truth: planning/THEME.md (GASR UI Theme Specification v2)
+   Token-first foundation: define tokens here, consume ONLY via component
+   classes (see rdrf-components.css). Do not hardcode these values elsewhere.
+   ========================================================================== */
+
+:root {
+
+  /* ------------------------------------------------------------------
+     Neutrals & surfaces — THEME.md §4.2 / §4.5 token resolution map
+       White                            -> #FFFFFF
+       Gray/700                         -> #414651
+       Gray/300                         -> #D5D7DA
+       Gray/200                         -> #E9EAEB
+       colours/common/Default/500(Main) -> #71717A
+     ------------------------------------------------------------------ */
+  --color-surface-primary: #FFFFFF;
+  --color-surface-reference: #FAFAFA;      /* tinted reference/informational bg (§4.2, §6 CAP-07) */
+  --color-border-subtle: #E9EAEB;          /* Gray/200 */
+  --color-border-default: #D5D7DA;         /* Gray/300 */
+  --color-text-primary: #414651;           /* Gray/700 */
+  --color-text-secondary: #71717A;         /* Default/500 (Main) */
+  --color-text-heading: #181D27;           /* darkest observed neutral (§4.2) */
+
+  /* Primary accent family (#005CD6 observed, §4.2 / §5.1 rail active) */
+  --color-accent: #005CD6;
+  --color-accent-strong: #184FAC;
+  --color-accent-bg-subtle: rgba(0, 92, 214, 0.10);
+  --color-accent-bg-hover: rgba(0, 92, 214, 0.15);
+  --color-focus-ring: rgba(0, 92, 214, 0.35);   /* primary focus ring, §4.6.3 policy applied to accent */
+
+  /* ------------------------------------------------------------------
+     Typography — THEME.md §4.1 / §4.5 / §9
+       Primary stack: Inter, secondary families reserved for branding.
+       Text xs/Medium: Inter 500, 12px/18px, letter-spacing 0.
+     ------------------------------------------------------------------ */
+  --font-body: "Inter", "Work Sans", "Montserrat", sans-serif;
+  --text-xs-size: 12px;
+  --text-xs-line-height: 18px;
+  --text-xs-weight-medium: 500;
+  --text-xs-letter-spacing: 0;
+
+  /* ------------------------------------------------------------------
+     Elevation — THEME.md §4.3 (resolved Figma effect tokens)
+     ------------------------------------------------------------------ */
+  --elevation-xs: 0 1px 2px 0 rgba(10, 13, 18, 0.051);                                       /* shadow/xs */
+  --elevation-base: 0 1px 2px -1px rgba(0, 0, 0, 0.102), 0 1px 3px 0 rgba(0, 0, 0, 0.102);   /* shadow/neutral/base */
+  --elevation-md: 0 2px 4px -2px rgba(0, 0, 0, 0.102), 0 4px 6px -1px rgba(0, 0, 0, 0.102);  /* shadow/neutral/md */
+  --elevation-lg: 0 4px 6px -4px rgba(0, 0, 0, 0.102), 0 10px 15px -3px rgba(0, 0, 0, 0.102);/* shadow/neutral/lg */
+
+  /* ------------------------------------------------------------------
+     Shape & spacing — THEME.md §4.4 (constrained radius scale,
+     consistent spacing ladder on a 4px grid)
+     ------------------------------------------------------------------ */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-pill: 9999px;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-7: 28px;
+  --space-8: 32px;
+
+  /* ==================================================================
+     Semantic status matrix — THEME.md §4.6
+     Interaction states derived per §4.6.3 policy:
+       hover  = default bg alpha + 0.05 (cap 0.30)
+       focus  = default bg + ring 0 0 0 3px rgba(fg RGB, 0.35)
+       active = hover alpha - 0.03
+     ================================================================== */
+
+  /* --- §4.6.1 Module status badges (BadgeBase) ---------------------- */
+
+  /* In progress: base 0.20 -> hover 0.25 -> active 0.22 */
+  --status-in-progress-bg: rgba(0, 92, 214, 0.20);
+  --status-in-progress-bg-hover: rgba(0, 92, 214, 0.25);
+  --status-in-progress-bg-active: rgba(0, 92, 214, 0.22);
+  --status-in-progress-fg: #005CD6;
+  --status-in-progress-focus-ring: rgba(0, 92, 214, 0.35);
+
+  /* Not started: base 0.10 -> hover 0.15 -> active 0.12 (ring from fg #4F4F4F) */
+  --status-not-started-bg: rgba(155, 155, 155, 0.10);
+  --status-not-started-bg-hover: rgba(155, 155, 155, 0.15);
+  --status-not-started-bg-active: rgba(155, 155, 155, 0.12);
+  --status-not-started-fg: #4F4F4F;
+  --status-not-started-focus-ring: rgba(79, 79, 79, 0.35);
+
+  /* Due soon: base 0.10 -> hover 0.15 -> active 0.12 */
+  --status-due-soon-bg: rgba(195, 138, 6, 0.10);
+  --status-due-soon-bg-hover: rgba(195, 138, 6, 0.15);
+  --status-due-soon-bg-active: rgba(195, 138, 6, 0.12);
+  --status-due-soon-fg: #C38A06;
+  --status-due-soon-focus-ring: rgba(195, 138, 6, 0.35);
+
+  /* Overdue: base 0.10 -> hover 0.15 -> active 0.12 */
+  --status-overdue-bg: rgba(175, 22, 66, 0.10);
+  --status-overdue-bg-hover: rgba(175, 22, 66, 0.15);
+  --status-overdue-bg-active: rgba(175, 22, 66, 0.12);
+  --status-overdue-fg: #AF1642;
+  --status-overdue-focus-ring: rgba(175, 22, 66, 0.35);
+
+  /* Due now: base 0.10 -> hover 0.15 -> active 0.12 */
+  --status-due-now-bg: rgba(132, 22, 175, 0.10);
+  --status-due-now-bg-hover: rgba(132, 22, 175, 0.15);
+  --status-due-now-bg-active: rgba(132, 22, 175, 0.12);
+  --status-due-now-fg: #8416AF;
+  --status-due-now-focus-ring: rgba(132, 22, 175, 0.35);
+
+  /* Complete (locked variant): base 0.10 -> hover 0.15 -> active 0.12 */
+  --status-complete-bg: rgba(0, 92, 214, 0.10);
+  --status-complete-bg-hover: rgba(0, 92, 214, 0.15);
+  --status-complete-bg-active: rgba(0, 92, 214, 0.12);
+  --status-complete-fg: #005CD6;
+  --status-complete-focus-ring: rgba(0, 92, 214, 0.35);
+
+  /* --- §4.6.2 Clinical status chips ---------------------------------- */
+
+  /* Stable: base 0.10 -> hover 0.15 -> active 0.12 */
+  --clinical-stable-bg: rgba(40, 173, 98, 0.10);
+  --clinical-stable-bg-hover: rgba(40, 173, 98, 0.15);
+  --clinical-stable-bg-active: rgba(40, 173, 98, 0.12);
+  --clinical-stable-border: rgba(40, 173, 98, 0.50);
+  --clinical-stable-fg: #28AD62;
+  --clinical-stable-focus-ring: rgba(40, 173, 98, 0.35);
+
+  /* Monitoring required: base 0.10 -> hover 0.15 -> active 0.12 */
+  --clinical-monitoring-bg: rgba(195, 138, 6, 0.10);
+  --clinical-monitoring-bg-hover: rgba(195, 138, 6, 0.15);
+  --clinical-monitoring-bg-active: rgba(195, 138, 6, 0.12);
+  --clinical-monitoring-border: rgba(195, 138, 6, 0.50);
+  --clinical-monitoring-fg: #C38A06;
+  --clinical-monitoring-focus-ring: rgba(195, 138, 6, 0.35);
+
+  /* No issues: base 0.10 -> hover 0.15 -> active 0.12 */
+  --clinical-no-issues-bg: rgba(155, 155, 155, 0.10);
+  --clinical-no-issues-bg-hover: rgba(155, 155, 155, 0.15);
+  --clinical-no-issues-bg-active: rgba(155, 155, 155, 0.12);
+  --clinical-no-issues-border: rgba(155, 155, 155, 0.50);
+  --clinical-no-issues-fg: #9B9B9B;
+  --clinical-no-issues-focus-ring: rgba(155, 155, 155, 0.35);
+}

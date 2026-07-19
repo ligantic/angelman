@@ -24,6 +24,7 @@ PROJECT_TITLE = env.get("project_title", "Global Angelman Syndrome Registry")
 PROJECT_TITLE_LINK = "login_router"
 
 PROJECT_LOGO = env.get("project_logo", "images/logo.png")
+PROJECT_STYLESHEET = env.get("project_stylesheet", "css/gasr-theme.css")
 
 VERSION = env.get("app_version", "%s (ang)" % angelman.VERSION)
 
