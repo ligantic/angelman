@@ -1,0 +1,26 @@
+{
+  "name": "GASR Devcontainer",
+  "dockerComposeFile": "../rdrf/docker-compose.yml",
+  "service": "devcontainer",
+  "runServices": ["db", "clinicaldb", "devcontainer"],
+  "workspaceFolder": "/workspaces/gasr",
+  "shutdownAction": "stopCompose",
+  "forwardPorts": ["runserver:8000"],
+  "portsAttributes": {
+    "runserver:8000": {
+      "label": "TRRF Django",
+      "onAutoForward": "openBrowser"
+    }
+  },
+  "features": {
+    "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {
+      "moby": false
+    }
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": ["ms-python.python", "ms-python.debugpy"]
+    }
+  },
+  "postCreateCommand": "pip install psycopg2-binary"
+}

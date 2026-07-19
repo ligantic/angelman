@@ -49,3 +49,5 @@ rdrf/rdrf/frontend/dist
 rdrf/rdrf/static/js/*-bundle*.js
 
 yarn_cache/
+
+planning
