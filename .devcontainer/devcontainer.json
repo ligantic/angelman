@@ -2,14 +2,18 @@
   "name": "GASR Devcontainer",
   "dockerComposeFile": "../rdrf/docker-compose.yml",
   "service": "devcontainer",
-  "runServices": ["db", "clinicaldb", "devcontainer"],
-  "workspaceFolder": "/workspaces/gasr",
+  "runServices": ["db", "clinicaldb", "smtp4dev", "devcontainer"],
+  "workspaceFolder": "/workspaces/fast-au/gasr",
   "shutdownAction": "stopCompose",
-  "forwardPorts": ["runserver:8000"],
+  "containerEnv": {
+    "DJANGO_SETTINGS_MODULE": "angelman.settings",
+    "PYTHONPATH": "/workspaces/fast-au/gasr/rdrf:/workspaces/fast-au/gasr/angelman"
+  },
+  "forwardPorts": [8000],
   "portsAttributes": {
-    "runserver:8000": {
-      "label": "TRRF Django",
-      "onAutoForward": "openBrowser"
+    "8000": {
+      "label": "Angelman Django",
+      "onAutoForward": "notify"
     }
   },
   "features": {
@@ -22,5 +26,5 @@
       "extensions": ["ms-python.python", "ms-python.debugpy"]
     }
   },
-  "postCreateCommand": "pip install psycopg2-binary"
+  "postCreateCommand": "python -c \"import django; print(django.get_version())\""
 }

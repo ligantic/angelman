@@ -2,18 +2,18 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "Django: Start debug Compose",
+      "label": "Angelman: Start debug Compose",
       "type": "shell",
-      "command": "export HOST_WORKSPACE_FOLDER=$(docker inspect $(hostname) --format '{{range .Mounts}}{{if eq .Destination \"${workspaceFolder}\"}}{{.Source}}{{end}}{{end}}') TRRF_HOST_PORT=8000 && test -n \"$HOST_WORKSPACE_FOLDER\" && docker compose -f docker-compose.yml -f docker-compose-debug.yml up -d --build --force-recreate runserver && until docker exec trrf-runserver-1 grep -q ':162E .* 0A ' /proc/net/tcp /proc/net/tcp6; do printf 'Waiting for debugpy on port 5678...\\n'; sleep 1; done",
+      "command": "export HOST_WORKSPACE_FOLDER=$(docker inspect $(hostname) --format '{{range .Mounts}}{{if eq .Destination \"/workspaces/fast-au\"}}{{.Source}}/gasr{{end}}{{end}}') TRRF_HOST_PORT=18000 && test -n \"$HOST_WORKSPACE_FOLDER\" && docker compose -f docker-compose.yml -f docker-compose-debug.yml up -d --build --force-recreate runserver && until docker exec trrf-runserver-1 grep -q ':162E .* 0A ' /proc/net/tcp /proc/net/tcp6; do printf 'Waiting for debugpy on port 5678...\\n'; sleep 1; done",
       "options": {
         "cwd": "${workspaceFolder}/rdrf"
       },
       "problemMatcher": []
     },
     {
-      "label": "Django: Stop debug server",
+      "label": "Angelman: Stop debug server",
       "type": "shell",
-      "command": "export HOST_WORKSPACE_FOLDER=$(docker inspect $(hostname) --format '{{range .Mounts}}{{if eq .Destination \"${workspaceFolder}\"}}{{.Source}}{{end}}{{end}}') TRRF_HOST_PORT=8000 && docker compose -f docker-compose.yml -f docker-compose-debug.yml stop runserver",
+      "command": "export HOST_WORKSPACE_FOLDER=$(docker inspect $(hostname) --format '{{range .Mounts}}{{if eq .Destination \"/workspaces/fast-au\"}}{{.Source}}/gasr{{end}}{{end}}') TRRF_HOST_PORT=18000 && docker compose -f docker-compose.yml -f docker-compose-debug.yml stop runserver",
       "options": {
         "cwd": "${workspaceFolder}/rdrf"
       },
