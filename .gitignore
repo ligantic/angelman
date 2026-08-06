@@ -42,7 +42,7 @@ startup
 *.tags
 *.tags1
 .env_local
-
+.envrc
 
 node_modules
 rdrf/rdrf/frontend/dist

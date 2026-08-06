@@ -23,7 +23,7 @@
   },
   "customizations": {
     "vscode": {
-      "extensions": ["ms-python.python", "ms-python.debugpy"]
+      "extensions": ["ms-python.python", "ms-python.debugpy", "mkhl.direnv"]
     }
   },
   "postCreateCommand": "python -c \"import django; print(django.get_version())\""

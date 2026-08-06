@@ -19,6 +19,7 @@
   --color-surface-reference: #FAFAFA;      /* tinted reference/informational bg (§4.2, §6 CAP-07) */
   --color-border-subtle: #E9EAEB;          /* Gray/200 */
   --color-border-default: #D5D7DA;         /* Gray/300 */
+   --color-input-border: #E0E1E4;
   --color-text-primary: #414651;           /* Gray/700 */
   --color-text-secondary: #71717A;         /* Default/500 (Main) */
   --color-text-heading: #181D27;           /* darkest observed neutral (§4.2) */

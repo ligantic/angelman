@@ -5,6 +5,7 @@ USER root
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         build-essential \
+        direnv \
         gettext \
         git \
         libmagic1 \
@@ -12,6 +13,7 @@ RUN apt-get update \
         libssl-dev \
         libyaml-dev \
         nodejs \
+        ripgrep \
         unixodbc-dev \
         zlib1g-dev \
     && rm -rf /var/lib/apt/lists/*
