@@ -23,6 +23,8 @@
   --color-text-primary: #414651;           /* Gray/700 */
   --color-text-secondary: #71717A;         /* Default/500 (Main) */
   --color-text-heading: #181D27;           /* darkest observed neutral (§4.2) */
+   --color-rail-heading: #001537;
+   --color-rail-guide: #E4E4E7;
 
   /* Primary accent family (#005CD6 observed, §4.2 / §5.1 rail active) */
   --color-accent: #005CD6;
@@ -145,4 +147,8 @@
   --clinical-no-issues-border: rgba(155, 155, 155, 0.50);
   --clinical-no-issues-fg: #9B9B9B;
   --clinical-no-issues-focus-ring: rgba(155, 155, 155, 0.35);
+}
+
+body {
+   background-color: var(--color-surface-primary);
 }
