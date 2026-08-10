@@ -1,0 +1,52 @@
+{% load project_logo %}
+{% load project_title %}
+{% load static %}
+{% load version_number %}
+{% load i18n %}
+
+{% project_logo as project_logo_path %}
+{% project_title as project_title_text %}
+
+<footer class="footer-wrap gasr-footer" aria-label="{% trans 'Site footer' %}">
+  <div class="gasr-footer__inner">
+    <div class="gasr-footer__directory">
+      <div class="gasr-footer__brand">
+        <a class="gasr-footer__logo-link" href="{% url 'login_router' %}">
+          {% if project_logo_path %}
+          <img class="gasr-footer__logo" src="{% static project_logo_path %}" alt="{{ project_title_text }}">
+          {% else %}
+          <span class="gasr-footer__logo-text">{{ project_title_text }}</span>
+          {% endif %}
+        </a>
+        <p class="gasr-footer__description">{% trans 'The Global Angelman Syndrome Registry is a project designed for individuals diagnosed with Angelman syndrome and those working towards research and treatments.' %}</p>
+      </div>
+
+      <nav class="gasr-footer__links" aria-label="{% trans 'Footer navigation' %}">
+        <section class="gasr-footer__link-group" aria-labelledby="footer-registry-links">
+          <h2 id="footer-registry-links" class="gasr-footer__link-heading">{% trans 'Registry' %}</h2>
+          <a href="{% url 'login_router' %}">{% trans 'Queries' %}</a>
+          <a href="{% url 'login_router' %}">{% trans 'Support' %}</a>
+        </section>
+        <section class="gasr-footer__link-group" aria-labelledby="footer-legal-links">
+          <h2 id="footer-legal-links" class="gasr-footer__link-heading">{% trans 'Legal info' %}</h2>
+          <a href="{% url 'login_router' %}">{% trans 'Privacy policy' %}</a>
+          <a href="{% url 'login_router' %}">{% trans 'Terms of use' %}</a>
+        </section>
+      </nav>
+    </div>
+
+    <div class="gasr-footer__divider" aria-hidden="true"></div>
+
+    <div class="gasr-footer__fine-print">
+      <p>&copy; {% now "Y" %} {% trans 'Global Angelman Syndrome Registry.' %}</p>
+      <div class="gasr-footer__fine-print-end">
+        <a class="gasr-footer__ligantic" href="https://ligantic.com" aria-label="{% trans 'Powered by Ligantic' %}">
+          <img class="gasr-footer__ligantic-icon" src="{% static 'images/ligantic-icon.svg' %}" alt="">
+          <span class="gasr-footer__ligantic-text">{% trans 'Hosted by' %}</span>
+          <img class="gasr-footer__ligantic-wordmark" src="{% static 'images/ligantic-wordmark.svg' %}" alt="Ligantic">
+        </a>
+        <p>{% trans 'Version' %} {% version_number %}</p>
+      </div>
+    </div>
+  </div>
+</footer>
