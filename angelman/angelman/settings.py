@@ -25,6 +25,12 @@ PROJECT_TITLE_LINK = "login_router"
 
 PROJECT_LOGO = env.get("project_logo", "images/gasr-logo.png")
 PROJECT_STYLESHEET = env.get("project_stylesheet", "css/gasr-theme.css")
+CONSENT_MEDIA_HOST = env.get(
+    "consent_media_host", "https://stangelmediaprod52246a6e.blob.core.windows.net"
+)
+
+CSP_IMG_SRC += [CONSENT_MEDIA_HOST]
+CSP_MEDIA_SRC += [CONSENT_MEDIA_HOST]
 
 VERSION = env.get("app_version", "%s (ang)" % angelman.VERSION)
 
