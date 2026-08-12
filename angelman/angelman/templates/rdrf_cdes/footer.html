@@ -19,7 +19,7 @@
           {% endif %}
         </a>
         <p class="gasr-footer__description">{% trans 'The Global Angelman Syndrome Registry is a project designed for individuals diagnosed with Angelman syndrome and those working towards research and treatments.' %}</p>
-        <p class="gasr-footer__description gasr-footer__funding">{% trans 'Funded by Foundation Angleman Syndrome Therapeutics.' %}</p>
+        <p class="gasr-footer__description gasr-footer__funding">{% trans 'Funded by' %} <a href="https://www.cureangelman.org.au/" target="_blank">{% trans 'Foundation for Angelman Syndrome Therapeutics Australia' %}</a>.</p>
       </div>
 
       <nav class="gasr-footer__links" aria-label="{% trans 'Footer navigation' %}">
@@ -39,7 +39,7 @@
     <div class="gasr-footer__fine-print">
       <p>&copy; {% now "Y" %} {% trans 'Global Angelman Syndrome Registry.' %}</p>
       <div class="gasr-footer__fine-print-end">
-        <a class="gasr-footer__ligantic" href="https://ligantic.com" aria-label="{% trans 'Powered by Ligantic' %}">
+        <a class="gasr-footer__ligantic" href="https://ligantic.com" target="_blank" aria-label="{% trans 'Powered by Ligantic' %}">
           <img class="gasr-footer__ligantic-icon" src="{% static 'images/ligantic-icon.svg' %}" alt="">
           <span class="gasr-footer__ligantic-text">{% trans 'Hosted by' %}</span>
           <img class="gasr-footer__ligantic-wordmark" src="{% static 'images/ligantic-wordmark.svg' %}" alt="Ligantic">
