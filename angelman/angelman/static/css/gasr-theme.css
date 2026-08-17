@@ -19,6 +19,7 @@
      ------------------------------------------------------------------ */
   --color-surface-primary: #FFFFFF;
   --color-surface-reference: #FAFAFA;      /* tinted reference/informational bg (§4.2, §6 CAP-07) */
+   --color-surface-segmented: #EAEDF2;      /* participant chooser background */
   --color-border-subtle: #E9EAEB;          /* Gray/200 */
   --color-border-default: #D5D7DA;         /* Gray/300 */
    --color-input-border: #E0E1E4;
