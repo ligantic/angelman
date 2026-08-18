@@ -231,9 +231,24 @@ body {
 }
 
 .gasr-patient-information__header {
-   align-items: baseline;
+   align-items: flex-start;
    display: flex;
    justify-content: space-between;
+}
+
+.gasr-patient-information__header > div {
+   align-items: flex-start;
+   display: flex;
+   gap: var(--space-3);
+   justify-content: space-between;
+   width: 100%;
+}
+
+.gasr-patient-information__identity {
+   align-items: center;
+   display: flex;
+   flex-wrap: wrap;
+   gap: var(--space-1);
 }
 
 .gasr-patient-information__header p {
@@ -244,30 +259,99 @@ body {
    margin: 0;
 }
 
+.gasr-patient-information__header p .fa {
+   font-size: .875rem;
+}
+
+.gasr-patient-information__actions {
+   display: flex;
+   gap: var(--space-3);
+}
+
+.gasr-patient-information__actions a {
+   color: var(--color-text-secondary);
+   font-size: 1rem;
+   line-height: 1;
+}
+
+.gasr-patient-information__actions a:hover,
+.gasr-patient-information__actions a:focus {
+   color: var(--color-accent);
+}
+
 .gasr-patient-information__facts {
-   border-top: 1px solid var(--color-border-subtle);
+   align-items: center;
    display: flex;
    flex-wrap: wrap;
-   gap: var(--space-2) var(--space-5);
-   margin: var(--space-3) 0 0;
-   padding-top: var(--space-2);
+   gap: var(--space-3);
+   margin-top: var(--space-3);
 }
 
-.gasr-patient-information__facts div {
-   align-items: baseline;
+.gasr-patient-information__facts [role="listitem"] {
+   color: var(--color-text-secondary);
+   font-size: .875rem;
+   font-weight: 500;
+   line-height: 1.25rem;
+}
+
+.gasr-patient-information__separator {
+   background: var(--color-border-subtle);
+   height: .9375rem;
+   width: 1px;
+}
+
+.gasr-patient-information__about {
+   margin-top: var(--space-4);
+}
+
+.gasr-patient-information__about h3 {
+   color: var(--color-text-heading);
+   font-size: .875rem;
+   font-weight: 600;
+   line-height: 1.25rem;
+   margin: 0 0 var(--space-2);
+}
+
+.gasr-patient-information__contact-details {
    display: flex;
-   gap: var(--space-1);
+   flex-wrap: wrap;
+   gap: var(--space-2) var(--space-4);
 }
 
-.gasr-patient-information__facts dt,
-.gasr-patient-information__facts dd {
+.gasr-patient-information__contact-details p {
+   color: var(--color-text-secondary);
    font-size: var(--text-xs-size);
    line-height: var(--text-xs-line-height);
    margin: 0;
 }
 
-.gasr-patient-information__facts dt { color: var(--color-text-secondary); }
-.gasr-patient-information__facts dd { color: var(--color-text-primary); }
+.gasr-patient-information__contact-details .fa {
+   margin-right: var(--space-2);
+}
+
+.gasr-patient-information__flags {
+   display: flex;
+   flex-wrap: wrap;
+   gap: var(--space-3);
+   margin-top: var(--space-4);
+}
+
+.gasr-patient-information__flags [role="listitem"] {
+   border: 1px solid var(--color-border-default);
+   border-radius: var(--radius-sm);
+   color: var(--color-text-heading);
+   font-size: var(--text-xs-size);
+   font-weight: var(--text-xs-weight-medium);
+   line-height: var(--text-xs-line-height);
+   padding: var(--space-1) var(--space-2);
+}
+
+@media (max-width: 575.98px) {
+   .gasr-patient-information__identity {
+      align-items: flex-start;
+      flex-direction: column;
+   }
+}
 
 /* Angelman registry footer */
 .footer-wrap.gasr-footer {

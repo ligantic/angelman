@@ -55261,6 +55261,20 @@ registry_dashboards:
         links: []
         title: Consents
         widget_type: consents
+      - cdes: []
+        demographics: []
+        free_text: ""
+        links: []
+        provider: angelman_clinical_snapshot
+        title: Clinical Snapshot
+        widget_type: registry_plugin
+      - cdes: []
+        demographics: []
+        free_text: ""
+        links: []
+        provider: angelman_patient_information
+        title: Patient Information
+        widget_type: registry_plugin
       - cdes:
           - cde: ANGDNAMethylAbnormalResult2
             context_form_group: PatientHistoryCFG

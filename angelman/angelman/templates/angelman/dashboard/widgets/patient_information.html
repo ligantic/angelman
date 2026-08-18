@@ -1,0 +1,52 @@
+<section class="gasr-dashboard-plugin gasr-patient-information">
+  <header class="gasr-patient-information__header">
+    <div>
+      <div class="gasr-patient-information__identity">
+        <h2>{{ plugin.patient.name }}</h2>
+        {% if plugin.patient.last_updated %}
+          <p><span class="fa fa-check-circle" aria-hidden="true"></span> Profile last updated: {{ plugin.patient.last_updated|date:"j F Y" }}</p>
+        {% endif %}
+      </div>
+      <div class="gasr-patient-information__actions d-print-none">
+        <a href="{{ plugin.patient.demographics_url }}" aria-label="Update demographics" data-bs-toggle="tooltip" data-bs-placement="bottom" data-gasr-patient-tooltip title="Update demographics">
+          <span class="fa fa-pencil" aria-hidden="true"></span>
+        </a>
+        {% if plugin.patient.diagnostic_information_url %}
+          <a href="{{ plugin.patient.diagnostic_information_url }}" aria-label="Update diagnostic information" data-bs-toggle="tooltip" data-bs-placement="bottom" data-gasr-patient-tooltip title="Update diagnostic information">
+            <span class="fa fa-stethoscope" aria-hidden="true"></span>
+          </a>
+        {% endif %}
+      </div>
+    </div>
+  </header>
+  <div class="gasr-patient-information__facts" role="list" aria-label="Patient details">
+    <span role="listitem">{{ plugin.patient.sex|default:"Not recorded" }}</span>
+    <span class="gasr-patient-information__separator" aria-hidden="true"></span>
+    <span role="listitem">{{ plugin.patient.age|default:"Not recorded" }}{% if plugin.patient.age %} years old{% endif %}</span>
+    <span class="gasr-patient-information__separator" aria-hidden="true"></span>
+    <span role="listitem">{{ plugin.patient.working_group|default:"Not recorded" }}</span>
+  </div>
+  {% if plugin.patient.address or plugin.patient.phone %}
+    <section class="gasr-patient-information__about" aria-label="About {{ plugin.patient.name }}">
+      <h3>About</h3>
+      <div class="gasr-patient-information__contact-details">
+        {% if plugin.patient.address %}
+          <p><span class="fa fa-map-marker" aria-hidden="true"></span>{{ plugin.patient.address }}</p>
+        {% endif %}
+        {% if plugin.patient.phone %}
+          <p><span class="fa fa-phone" aria-hidden="true"></span>{{ plugin.patient.phone }}</p>
+        {% endif %}
+      </div>
+    </section>
+  {% endif %}
+  {% if plugin.patient.flags %}
+    <div class="gasr-patient-information__flags" role="list" aria-label="Patient flags">
+      {% for flag in plugin.patient.flags %}
+        <span role="listitem">{{ flag }}</span>
+      {% endfor %}
+    </div>
+  {% endif %}
+</section>
+<script>
+  document.querySelectorAll("[data-gasr-patient-tooltip]").forEach((element) => new bootstrap.Tooltip(element));
+</script>

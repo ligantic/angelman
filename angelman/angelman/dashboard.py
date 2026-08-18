@@ -1,5 +1,6 @@
 from itertools import zip_longest
 
+from django.urls import reverse
 from rdrf.models.definition.models import (
     CommonDataElement,
     ContextFormGroup,
@@ -73,16 +74,23 @@ def _display(cde_code, value):
     return display_value
 
 
-def _value(dashboard, section_code, cde_code, multisection=False):
+def _form_value(
+    dashboard,
+    context_group_code,
+    form_name,
+    section_code,
+    cde_code,
+    multisection=False,
+):
     try:
         context_group = ContextFormGroup.objects.get(
-            registry=dashboard.registry, code=CONTEXT_GROUP_CODE
+            registry=dashboard.registry, code=context_group_code
         )
         context = dashboard._get_patient_context(context_group)
         if not context:
             return [] if multisection else None
         form = RegistryForm.objects.get(
-            registry=dashboard.registry, name=FORM_NAME
+            registry=dashboard.registry, name=form_name
         )
         return dashboard.patient.get_form_value(
             dashboard.registry.code,
@@ -99,6 +107,17 @@ def _value(dashboard, section_code, cde_code, multisection=False):
         RegistryForm.DoesNotExist,
     ):
         return [] if multisection else None
+
+
+def _value(dashboard, section_code, cde_code, multisection=False):
+    return _form_value(
+        dashboard,
+        CONTEXT_GROUP_CODE,
+        FORM_NAME,
+        section_code,
+        cde_code,
+        multisection,
+    )
 
 
 def _medications(dashboard):
@@ -204,20 +223,13 @@ def _brain_row(dashboard):
 
 def clinical_snapshot(dashboard, widget):
     medications = _medications(dashboard)
-    brain_conditions = _value(dashboard, "NewIllness", "ANGBrainList") or []
-    if not isinstance(brain_conditions, list):
-        brain_conditions = [brain_conditions]
-    has_seizures = "Seizures" in brain_conditions
-    seizure_status = None
-    seizure_management = None
-    if has_seizures:
-        seizure_status = _display(
-            "SeizureStatus2", _value(dashboard, "NewEpilepsy", "SeizureStatus2")
-        )
-        seizure_management = _display(
-            "ANGSEIZUREManaged",
-            _value(dashboard, "NewEpilepsy", "ANGSEIZUREManaged"),
-        )
+    seizure_status = _display(
+        "SeizureStatus2", _value(dashboard, "NewEpilepsy", "SeizureStatus2")
+    )
+    seizure_management = _display(
+        "ANGSEIZUREManaged",
+        _value(dashboard, "NewEpilepsy", "ANGSEIZUREManaged"),
+    )
     seizure_summary = "; ".join(
         value for value in (seizure_status, seizure_management) if value
     )
@@ -269,8 +281,80 @@ def clinical_snapshot(dashboard, widget):
     }
 
 
+def _patient_flags(dashboard):
+    flags = []
+    seizure_status = _display(
+        "SeizureStatus2", _value(dashboard, "NewEpilepsy", "SeizureStatus2")
+    )
+    if seizure_status == "Uncontrolled":
+        flags.append("Uncontrolled seizures")
+
+    medication_current = _value(
+        dashboard, "NewMedication", "curmedscreen2", multisection=True
+    )
+    medication_frequency = _value(
+        dashboard, "NewMedication", "ANGMedOftenSimple", multisection=True
+    )
+    if not isinstance(medication_current, list):
+        medication_current = [medication_current]
+    if not isinstance(medication_frequency, list):
+        medication_frequency = [medication_frequency]
+    for current, frequency in zip_longest(
+        medication_current, medication_frequency, fillvalue=None
+    ):
+        if (
+            _display("curmedscreen2", current) == "Yes"
+            and _display("ANGMedOftenSimple", frequency)
+            == "Taken on a regular basis"
+        ):
+            flags.append("Daily medication")
+            break
+
+    mobility_support = _form_value(
+        dashboard,
+        "BehDev",
+        "Development",
+        "ANGBEHDEVMOTORFUNCTIONV2",
+        "ANGBEHDEVMOBILITYSUPPORT",
+        multisection=True,
+    )
+    if not isinstance(mobility_support, list):
+        mobility_support = [mobility_support]
+    if "WheelchairAll" in mobility_support:
+        flags.append("Wheelchair required")
+
+    return flags
+
+
 def patient_information(dashboard, widget):
     patient = dashboard.patient
+    home_address = patient.home_address
+    working_group = patient.working_groups.first()
+    address = ", ".join(
+        str(value)
+        for value in (
+            getattr(home_address, "address", None),
+            getattr(home_address, "suburb", None),
+            getattr(home_address, "state", None),
+            getattr(home_address, "postcode", None),
+            getattr(home_address, "country", None),
+        )
+        if value
+    )
+    diagnostic_information_url = None
+    try:
+        context_form_group = ContextFormGroup.objects.get(
+            registry=dashboard.registry, code="PatientHistoryCFG"
+        )
+        registry_form = RegistryForm.objects.get(
+            registry=dashboard.registry, name="HistoryOfDiagnosis"
+        )
+        diagnostic_information_url = dashboard._get_form_link(
+            context_form_group, registry_form
+        )
+    except (ContextFormGroup.DoesNotExist, RegistryForm.DoesNotExist):
+        pass
+
     return {
         "placement": "primary",
         "template": "angelman/dashboard/widgets/patient_information.html",
@@ -278,7 +362,20 @@ def patient_information(dashboard, widget):
             "name": patient.display_name,
             "sex": patient.get_sex_display(),
             "age": patient.age,
-            "date_of_birth": patient.date_of_birth,
+            "working_group": (
+                working_group.display_name if working_group else None
+            ),
+            "flags": _patient_flags(dashboard),
             "last_updated": patient.last_updated_overall_at,
+            "address": address,
+            "phone": patient.home_phone or patient.mobile_phone,
+            "demographics_url": reverse(
+                "patient_edit",
+                kwargs={
+                    "registry_code": dashboard.registry.code,
+                    "patient_id": patient.id,
+                },
+            ),
+            "diagnostic_information_url": diagnostic_information_url,
         },
     }
