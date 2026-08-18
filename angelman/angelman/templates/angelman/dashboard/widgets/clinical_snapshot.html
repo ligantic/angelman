@@ -1,0 +1,14 @@
+<section class="gasr-dashboard-plugin gasr-clinical-snapshot">
+  <header class="gasr-dashboard-plugin__header">
+    <h2>{{ widget.title }}</h2>
+  </header>
+  {% for item in plugin.snapshot %}
+    <div class="gasr-clinical-snapshot__row">
+      <div class="gasr-clinical-snapshot__content">
+        <h3>{{ item.label }}</h3>
+        <p>{{ item.summary }}</p>
+      </div>
+      <span class="gasr-clinical-status gasr-clinical-status--{{ item.status_css }}">{{ item.status }}</span>
+    </div>
+  {% endfor %}
+</section>

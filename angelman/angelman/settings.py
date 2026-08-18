@@ -72,3 +72,8 @@ SCHEMA_MODULE = "report.schema"
 SCHEMA_METHOD_PATIENT_FIELDS = "get_patient_fields"
 REPORT_CONFIG_MODULE = "angelman.report.report_configuration"
 REPORT_CONFIG_METHOD_GET = "get_angelman_configuration"
+
+REGISTRY_DASHBOARD_WIDGET_PROVIDERS = {
+    "angelman_clinical_snapshot": "angelman.dashboard.clinical_snapshot",
+    "angelman_patient_information": "angelman.dashboard.patient_information",
+}
