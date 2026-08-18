@@ -1,6 +1,7 @@
 from itertools import zip_longest
 
 from django.urls import reverse
+from django.utils.translation import gettext as _
 from rdrf.models.definition.models import (
     CommonDataElement,
     ContextFormGroup,
@@ -182,8 +183,8 @@ def _condition_row(dashboard, label, list_cde_code, conditions):
     summary = ", ".join(active_conditions)
     return {
         "label": label,
-        "summary": summary or "No issues reported",
-        "status": "Monitoring required" if summary else "No issues",
+        "summary": summary or _("No issues reported"),
+        "status": _("Monitoring required") if summary else _("No issues"),
         "status_css": "monitoring" if summary else "no-issues",
     }
 
@@ -214,9 +215,9 @@ def _brain_row(dashboard):
 
     summary = _display("ANGBrainList", brain_conditions) if brain_conditions else None
     return {
-        "label": "Brain/nervous system",
-        "summary": summary or "No issues reported",
-        "status": "Monitoring required" if summary else "No issues",
+        "label": _("Brain/nervous system"),
+        "summary": summary or _("No issues reported"),
+        "status": _("Monitoring required") if summary else _("No issues"),
         "status_css": "monitoring" if summary else "no-issues",
     }
 
@@ -236,41 +237,41 @@ def clinical_snapshot(dashboard, widget):
     seizure_monitoring = seizure_status not in (None, "Controlled")
     snapshot = [
         {
-            "label": "Current medications",
+            "label": _("Current medications"),
             "summary": (
                 "; ".join(medications)
                 if medications
-                else "No current medications reported"
+                else _("No current medications reported")
             ),
-            "status": "Monitoring required" if medications else "No issues",
+            "status": _("Monitoring required") if medications else _("No issues"),
             "status_css": "monitoring" if medications else "no-issues",
         },
         {
-            "label": "Seizure status",
-            "summary": seizure_summary or "No seizure status reported",
-            "status": "Monitoring required" if seizure_monitoring else "Stable",
+            "label": _("Seizure status"),
+            "summary": seizure_summary or _("No seizure status reported"),
+            "status": _("Monitoring required") if seizure_monitoring else _("Stable"),
             "status_css": "monitoring" if seizure_monitoring else "stable",
         },
-        _condition_row(dashboard, "Growth/feeding", *SYSTEM_CONDITIONS["Growth/feeding"]),
+        _condition_row(dashboard, _("Growth/feeding"), *SYSTEM_CONDITIONS["Growth/feeding"]),
         _brain_row(dashboard),
         _condition_row(
             dashboard,
-            "Behaviour/psychiatric",
+            _("Behaviour/psychiatric"),
             *SYSTEM_CONDITIONS["Behaviour/psychiatric"],
         ),
         _condition_row(
             dashboard,
-            "Muscles/skeletal",
+            _("Muscles/skeletal"),
             *SYSTEM_CONDITIONS["Muscles/skeletal"],
         ),
         _condition_row(
             dashboard,
-            "Lungs/breathing",
+            _("Lungs/breathing"),
             *SYSTEM_CONDITIONS["Lungs/breathing"],
         ),
         _condition_row(
             dashboard,
-            "Digestive system",
+            _("Digestive system"),
             *SYSTEM_CONDITIONS["Digestive system"],
         ),
     ]
@@ -287,7 +288,7 @@ def _patient_flags(dashboard):
         "SeizureStatus2", _value(dashboard, "NewEpilepsy", "SeizureStatus2")
     )
     if seizure_status == "Uncontrolled":
-        flags.append("Uncontrolled seizures")
+        flags.append(_("Uncontrolled seizures"))
 
     medication_current = _value(
         dashboard, "NewMedication", "curmedscreen2", multisection=True
@@ -307,7 +308,7 @@ def _patient_flags(dashboard):
             and _display("ANGMedOftenSimple", frequency)
             == "Taken on a regular basis"
         ):
-            flags.append("Daily medication")
+            flags.append(_("Daily medication"))
             break
 
     mobility_support = _form_value(
@@ -321,7 +322,7 @@ def _patient_flags(dashboard):
     if not isinstance(mobility_support, list):
         mobility_support = [mobility_support]
     if "WheelchairAll" in mobility_support:
-        flags.append("Wheelchair required")
+        flags.append(_("Wheelchair required"))
 
     return flags
 

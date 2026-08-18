@@ -1,34 +1,35 @@
+{% load i18n %}
 <section class="gasr-dashboard-plugin gasr-patient-information">
   <header class="gasr-patient-information__header">
     <div>
       <div class="gasr-patient-information__identity">
         <h2>{{ plugin.patient.name }}</h2>
         {% if plugin.patient.last_updated %}
-          <p><span class="fa fa-check-circle" aria-hidden="true"></span> Profile last updated: {{ plugin.patient.last_updated|date:"j F Y" }}</p>
+          <p><span class="fa fa-check-circle" aria-hidden="true"></span> {% blocktrans with updated_at=plugin.patient.last_updated|date:"j F Y" %}Profile last updated: {{ updated_at }}{% endblocktrans %}</p>
         {% endif %}
       </div>
       <div class="gasr-patient-information__actions d-print-none">
-        <a href="{{ plugin.patient.demographics_url }}" aria-label="Update demographics" data-bs-toggle="tooltip" data-bs-placement="bottom" data-gasr-patient-tooltip title="Update demographics">
+        <a href="{{ plugin.patient.demographics_url }}" aria-label="{% trans 'Update demographics' %}" data-bs-toggle="tooltip" data-bs-placement="bottom" data-gasr-patient-tooltip title="{% trans 'Update demographics' %}">
           <span class="fa fa-pencil" aria-hidden="true"></span>
         </a>
         {% if plugin.patient.diagnostic_information_url %}
-          <a href="{{ plugin.patient.diagnostic_information_url }}" aria-label="Update diagnostic information" data-bs-toggle="tooltip" data-bs-placement="bottom" data-gasr-patient-tooltip title="Update diagnostic information">
+          <a href="{{ plugin.patient.diagnostic_information_url }}" aria-label="{% trans 'Update diagnostic information' %}" data-bs-toggle="tooltip" data-bs-placement="bottom" data-gasr-patient-tooltip title="{% trans 'Update diagnostic information' %}">
             <span class="fa fa-stethoscope" aria-hidden="true"></span>
           </a>
         {% endif %}
       </div>
     </div>
   </header>
-  <div class="gasr-patient-information__facts" role="list" aria-label="Patient details">
-    <span role="listitem">{{ plugin.patient.sex|default:"Not recorded" }}</span>
+  <div class="gasr-patient-information__facts" role="list" aria-label="{% trans 'Patient details' %}">
+    <span role="listitem">{% if plugin.patient.sex %}{{ plugin.patient.sex }}{% else %}{% trans "Not recorded" %}{% endif %}</span>
     <span class="gasr-patient-information__separator" aria-hidden="true"></span>
-    <span role="listitem">{{ plugin.patient.age|default:"Not recorded" }}{% if plugin.patient.age %} years old{% endif %}</span>
+    <span role="listitem">{% if plugin.patient.age %}{{ plugin.patient.age }} {% trans "years old" %}{% else %}{% trans "Not recorded" %}{% endif %}</span>
     <span class="gasr-patient-information__separator" aria-hidden="true"></span>
-    <span role="listitem">{{ plugin.patient.working_group|default:"Not recorded" }}</span>
+    <span role="listitem">{% if plugin.patient.working_group %}{{ plugin.patient.working_group }}{% else %}{% trans "Not recorded" %}{% endif %}</span>
   </div>
   {% if plugin.patient.address or plugin.patient.phone %}
-    <section class="gasr-patient-information__about" aria-label="About {{ plugin.patient.name }}">
-      <h3>About</h3>
+    <section class="gasr-patient-information__about" aria-label="{% blocktrans with patient_name=plugin.patient.name %}About {{ patient_name }}{% endblocktrans %}">
+      <h3>{% trans "About" %}</h3>
       <div class="gasr-patient-information__contact-details">
         {% if plugin.patient.address %}
           <p><span class="fa fa-map-marker" aria-hidden="true"></span>{{ plugin.patient.address }}</p>
@@ -40,7 +41,7 @@
     </section>
   {% endif %}
   {% if plugin.patient.flags %}
-    <div class="gasr-patient-information__flags" role="list" aria-label="Patient flags">
+    <div class="gasr-patient-information__flags" role="list" aria-label="{% trans 'Patient flags' %}">
       {% for flag in plugin.patient.flags %}
         <span role="listitem">{{ flag }}</span>
       {% endfor %}
