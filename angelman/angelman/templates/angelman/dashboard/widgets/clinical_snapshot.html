@@ -5,10 +5,27 @@
   {% for item in plugin.snapshot %}
     <div class="gasr-clinical-snapshot__row">
       <div class="gasr-clinical-snapshot__content">
-        <h3>{{ item.label }}</h3>
+        <div class="gasr-clinical-snapshot__heading">
+          <span class="gasr-clinical-snapshot__icon" aria-hidden="true"><span class="fa {{ item.icon }}"></span></span>
+          <span class="fa fa-info-circle gasr-clinical-snapshot__info"
+                aria-label="{{ item.tooltip }}"
+                data-bs-toggle="tooltip"
+                data-bs-placement="bottom"
+                data-gasr-clinical-tooltip
+                title="{{ item.tooltip }}"></span>
+          <h3>{{ item.label }}</h3>
+        </div>
         <p>{{ item.summary }}</p>
       </div>
-      <span class="gasr-clinical-status gasr-clinical-status--{{ item.status_css }}">{{ item.status }}</span>
+      {% if item.status %}
+        <span class="gasr-clinical-status gasr-clinical-status--{{ item.status_css }}">
+          <span class="gasr-clinical-status__dot" aria-hidden="true"></span>
+          {{ item.status }}
+        </span>
+      {% endif %}
     </div>
   {% endfor %}
 </section>
+<script>
+  document.querySelectorAll("[data-gasr-clinical-tooltip]").forEach((element) => new bootstrap.Tooltip(element));
+</script>

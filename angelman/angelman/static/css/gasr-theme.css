@@ -143,6 +143,10 @@
   --clinical-monitoring-fg: #C38A06;
   --clinical-monitoring-focus-ring: rgba(195, 138, 6, 0.35);
 
+   --clinical-critical-bg: rgba(175, 22, 66, 0.10);
+   --clinical-critical-border: rgba(175, 22, 66, 0.50);
+   --clinical-critical-fg: #AF1642;
+
   /* No issues: base 0.10 -> hover 0.15 -> active 0.12 */
   --clinical-no-issues-bg: rgba(155, 155, 155, 0.10);
   --clinical-no-issues-bg-hover: rgba(155, 155, 155, 0.15);
@@ -196,6 +200,33 @@ body {
 
 .gasr-clinical-snapshot__content { min-width: 0; }
 
+.gasr-clinical-snapshot__heading {
+   align-items: center;
+   display: flex;
+   gap: var(--space-2);
+}
+
+.gasr-clinical-snapshot__icon {
+   align-items: center;
+   background: var(--color-accent);
+   border: 1px solid var(--color-rail-guide);
+   border-radius: 6px;
+   color: #FFFFFF;
+   display: inline-flex;
+   flex: 0 0 24px;
+   height: 24px;
+   justify-content: center;
+   width: 24px;
+}
+
+.gasr-clinical-snapshot__icon .fa { font-size: 14px; }
+
+.gasr-clinical-snapshot__info {
+   color: var(--color-text-primary);
+   cursor: help;
+   font-size: 12px;
+}
+
 .gasr-clinical-snapshot__row h3 {
    color: var(--color-text-heading);
    font-size: .875rem;
@@ -212,9 +243,12 @@ body {
 }
 
 .gasr-clinical-status {
+   align-items: center;
+   background: var(--clinical-no-issues-bg);
    border: 1px solid currentColor;
    border-radius: var(--radius-pill);
-   display: inline-block;
+   display: inline-flex;
+   gap: var(--space-2);
    font-size: var(--text-xs-size);
    font-weight: var(--text-xs-weight-medium);
    line-height: var(--text-xs-line-height);
@@ -222,9 +256,31 @@ body {
    white-space: nowrap;
 }
 
-.gasr-clinical-status--stable { color: var(--clinical-stable-fg); }
-.gasr-clinical-status--monitoring { color: var(--clinical-monitoring-fg); }
-.gasr-clinical-status--no-issues { color: var(--clinical-no-issues-fg); }
+.gasr-clinical-status__dot {
+   background: currentColor;
+   border-radius: 50%;
+   display: inline-block;
+   flex: 0 0 8px;
+   height: 8px;
+   width: 8px;
+}
+
+.gasr-clinical-status--stable {
+   background: var(--clinical-stable-bg);
+   color: var(--clinical-stable-fg);
+}
+.gasr-clinical-status--monitoring {
+   background: var(--clinical-monitoring-bg);
+   color: var(--clinical-monitoring-fg);
+}
+.gasr-clinical-status--critical {
+   background: var(--clinical-critical-bg);
+   color: var(--clinical-critical-fg);
+}
+.gasr-clinical-status--no-issues {
+   background: var(--clinical-no-issues-bg);
+   color: var(--clinical-no-issues-fg);
+}
 
 .gasr-patient-information {
    padding: var(--space-3) var(--space-4);

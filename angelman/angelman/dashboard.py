@@ -11,7 +11,15 @@ from rdrf.models.definition.models import (
 
 FORM_NAME = "Clinical"
 CONTEXT_GROUP_CODE = "Clinical"
-ACTIVE_STATUSES = {"Current", "Episodic"}
+ACTIVE_STATUSES = {"Current", "Episodic", "Intermittently experiencing/ episodic"}
+RESOLVED_STATUS = "Resolved"
+
+CRITICAL_GROWTH_CONDITIONS = {
+    "FTT",
+    "TubeFeeding",
+    "FoodRefusal",
+    "DifficultSwallow",
+}
 
 SYSTEM_CONDITIONS = {
     "Growth/feeding": (
@@ -165,11 +173,18 @@ def _medications(dashboard):
     return entries
 
 
-def _condition_row(dashboard, label, list_cde_code, conditions):
+def _condition_row(
+    dashboard,
+    label,
+    list_cde_code,
+    conditions,
+    critical_conditions=None,
+):
     values = _value(dashboard, "NewIllness", list_cde_code) or []
     if not isinstance(values, list):
         values = [values]
     active_conditions = []
+    listed_statuses = []
     for condition_code, status_cde_code in conditions:
         if condition_code not in values:
             continue
@@ -177,15 +192,47 @@ def _condition_row(dashboard, label, list_cde_code, conditions):
             status_cde_code,
             _value(dashboard, "NewIllness", status_cde_code),
         )
+        listed_statuses.append((condition_code, status))
         if status in ACTIVE_STATUSES:
             condition = _display(list_cde_code, condition_code)
             active_conditions.append(f"{condition} ({status})")
     summary = ", ".join(active_conditions)
+    critical_conditions = critical_conditions or set()
+    active_codes = {
+        condition_code
+        for condition_code, status in listed_statuses
+        if status in ACTIVE_STATUSES
+    }
+    if active_codes:
+        status_css = (
+            "critical"
+            if active_codes.intersection(critical_conditions)
+            else "monitoring"
+        )
+        status = _("Monitoring required")
+    elif listed_statuses and all(
+        status == RESOLVED_STATUS for _, status in listed_statuses
+    ):
+        status_css = "stable"
+        status = _("Stable")
+    else:
+        status_css = "no-issues"
+        status = _("No issues")
     return {
         "label": label,
+        "tooltip": _(
+            "From Clinical > Illness and Medical Conditions > %(label)s, including its status fields."
+        ) % {"label": label},
+        "icon": {
+            "Growth/feeding": "fa-medkit",
+            "Behaviour/psychiatric": "fa-smile-o",
+            "Muscles/skeletal": "fa-wheelchair",
+            "Lungs/breathing": "fa-cloud",
+            "Digestive system": "fa-medkit",
+        }.get(label, "fa-medkit"),
         "summary": summary or _("No issues reported"),
-        "status": _("Monitoring required") if summary else _("No issues"),
-        "status_css": "monitoring" if summary else "no-issues",
+        "status": status,
+        "status_css": status_css,
     }
 
 
@@ -214,11 +261,20 @@ def _brain_row(dashboard):
         ]
 
     summary = _display("ANGBrainList", brain_conditions) if brain_conditions else None
+    myoclonus_active = nem_status in ACTIVE_STATUSES
     return {
         "label": _("Brain/nervous system"),
+        "tooltip": _(
+            "From Clinical > Illness and Medical Conditions > Brain/nervous system, including myoclonus status."
+        ),
+        "icon": "fa-plus",
         "summary": summary or _("No issues reported"),
-        "status": _("Monitoring required") if summary else _("No issues"),
-        "status_css": "monitoring" if summary else "no-issues",
+        "status": _("Monitoring required") if myoclonus_active else (
+            _("Stable") if summary else _("No issues")
+        ),
+        "status_css": "monitoring" if myoclonus_active else (
+            "stable" if summary else "no-issues"
+        ),
     }
 
 
@@ -234,25 +290,52 @@ def clinical_snapshot(dashboard, widget):
     seizure_summary = "; ".join(
         value for value in (seizure_status, seizure_management) if value
     )
-    seizure_monitoring = seizure_status not in (None, "Controlled")
+    if seizure_status and seizure_status.startswith("Uncontrolled"):
+        seizure_status_css = "critical"
+        seizure_status_label = _("Uncontrolled")
+    elif seizure_status and seizure_status.startswith("Mostly controlled"):
+        seizure_status_css = "monitoring"
+        seizure_status_label = _("Monitoring required")
+    elif seizure_status and seizure_status.startswith("Controlled"):
+        seizure_status_css = "stable"
+        seizure_status_label = _("Stable")
+    elif seizure_status == "Unsure":
+        seizure_status_css = "no-issues"
+        seizure_status_label = _("Requires monitoring")
+    else:
+        seizure_status_css = "no-issues"
+        seizure_status_label = _("No issues")
     snapshot = [
         {
             "label": _("Current medications"),
+            "tooltip": _(
+                "From Clinical > Medications > current medication details."
+            ),
+            "icon": "fa-medkit",
             "summary": (
                 "; ".join(medications)
                 if medications
                 else _("No current medications reported")
             ),
-            "status": _("Monitoring required") if medications else _("No issues"),
-            "status_css": "monitoring" if medications else "no-issues",
+            "status": None,
+            "status_css": None,
         },
         {
             "label": _("Seizure status"),
+            "tooltip": _(
+                "From Clinical > Epilepsy > seizure status and management."
+            ),
+            "icon": "fa-tag",
             "summary": seizure_summary or _("No seizure status reported"),
-            "status": _("Monitoring required") if seizure_monitoring else _("Stable"),
-            "status_css": "monitoring" if seizure_monitoring else "stable",
+            "status": seizure_status_label,
+            "status_css": seizure_status_css,
         },
-        _condition_row(dashboard, _("Growth/feeding"), *SYSTEM_CONDITIONS["Growth/feeding"]),
+        _condition_row(
+            dashboard,
+            _("Growth/feeding"),
+            *SYSTEM_CONDITIONS["Growth/feeding"],
+            critical_conditions=CRITICAL_GROWTH_CONDITIONS,
+        ),
         _brain_row(dashboard),
         _condition_row(
             dashboard,
@@ -268,6 +351,7 @@ def clinical_snapshot(dashboard, widget):
             dashboard,
             _("Lungs/breathing"),
             *SYSTEM_CONDITIONS["Lungs/breathing"],
+            critical_conditions={"Apnea", "Pneumonia", "Aspiration"},
         ),
         _condition_row(
             dashboard,
