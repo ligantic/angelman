@@ -14,6 +14,25 @@ CONTEXT_GROUP_CODE = "Clinical"
 ACTIVE_STATUSES = {"Current", "Episodic", "Intermittently experiencing/ episodic"}
 RESOLVED_STATUS = "Resolved"
 
+CLINICAL_SNAPSHOT_DESCRIPTIONS = {
+    "Growth/feeding": _("Growth, weight, appetite or feeding concerns."),
+    "Brain/nervous system": _(
+        "Seizures, myoclonus or other neurological concerns."
+    ),
+    "Behaviour/psychiatric": _(
+        "Behaviour, anxiety or other emotional and mental health concerns."
+    ),
+    "Muscles/skeletal": _(
+        "Muscle, joint, bone, posture or mobility concerns."
+    ),
+    "Lungs/breathing": _(
+        "Breathing, aspiration or recurrent respiratory concerns."
+    ),
+    "Digestive system": _(
+        "Reflux, constipation, vomiting or other digestive concerns."
+    ),
+}
+
 CRITICAL_GROWTH_CONDITIONS = {
     "FTT",
     "TubeFeeding",
@@ -129,6 +148,19 @@ def _value(dashboard, section_code, cde_code, multisection=False):
     )
 
 
+def _clinical_section_edit_url(dashboard, section_code):
+    try:
+        context_group = ContextFormGroup.objects.get(
+            registry=dashboard.registry, code=CONTEXT_GROUP_CODE
+        )
+        form = RegistryForm.objects.get(registry=dashboard.registry, name=FORM_NAME)
+        form_url = dashboard._get_form_link(context_group, form)
+    except (ContextFormGroup.DoesNotExist, RegistryForm.DoesNotExist):
+        return None
+
+    return f"{form_url}#section_{section_code}" if form_url else None
+
+
 def _medications(dashboard):
     medication_codes = (
         "curmedscreen2",
@@ -220,6 +252,9 @@ def _condition_row(
         status = _("No issues")
     return {
         "label": label,
+        "description": CLINICAL_SNAPSHOT_DESCRIPTIONS.get(label, ""),
+        "edit_url": _clinical_section_edit_url(dashboard, "NewIllness"),
+        "edit_label": _("Edit Clinical > Illness and Medical Conditions"),
         "tooltip": _(
             "From Clinical > Illness and Medical Conditions > %(label)s, including its status fields."
         ) % {"label": label},
@@ -264,6 +299,9 @@ def _brain_row(dashboard):
     myoclonus_active = nem_status in ACTIVE_STATUSES
     return {
         "label": _("Brain/nervous system"),
+        "description": CLINICAL_SNAPSHOT_DESCRIPTIONS["Brain/nervous system"],
+        "edit_url": _clinical_section_edit_url(dashboard, "NewIllness"),
+        "edit_label": _("Edit Clinical > Illness and Medical Conditions"),
         "tooltip": _(
             "From Clinical > Illness and Medical Conditions > Brain/nervous system, including myoclonus status."
         ),
@@ -308,6 +346,8 @@ def clinical_snapshot(dashboard, widget):
     snapshot = [
         {
             "label": _("Current medications"),
+            "edit_url": _clinical_section_edit_url(dashboard, "NewMedication"),
+            "edit_label": _("Edit Clinical > Medications"),
             "tooltip": _(
                 "From Clinical > Medications > current medication details."
             ),
@@ -322,6 +362,8 @@ def clinical_snapshot(dashboard, widget):
         },
         {
             "label": _("Seizure status"),
+            "edit_url": _clinical_section_edit_url(dashboard, "NewEpilepsy"),
+            "edit_label": _("Edit Clinical > Epilepsy"),
             "tooltip": _(
                 "From Clinical > Epilepsy > seizure status and management."
             ),
@@ -414,7 +456,16 @@ def _patient_flags(dashboard):
 def patient_information(dashboard, widget):
     patient = dashboard.patient
     home_address = patient.home_address
-    working_group = patient.working_groups.first()
+    angelman_type = _display(
+        "ANGDNAMethylAbnormalResult2",
+        _form_value(
+            dashboard,
+            "PatientHistoryCFG",
+            "HistoryOfDiagnosis",
+            "ANGPatientResultsNEW",
+            "ANGDNAMethylAbnormalResult2",
+        ),
+    )
     address = ", ".join(
         str(value)
         for value in (
@@ -447,9 +498,7 @@ def patient_information(dashboard, widget):
             "name": patient.display_name,
             "sex": patient.get_sex_display(),
             "age": patient.age,
-            "working_group": (
-                working_group.display_name if working_group else None
-            ),
+            "angelman_type": angelman_type,
             "flags": _patient_flags(dashboard),
             "last_updated": patient.last_updated_overall_at,
             "address": address,

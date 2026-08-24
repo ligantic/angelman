@@ -221,17 +221,43 @@ body {
 
 .gasr-clinical-snapshot__icon .fa { font-size: 14px; }
 
+.gasr-clinical-snapshot__edit {
+   color: var(--color-text-primary);
+   cursor: pointer;
+   font-size: 12px;
+   text-decoration: none;
+}
+
+.gasr-clinical-snapshot__edit:focus-visible {
+   border-radius: 2px;
+   outline: 2px solid var(--color-accent);
+   outline-offset: 2px;
+}
+
+.gasr-clinical-snapshot__edit:hover {
+   color: var(--color-accent);
+}
+
 .gasr-clinical-snapshot__info {
    color: var(--color-text-primary);
    cursor: help;
    font-size: 12px;
 }
 
+.gasr-clinical-snapshot__title { min-width: 0; }
+
 .gasr-clinical-snapshot__row h3 {
    color: var(--color-text-heading);
    font-size: .875rem;
    font-weight: 600;
    line-height: 1.25rem;
+   margin: 0;
+}
+
+.gasr-clinical-snapshot__description {
+   color: var(--color-text-secondary);
+   font-size: .475rem;
+   line-height: 1rem;
    margin: 0;
 }
 

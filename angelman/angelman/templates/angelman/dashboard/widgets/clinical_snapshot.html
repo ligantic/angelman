@@ -7,13 +7,21 @@
       <div class="gasr-clinical-snapshot__content">
         <div class="gasr-clinical-snapshot__heading">
           <span class="gasr-clinical-snapshot__icon" aria-hidden="true"><span class="fa {{ item.icon }}"></span></span>
-          <span class="fa fa-info-circle gasr-clinical-snapshot__info"
-                aria-label="{{ item.tooltip }}"
-                data-bs-toggle="tooltip"
-                data-bs-placement="bottom"
-                data-gasr-clinical-tooltip
-                title="{{ item.tooltip }}"></span>
-          <h3>{{ item.label }}</h3>
+          {% if item.edit_url %}
+            <a class="fa fa-pencil gasr-clinical-snapshot__edit"
+               href="{{ item.edit_url }}"
+               aria-label="{{ item.edit_label }}"
+               data-bs-toggle="tooltip"
+               data-bs-placement="bottom"
+               data-gasr-clinical-tooltip
+               title="{{ item.edit_label }}"></a>
+          {% endif %}
+          <div class="gasr-clinical-snapshot__title">
+            <h3>{{ item.label }}</h3>
+            {% if item.description %}
+              <p class="gasr-clinical-snapshot__description">{{ item.description }}</p>
+            {% endif %}
+          </div>
         </div>
         <p>{{ item.summary }}</p>
       </div>
