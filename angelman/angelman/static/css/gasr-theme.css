@@ -119,11 +119,11 @@
   --status-due-now-focus-ring: rgba(132, 22, 175, 0.35);
 
   /* Complete (locked variant): base 0.10 -> hover 0.15 -> active 0.12 */
-  --status-complete-bg: rgba(0, 92, 214, 0.10);
-  --status-complete-bg-hover: rgba(0, 92, 214, 0.15);
-  --status-complete-bg-active: rgba(0, 92, 214, 0.12);
-  --status-complete-fg: #005CD6;
-  --status-complete-focus-ring: rgba(0, 92, 214, 0.35);
+   --status-complete-bg: rgba(40, 173, 98, 0.10);
+   --status-complete-bg-hover: rgba(40, 173, 98, 0.15);
+   --status-complete-bg-active: rgba(40, 173, 98, 0.12);
+   --status-complete-fg: #28AD62;
+   --status-complete-focus-ring: rgba(40, 173, 98, 0.35);
 
   /* --- §4.6.2 Clinical status chips ---------------------------------- */
 
