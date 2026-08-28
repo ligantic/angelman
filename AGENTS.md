@@ -45,6 +45,12 @@
 	python3 -m pytest rdrf/rdrf/testing/unit/cap07_clinical_form_tests.py -q --disable-warnings --tb=short
 	```
 
+- For Angelman dashboard provider changes, run the focused suite from `rdrf/`:
+
+	```sh
+	DJANGO_SETTINGS_MODULE=angelman.settings PYTHONPATH="$PWD/rdrf:$PWD/../angelman" python3 -m pytest ../angelman/angelman/tests/test_dashboard.py -q --disable-warnings --tb=short
+	```
+
 - Django templates can produce false editor diagnostics when CSS or JavaScript
 	contains template expressions. Prefer actual route rendering and focused
 	tests when evaluating those files.

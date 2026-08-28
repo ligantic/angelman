@@ -43,6 +43,7 @@ CRITICAL_GROWTH_CONDITIONS = {
 SYSTEM_CONDITIONS = {
     "Growth/feeding": (
         "ANGGrowthList",
+        "Growth/ Feeding",
         (
             ("OverweightObese", "ANGOverweightStatus"),
             ("FTT", "ANGFTTStatus"),
@@ -54,6 +55,7 @@ SYSTEM_CONDITIONS = {
     ),
     "Behaviour/psychiatric": (
         "ANGBehPsyList",
+        "Behaviour/ psychiatric",
         (
             ("Anxiety", "ANGAnxietyStatus"),
             ("Aggression", "ANGAgressionStatus"),
@@ -63,6 +65,7 @@ SYSTEM_CONDITIONS = {
     ),
     "Muscles/skeletal": (
         "ANGMusclesList",
+        "Muscles/ Skeletal",
         (
             ("Hypotonia", "ANGHypotoniaStatus"),
             ("Hypertonia", "ANGHypertoniaStatus"),
@@ -73,6 +76,7 @@ SYSTEM_CONDITIONS = {
     ),
     "Lungs/breathing": (
         "ANGLungsList",
+        "Lungs/ breathing",
         (
             ("Apnea", "ANGApneaStatus"),
             ("Pneumonia", "ANGPneumoniaStatus"),
@@ -81,6 +85,7 @@ SYSTEM_CONDITIONS = {
     ),
     "Digestive system": (
         "ANGDigestiveList",
+        "Digestive system",
         (
             ("Gastroesophageal", "ANGGastroStatus"),
             ("Constipation", "ANGConstipationStatus"),
@@ -161,6 +166,23 @@ def _clinical_section_edit_url(dashboard, section_code):
     return f"{form_url}#section_{section_code}" if form_url else None
 
 
+def _clinical_field_edit_url(dashboard, section_code, cde_code):
+    section_url = _clinical_section_edit_url(dashboard, section_code)
+    if not section_url:
+        return None
+    return f"{section_url.rsplit('#', 1)[0]}#id_Clinical____{section_code}____{cde_code}"
+
+
+def _illness_system_edit_url(dashboard, list_cde_code, category_value):
+    categories = _value(dashboard, "NewIllness", "IllnessMedicalListb") or []
+    if not isinstance(categories, list):
+        categories = [categories]
+    target_cde_code = (
+        list_cde_code if category_value in categories else "IllnessMedicalListb"
+    )
+    return _clinical_field_edit_url(dashboard, "NewIllness", target_cde_code)
+
+
 def _medications(dashboard):
     medication_codes = (
         "curmedscreen2",
@@ -209,6 +231,7 @@ def _condition_row(
     dashboard,
     label,
     list_cde_code,
+    category_value,
     conditions,
     critical_conditions=None,
 ):
@@ -253,7 +276,9 @@ def _condition_row(
     return {
         "label": label,
         "description": CLINICAL_SNAPSHOT_DESCRIPTIONS.get(label, ""),
-        "edit_url": _clinical_section_edit_url(dashboard, "NewIllness"),
+        "edit_url": _illness_system_edit_url(
+            dashboard, list_cde_code, category_value
+        ),
         "edit_label": _("Edit Clinical > Illness and Medical Conditions"),
         "tooltip": _(
             "From Clinical > Illness and Medical Conditions > %(label)s, including its status fields."
@@ -300,7 +325,9 @@ def _brain_row(dashboard):
     return {
         "label": _("Brain/nervous system"),
         "description": CLINICAL_SNAPSHOT_DESCRIPTIONS["Brain/nervous system"],
-        "edit_url": _clinical_section_edit_url(dashboard, "NewIllness"),
+        "edit_url": _illness_system_edit_url(
+            dashboard, "ANGBrainList", "Brain/ nervous system"
+        ),
         "edit_label": _("Edit Clinical > Illness and Medical Conditions"),
         "tooltip": _(
             "From Clinical > Illness and Medical Conditions > Brain/nervous system, including myoclonus status."
@@ -362,7 +389,9 @@ def clinical_snapshot(dashboard, widget):
         },
         {
             "label": _("Seizure status"),
-            "edit_url": _clinical_section_edit_url(dashboard, "NewEpilepsy"),
+            "edit_url": _clinical_field_edit_url(
+                dashboard, "NewEpilepsy", "SeizureStatus2"
+            ),
             "edit_label": _("Edit Clinical > Epilepsy"),
             "tooltip": _(
                 "From Clinical > Epilepsy > seizure status and management."
