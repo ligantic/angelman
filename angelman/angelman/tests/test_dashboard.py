@@ -3,7 +3,11 @@ from unittest.mock import patch
 from django.test import SimpleTestCase
 from django.template.loader import render_to_string
 
-from angelman.dashboard import _clinical_field_edit_url, _illness_system_edit_url
+from angelman.dashboard import (
+    _clinical_field_edit_url,
+    _illness_system_edit_url,
+    _patient_action_required,
+)
 
 
 class PatientInformationTemplateTest(SimpleTestCase):
@@ -14,6 +18,71 @@ class PatientInformationTemplateTest(SimpleTestCase):
         )
 
         self.assertIn('<span role="listitem">0 years old</span>', html)
+
+    def test_displays_static_action_required_items_without_arrows(self):
+        html = render_to_string(
+            "angelman/dashboard/widgets/patient_information.html",
+            {
+                "plugin": {
+                    "patient": {
+                        "action_required": [
+                            "Patient Address",
+                            "Genetic Result",
+                            "Date of Birth",
+                        ]
+                    }
+                }
+            },
+        )
+
+        self.assertIn("Action required", html)
+        self.assertIn('role="listitem">Patient Address</span>', html)
+        self.assertIn('role="listitem">Genetic Result</span>', html)
+        self.assertIn('role="listitem">Date of Birth</span>', html)
+        self.assertNotIn("&#8594;", html)
+        self.assertNotIn(
+            'gasr-patient-information__action-required-item" role="listitem"><a',
+            html,
+        )
+
+    def test_hides_action_required_when_no_items_are_provided(self):
+        html = render_to_string(
+            "angelman/dashboard/widgets/patient_information.html",
+            {"plugin": {"patient": {"action_required": []}}},
+        )
+
+        self.assertNotIn("gasr-patient-information__action-required", html)
+
+
+class PatientActionRequiredTest(SimpleTestCase):
+    def test_identifies_missing_postcode_genetic_result_and_date_of_birth(self):
+        patient = type(
+            "Patient",
+            (),
+            {
+                "home_address": type("Address", (), {"postcode": None})(),
+                "date_of_birth": None,
+            },
+        )()
+
+        actions = _patient_action_required(patient, angelman_type=None)
+
+        self.assertEqual(
+            actions,
+            ["Patient Address", "Genetic Result", "Date of Birth"],
+        )
+
+    def test_omits_actions_when_required_data_is_present(self):
+        patient = type(
+            "Patient",
+            (),
+            {
+                "home_address": type("Address", (), {"postcode": "4000"})(),
+                "date_of_birth": object(),
+            },
+        )()
+
+        self.assertEqual(_patient_action_required(patient, "Deletion"), [])
 
 
 class ClinicalSnapshotEditUrlTest(SimpleTestCase):

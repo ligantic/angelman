@@ -482,6 +482,18 @@ def _patient_flags(dashboard):
     return flags
 
 
+def _patient_action_required(patient, angelman_type):
+    actions = []
+    home_address = patient.home_address
+    if not getattr(home_address, "postcode", None):
+        actions.append(_("Patient Address"))
+    if not angelman_type:
+        actions.append(_("Genetic Result"))
+    if not patient.date_of_birth:
+        actions.append(_("Date of Birth"))
+    return actions
+
+
 def patient_information(dashboard, widget):
     patient = dashboard.patient
     home_address = patient.home_address
@@ -528,6 +540,7 @@ def patient_information(dashboard, widget):
             "sex": patient.get_sex_display(),
             "age": patient.age,
             "angelman_type": angelman_type,
+            "action_required": _patient_action_required(patient, angelman_type),
             "flags": _patient_flags(dashboard),
             "last_updated": patient.last_updated_overall_at,
             "address": address,
