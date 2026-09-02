@@ -1,8 +1,19 @@
 from unittest.mock import patch
 
 from django.test import SimpleTestCase
+from django.template.loader import render_to_string
 
 from angelman.dashboard import _clinical_field_edit_url, _illness_system_edit_url
+
+
+class PatientInformationTemplateTest(SimpleTestCase):
+    def test_displays_zero_years_for_patient_under_one_year_old(self):
+        html = render_to_string(
+            "angelman/dashboard/widgets/patient_information.html",
+            {"plugin": {"patient": {"age": 0}}},
+        )
+
+        self.assertIn('<span role="listitem">0 years old</span>', html)
 
 
 class ClinicalSnapshotEditUrlTest(SimpleTestCase):

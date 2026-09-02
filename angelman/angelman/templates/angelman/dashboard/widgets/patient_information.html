@@ -23,7 +23,7 @@
   <div class="gasr-patient-information__facts" role="list" aria-label="{% trans 'Patient details' %}">
     <span role="listitem">{% if plugin.patient.sex %}{{ plugin.patient.sex }}{% else %}{% trans "Not recorded" %}{% endif %}</span>
     <span class="gasr-patient-information__separator" aria-hidden="true"></span>
-    <span role="listitem">{% if plugin.patient.age %}{{ plugin.patient.age }} {% trans "years old" %}{% else %}{% trans "Not recorded" %}{% endif %}</span>
+    <span role="listitem">{% if plugin.patient.age is not None %}{{ plugin.patient.age }} {% trans "years old" %}{% else %}{% trans "Not recorded" %}{% endif %}</span>
     <span class="gasr-patient-information__separator" aria-hidden="true"></span>
     <span role="listitem">{% if plugin.patient.angelman_type %}{% blocktrans with angelman_type=plugin.patient.angelman_type %}Angelman Syndrome ({{ angelman_type }}){% endblocktrans %}{% else %}{% trans "Angelman Syndrome (not recorded)" %}{% endif %}</span>
   </div>
