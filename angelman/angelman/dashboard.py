@@ -494,9 +494,20 @@ def _patient_action_required(patient, angelman_type):
     return actions
 
 
-def patient_information(dashboard, widget):
-    patient = dashboard.patient
-    home_address = patient.home_address
+def _patient_angelman_type(dashboard):
+    genetic_test = _display(
+        "ANGGeneticTestV2",
+        _form_value(
+            dashboard,
+            "PatientHistoryCFG",
+            "HistoryOfDiagnosis",
+            "ANGPatientResultsNEW",
+            "ANGGeneticTestV2",
+        ),
+    )
+    if genetic_test != "Yes":
+        return None
+
     angelman_type = _display(
         "ANGDNAMethylAbnormalResult2",
         _form_value(
@@ -507,6 +518,13 @@ def patient_information(dashboard, widget):
             "ANGDNAMethylAbnormalResult2",
         ),
     )
+    return None if angelman_type == "Unsure" else angelman_type
+
+
+def patient_information(dashboard, widget):
+    patient = dashboard.patient
+    home_address = patient.home_address
+    angelman_type = _patient_angelman_type(dashboard)
     address = ", ".join(
         str(value)
         for value in (

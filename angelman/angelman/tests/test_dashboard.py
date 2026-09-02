@@ -7,6 +7,7 @@ from angelman.dashboard import (
     _clinical_field_edit_url,
     _illness_system_edit_url,
     _patient_action_required,
+    _patient_angelman_type,
 )
 
 
@@ -83,6 +84,48 @@ class PatientActionRequiredTest(SimpleTestCase):
         )()
 
         self.assertEqual(_patient_action_required(patient, "Deletion"), [])
+
+
+class PatientAngelmanTypeTest(SimpleTestCase):
+    def test_uses_test_result_when_genetic_test_is_yes(self):
+        with (
+            patch(
+                "angelman.dashboard._form_value",
+                side_effect=["YesNoUnsureYes", "Deletion"],
+            ),
+            patch(
+                "angelman.dashboard._display",
+                side_effect=["Yes", "Deletion"],
+            ),
+        ):
+            angelman_type = _patient_angelman_type(object())
+
+        self.assertEqual(angelman_type, "Deletion")
+
+    def test_ignores_test_result_when_genetic_test_is_not_yes(self):
+        with (
+            patch("angelman.dashboard._form_value", return_value="YesNoUnsureNo") as form_value,
+            patch("angelman.dashboard._display", return_value="No"),
+        ):
+            angelman_type = _patient_angelman_type(object())
+
+        self.assertIsNone(angelman_type)
+        self.assertEqual(form_value.call_count, 1)
+
+    def test_treats_unsure_test_result_as_missing(self):
+        with (
+            patch(
+                "angelman.dashboard._form_value",
+                side_effect=["YesNoUnsureYes", "Unsure"],
+            ),
+            patch(
+                "angelman.dashboard._display",
+                side_effect=["Yes", "Unsure"],
+            ),
+        ):
+            angelman_type = _patient_angelman_type(object())
+
+        self.assertIsNone(angelman_type)
 
 
 class ClinicalSnapshotEditUrlTest(SimpleTestCase):
