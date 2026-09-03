@@ -6,6 +6,7 @@ from django.template.loader import render_to_string
 from angelman.dashboard import (
     _clinical_field_edit_url,
     _illness_system_edit_url,
+    _patient_address,
     _patient_action_required,
     _patient_angelman_type,
 )
@@ -56,6 +57,48 @@ class PatientInformationTemplateTest(SimpleTestCase):
 
 
 class PatientActionRequiredTest(SimpleTestCase):
+    def test_prefers_home_address_over_postal_address(self):
+        home_address = object()
+        postal_address = object()
+        addresses = type(
+            "Addresses",
+            (),
+            {"filter": lambda self, **kwargs: self, "first": lambda self: postal_address},
+        )()
+        patient = type(
+            "Patient",
+            (),
+            {
+                "home_address": home_address,
+                "patientaddress_set": addresses,
+            },
+        )()
+
+        self.assertIs(_patient_address(patient), home_address)
+
+    def test_falls_back_to_postal_address(self):
+        postal_address = type("Address", (), {"postcode": "4000"})()
+        patient = type(
+            "Patient",
+            (),
+            {
+                "home_address": None,
+                "patientaddress_set": type(
+                    "Addresses",
+                    (),
+                    {
+                        "filter": lambda self, **kwargs: type(
+                            "QuerySet", (), {"first": lambda self: postal_address}
+                        )()
+                    },
+                )(),
+                "date_of_birth": object(),
+            },
+        )()
+
+        self.assertIs(_patient_address(patient), postal_address)
+        self.assertEqual(_patient_action_required(patient, "Deletion"), [])
+
     def test_identifies_missing_postcode_genetic_result_and_date_of_birth(self):
         patient = type(
             "Patient",

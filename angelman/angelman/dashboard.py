@@ -482,10 +482,17 @@ def _patient_flags(dashboard):
     return flags
 
 
+def _patient_address(patient):
+    home_address = patient.home_address
+    if home_address:
+        return home_address
+    return patient.patientaddress_set.filter(address_type__type="Postal").first()
+
+
 def _patient_action_required(patient, angelman_type):
     actions = []
-    home_address = patient.home_address
-    if not getattr(home_address, "postcode", None):
+    address = _patient_address(patient)
+    if not getattr(address, "postcode", None):
         actions.append(_("Patient Address"))
     if not angelman_type:
         actions.append(_("Genetic Result"))
@@ -523,16 +530,16 @@ def _patient_angelman_type(dashboard):
 
 def patient_information(dashboard, widget):
     patient = dashboard.patient
-    home_address = patient.home_address
+    address_record = _patient_address(patient)
     angelman_type = _patient_angelman_type(dashboard)
     address = ", ".join(
         str(value)
         for value in (
-            getattr(home_address, "address", None),
-            getattr(home_address, "suburb", None),
-            getattr(home_address, "state", None),
-            getattr(home_address, "postcode", None),
-            getattr(home_address, "country", None),
+            getattr(address_record, "address", None),
+            getattr(address_record, "suburb", None),
+            getattr(address_record, "state", None),
+            getattr(address_record, "postcode", None),
+            getattr(address_record, "country", None),
         )
         if value
     )
