@@ -511,30 +511,26 @@ def _patient_action_required(patient, angelman_type, has_diagnosis_history=False
 
 
 def _patient_angelman_type(dashboard):
-    genetic_test = _display(
+    genetic_test = _form_value(
+        dashboard,
+        "PatientHistoryCFG",
+        "HistoryOfDiagnosis",
+        "ANGPatientResultsNEW",
         "ANGGeneticTestV2",
-        _form_value(
-            dashboard,
-            "PatientHistoryCFG",
-            "HistoryOfDiagnosis",
-            "ANGPatientResultsNEW",
-            "ANGGeneticTestV2",
-        ),
     )
-    if genetic_test != "Yes":
+    if genetic_test != "YesNoUnsureYes":
         return None
 
-    angelman_type = _display(
+    angelman_type = _form_value(
+        dashboard,
+        "PatientHistoryCFG",
+        "HistoryOfDiagnosis",
+        "ANGPatientResultsNEW",
         "ANGDNAMethylAbnormalResult2",
-        _form_value(
-            dashboard,
-            "PatientHistoryCFG",
-            "HistoryOfDiagnosis",
-            "ANGPatientResultsNEW",
-            "ANGDNAMethylAbnormalResult2",
-        ),
     )
-    return None if angelman_type == "Unsure" else angelman_type
+    if angelman_type == "Unsure":
+        return None
+    return _display("ANGDNAMethylAbnormalResult2", angelman_type)
 
 
 def _has_diagnosis_history(dashboard):

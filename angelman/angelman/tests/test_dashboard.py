@@ -170,22 +170,42 @@ class PatientAngelmanTypeTest(SimpleTestCase):
             ),
             patch(
                 "angelman.dashboard._display",
-                side_effect=["Yes", "Deletion"],
+                return_value="Deletion",
             ),
         ):
             angelman_type = _patient_angelman_type(object())
 
         self.assertEqual(angelman_type, "Deletion")
 
+    def test_uses_raw_codes_when_display_labels_are_translated(self):
+        with (
+            patch(
+                "angelman.dashboard._form_value",
+                side_effect=["YesNoUnsureYes", "Deletion"],
+            ),
+            patch("angelman.dashboard._display", return_value="Delezione"),
+        ):
+            angelman_type = _patient_angelman_type(object())
+
+        self.assertEqual(angelman_type, "Delezione")
+
     def test_ignores_test_result_when_genetic_test_is_not_yes(self):
         with (
             patch("angelman.dashboard._form_value", return_value="YesNoUnsureNo") as form_value,
-            patch("angelman.dashboard._display", return_value="No"),
         ):
             angelman_type = _patient_angelman_type(object())
 
         self.assertIsNone(angelman_type)
         self.assertEqual(form_value.call_count, 1)
+
+    def test_ignores_unsure_test_result_by_raw_code(self):
+        with patch(
+            "angelman.dashboard._form_value",
+            side_effect=["YesNoUnsureYes", "Unsure"],
+        ):
+            angelman_type = _patient_angelman_type(object())
+
+        self.assertIsNone(angelman_type)
 
 
 class PatientDiagnosisHistoryTest(SimpleTestCase):
@@ -254,10 +274,6 @@ class PatientDiagnosisHistoryTest(SimpleTestCase):
             patch(
                 "angelman.dashboard._form_value",
                 side_effect=["YesNoUnsureYes", "Unsure"],
-            ),
-            patch(
-                "angelman.dashboard._display",
-                side_effect=["Yes", "Unsure"],
             ),
         ):
             angelman_type = _patient_angelman_type(object())
