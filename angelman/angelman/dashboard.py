@@ -15,22 +15,12 @@ ACTIVE_STATUSES = {"Current", "Episodic", "Intermittently experiencing/ episodic
 RESOLVED_STATUS = "Resolved"
 
 CLINICAL_SNAPSHOT_DESCRIPTIONS = {
-    "Growth/feeding": _("Growth, weight, appetite or feeding concerns."),
-    "Brain/nervous system": _(
-        "Seizures, myoclonus or other neurological concerns."
-    ),
-    "Behaviour/psychiatric": _(
-        "Behaviour, anxiety or other emotional and mental health concerns."
-    ),
-    "Muscles/skeletal": _(
-        "Muscle, joint, bone, posture or mobility concerns."
-    ),
-    "Lungs/breathing": _(
-        "Breathing, aspiration or recurrent respiratory concerns."
-    ),
-    "Digestive system": _(
-        "Reflux, constipation, vomiting or other digestive concerns."
-    ),
+    "Growth/feeding": "Growth, weight, appetite or feeding concerns.",
+    "Brain/nervous system": "Seizures, myoclonus or other neurological concerns.",
+    "Behaviour/psychiatric": "Behaviour, anxiety or other emotional and mental health concerns.",
+    "Muscles/skeletal": "Muscle, joint, bone, posture or mobility concerns.",
+    "Lungs/breathing": "Breathing, aspiration or recurrent respiratory concerns.",
+    "Digestive system": "Reflux, constipation, vomiting or other digestive concerns.",
 }
 
 CRITICAL_GROWTH_CONDITIONS = {
@@ -227,6 +217,10 @@ def _medications(dashboard):
     return entries
 
 
+def _clinical_snapshot_description(label):
+    return _(CLINICAL_SNAPSHOT_DESCRIPTIONS.get(label, ""))
+
+
 def _condition_row(
     dashboard,
     label,
@@ -274,8 +268,8 @@ def _condition_row(
         status_css = "no-issues"
         status = _("No issues")
     return {
-        "label": label,
-        "description": CLINICAL_SNAPSHOT_DESCRIPTIONS.get(label, ""),
+        "label": _(label),
+        "description": _clinical_snapshot_description(label),
         "edit_url": _illness_system_edit_url(
             dashboard, list_cde_code, category_value
         ),
@@ -324,7 +318,7 @@ def _brain_row(dashboard):
     myoclonus_active = nem_status in ACTIVE_STATUSES
     return {
         "label": _("Brain/nervous system"),
-        "description": CLINICAL_SNAPSHOT_DESCRIPTIONS["Brain/nervous system"],
+        "description": _clinical_snapshot_description("Brain/nervous system"),
         "edit_url": _illness_system_edit_url(
             dashboard, "ANGBrainList", "Brain/ nervous system"
         ),
@@ -344,6 +338,9 @@ def _brain_row(dashboard):
 
 
 def clinical_snapshot(dashboard, widget):
+    if not _has_diagnosis_history(dashboard):
+        return None
+
     medications = _medications(dashboard)
     seizure_status = _display(
         "SeizureStatus2", _value(dashboard, "NewEpilepsy", "SeizureStatus2")
@@ -403,30 +400,30 @@ def clinical_snapshot(dashboard, widget):
         },
         _condition_row(
             dashboard,
-            _("Growth/feeding"),
+            "Growth/feeding",
             *SYSTEM_CONDITIONS["Growth/feeding"],
             critical_conditions=CRITICAL_GROWTH_CONDITIONS,
         ),
         _brain_row(dashboard),
         _condition_row(
             dashboard,
-            _("Behaviour/psychiatric"),
+            "Behaviour/psychiatric",
             *SYSTEM_CONDITIONS["Behaviour/psychiatric"],
         ),
         _condition_row(
             dashboard,
-            _("Muscles/skeletal"),
+            "Muscles/skeletal",
             *SYSTEM_CONDITIONS["Muscles/skeletal"],
         ),
         _condition_row(
             dashboard,
-            _("Lungs/breathing"),
+            "Lungs/breathing",
             *SYSTEM_CONDITIONS["Lungs/breathing"],
             critical_conditions={"Apnea", "Pneumonia", "Aspiration"},
         ),
         _condition_row(
             dashboard,
-            _("Digestive system"),
+            "Digestive system",
             *SYSTEM_CONDITIONS["Digestive system"],
         ),
     ]
@@ -489,12 +486,12 @@ def _patient_address(patient):
     return patient.patientaddress_set.filter(address_type__type="Postal").first()
 
 
-def _patient_action_required(patient, angelman_type):
+def _patient_action_required(patient, angelman_type, has_diagnosis_history=False):
     actions = []
     address = _patient_address(patient)
     if not getattr(address, "postcode", None):
         actions.append(_("Patient Address"))
-    if not angelman_type:
+    if has_diagnosis_history and not angelman_type:
         actions.append(_("Genetic Result"))
     if not patient.date_of_birth:
         actions.append(_("Date of Birth"))
@@ -528,10 +525,28 @@ def _patient_angelman_type(dashboard):
     return None if angelman_type == "Unsure" else angelman_type
 
 
+def _has_diagnosis_history(dashboard):
+    try:
+        context_form_group = ContextFormGroup.objects.get(
+            registry=dashboard.registry, code="PatientHistoryCFG"
+        )
+        registry_form = RegistryForm.objects.get(
+            registry=dashboard.registry, name="HistoryOfDiagnosis"
+        )
+        context = dashboard._get_patient_context(context_form_group)
+        return bool(
+            context
+            and dashboard.patient.get_form_timestamp(registry_form, context)
+        )
+    except (ContextFormGroup.DoesNotExist, RegistryForm.DoesNotExist):
+        return False
+
+
 def patient_information(dashboard, widget):
     patient = dashboard.patient
     address_record = _patient_address(patient)
     angelman_type = _patient_angelman_type(dashboard)
+    has_diagnosis_history = _has_diagnosis_history(dashboard)
     address = ", ".join(
         str(value)
         for value in (
@@ -565,7 +580,10 @@ def patient_information(dashboard, widget):
             "sex": patient.get_sex_display(),
             "age": patient.age,
             "angelman_type": angelman_type,
-            "action_required": _patient_action_required(patient, angelman_type),
+            "has_diagnosis_history": has_diagnosis_history,
+            "action_required": _patient_action_required(
+                patient, angelman_type, has_diagnosis_history
+            ),
             "flags": _patient_flags(dashboard),
             "last_updated": patient.last_updated_overall_at,
             "address": address,

@@ -32,8 +32,10 @@
     <span role="listitem">{% if plugin.patient.sex %}{{ plugin.patient.sex }}{% else %}{% trans "Not recorded" %}{% endif %}</span>
     <span class="gasr-patient-information__separator" aria-hidden="true"></span>
     <span role="listitem">{% if plugin.patient.age is not None %}{{ plugin.patient.age }} {% trans "years old" %}{% else %}{% trans "Not recorded" %}{% endif %}</span>
-    <span class="gasr-patient-information__separator" aria-hidden="true"></span>
-    <span role="listitem">{% if plugin.patient.angelman_type %}{% blocktrans with angelman_type=plugin.patient.angelman_type %}Angelman Syndrome ({{ angelman_type }}){% endblocktrans %}{% else %}{% trans "Angelman Syndrome (not recorded)" %}{% endif %}</span>
+    {% if plugin.patient.has_diagnosis_history %}
+      <span class="gasr-patient-information__separator" aria-hidden="true"></span>
+      <span role="listitem">{% if plugin.patient.angelman_type %}{% blocktrans with angelman_type=plugin.patient.angelman_type %}Angelman Syndrome ({{ angelman_type }}){% endblocktrans %}{% else %}{% trans "Angelman Syndrome (not recorded)" %}{% endif %}</span>
+    {% endif %}
   </div>
   {% if plugin.patient.address or plugin.patient.phone %}
     <section class="gasr-patient-information__about" aria-label="{% blocktrans with patient_name=plugin.patient.name %}About {{ patient_name }}{% endblocktrans %}">

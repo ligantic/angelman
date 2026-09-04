@@ -4,11 +4,14 @@ from django.test import SimpleTestCase
 from django.template.loader import render_to_string
 
 from angelman.dashboard import (
+    _condition_row,
     _clinical_field_edit_url,
+    _has_diagnosis_history,
     _illness_system_edit_url,
     _patient_address,
     _patient_action_required,
     _patient_angelman_type,
+    clinical_snapshot,
 )
 
 
@@ -54,6 +57,21 @@ class PatientInformationTemplateTest(SimpleTestCase):
         )
 
         self.assertNotIn("gasr-patient-information__action-required", html)
+
+    def test_hides_diagnosis_fact_without_saved_diagnosis_history(self):
+        html = render_to_string(
+            "angelman/dashboard/widgets/patient_information.html",
+            {
+                "plugin": {
+                    "patient": {
+                        "has_diagnosis_history": False,
+                        "angelman_type": None,
+                    }
+                }
+            },
+        )
+
+        self.assertNotIn("Angelman Syndrome", html)
 
 
 class PatientActionRequiredTest(SimpleTestCase):
@@ -109,12 +127,26 @@ class PatientActionRequiredTest(SimpleTestCase):
             },
         )()
 
-        actions = _patient_action_required(patient, angelman_type=None)
+        actions = _patient_action_required(
+            patient, angelman_type=None, has_diagnosis_history=True
+        )
 
         self.assertEqual(
             actions,
             ["Patient Address", "Genetic Result", "Date of Birth"],
         )
+
+    def test_omits_genetic_result_without_saved_diagnosis_history(self):
+        patient = type(
+            "Patient",
+            (),
+            {
+                "home_address": type("Address", (), {"postcode": "4000"})(),
+                "date_of_birth": object(),
+            },
+        )()
+
+        self.assertEqual(_patient_action_required(patient, None), [])
 
     def test_omits_actions_when_required_data_is_present(self):
         patient = type(
@@ -155,6 +187,68 @@ class PatientAngelmanTypeTest(SimpleTestCase):
         self.assertIsNone(angelman_type)
         self.assertEqual(form_value.call_count, 1)
 
+
+class PatientDiagnosisHistoryTest(SimpleTestCase):
+    def test_requires_a_saved_history_of_diagnosis_form(self):
+        context_form_group = object()
+        registry_form = object()
+        dashboard = type(
+            "Dashboard",
+            (),
+            {
+                "registry": object(),
+                "_get_patient_context": lambda self, cfg: object(),
+                "patient": type(
+                    "Patient",
+                    (), {
+                        "get_form_timestamp": lambda self, form, context: None
+                    },
+                )(),
+            },
+        )()
+
+        with (
+            patch(
+                "angelman.dashboard.ContextFormGroup.objects.get",
+                return_value=context_form_group,
+            ),
+            patch(
+                "angelman.dashboard.RegistryForm.objects.get",
+                return_value=registry_form,
+            ),
+        ):
+            self.assertFalse(_has_diagnosis_history(dashboard))
+
+    def test_identifies_saved_history_of_diagnosis_form(self):
+        context_form_group = object()
+        registry_form = object()
+        dashboard = type(
+            "Dashboard",
+            (),
+            {
+                "registry": object(),
+                "_get_patient_context": lambda self, cfg: object(),
+                "patient": type(
+                    "Patient",
+                    (), {
+                        "get_form_timestamp": lambda self, form, context: "2026-01-01T00:00:00"
+                    },
+                )(),
+            },
+        )()
+
+        with (
+            patch(
+                "angelman.dashboard.ContextFormGroup.objects.get",
+                return_value=context_form_group,
+            ),
+            patch(
+                "angelman.dashboard.RegistryForm.objects.get",
+                return_value=registry_form,
+            ),
+        ):
+            self.assertTrue(_has_diagnosis_history(dashboard))
+
     def test_treats_unsure_test_result_as_missing(self):
         with (
             patch(
@@ -172,6 +266,29 @@ class PatientAngelmanTypeTest(SimpleTestCase):
 
 
 class ClinicalSnapshotEditUrlTest(SimpleTestCase):
+    def test_translates_condition_labels_and_descriptions_when_requested(self):
+        with (
+            patch(
+                "angelman.dashboard._",
+                side_effect=lambda message: f"translated: {message}",
+            ),
+            patch("angelman.dashboard._value", return_value=[]),
+            patch("angelman.dashboard._illness_system_edit_url", return_value=None),
+        ):
+            row = _condition_row(
+                object(), "Digestive system", "ANGDigestiveList", "Digestive system", ()
+            )
+
+        self.assertEqual(row["label"], "translated: Digestive system")
+        self.assertEqual(
+            row["description"],
+            "translated: Reflux, constipation, vomiting or other digestive concerns.",
+        )
+
+    def test_hides_snapshot_without_saved_diagnosis_history(self):
+        with patch("angelman.dashboard._has_diagnosis_history", return_value=False):
+            self.assertIsNone(clinical_snapshot(object(), object()))
+
     def test_selected_illness_category_links_to_its_list_field(self):
         with (
             patch(
