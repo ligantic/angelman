@@ -1,7 +1,7 @@
 from itertools import zip_longest
 
 from django.urls import reverse
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext as _, gettext_noop
 from rdrf.models.definition.models import (
     CommonDataElement,
     ContextFormGroup,
@@ -15,12 +15,24 @@ ACTIVE_STATUSES = {"Current", "Episodic", "Intermittently experiencing/ episodic
 RESOLVED_STATUS = "Resolved"
 
 CLINICAL_SNAPSHOT_DESCRIPTIONS = {
-    "Growth/feeding": "Growth, weight, appetite or feeding concerns.",
-    "Brain/nervous system": "Seizures, myoclonus or other neurological concerns.",
-    "Behaviour/psychiatric": "Behaviour, anxiety or other emotional and mental health concerns.",
-    "Muscles/skeletal": "Muscle, joint, bone, posture or mobility concerns.",
-    "Lungs/breathing": "Breathing, aspiration or recurrent respiratory concerns.",
-    "Digestive system": "Reflux, constipation, vomiting or other digestive concerns.",
+    gettext_noop("Growth/feeding"): gettext_noop(
+        "Growth, weight, appetite or feeding concerns."
+    ),
+    gettext_noop("Brain/nervous system"): gettext_noop(
+        "Seizures, myoclonus or other neurological concerns."
+    ),
+    gettext_noop("Behaviour/psychiatric"): gettext_noop(
+        "Behaviour, anxiety or other emotional and mental health concerns."
+    ),
+    gettext_noop("Muscles/skeletal"): gettext_noop(
+        "Muscle, joint, bone, posture or mobility concerns."
+    ),
+    gettext_noop("Lungs/breathing"): gettext_noop(
+        "Breathing, aspiration or recurrent respiratory concerns."
+    ),
+    gettext_noop("Digestive system"): gettext_noop(
+        "Reflux, constipation, vomiting or other digestive concerns."
+    ),
 }
 
 CRITICAL_GROWTH_CONDITIONS = {
