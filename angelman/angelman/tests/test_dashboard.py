@@ -4,13 +4,16 @@ from django.test import SimpleTestCase
 from django.template.loader import render_to_string
 
 from angelman.dashboard import (
+    _brain_row,
     _condition_row,
     _clinical_field_edit_url,
     _has_diagnosis_history,
     _illness_system_edit_url,
+    _medications,
     _patient_address,
     _patient_action_required,
     _patient_angelman_type,
+    _patient_flags,
     clinical_snapshot,
 )
 
@@ -279,6 +282,92 @@ class PatientDiagnosisHistoryTest(SimpleTestCase):
             angelman_type = _patient_angelman_type(object())
 
         self.assertIsNone(angelman_type)
+
+
+class PatientFlagsTest(SimpleTestCase):
+    def test_identifies_daily_medication_from_raw_codes(self):
+        dashboard = type("Dashboard", (), {})()
+
+        with (
+            patch(
+                "angelman.dashboard._value",
+                side_effect=["Uncontrol", ["Yes"], ["1Regular"]],
+            ),
+            patch("angelman.dashboard._display", return_value="Non controllato"),
+            patch("angelman.dashboard._form_value", return_value=[]),
+        ):
+            flags = _patient_flags(dashboard)
+
+        self.assertEqual(flags, ["Uncontrolled seizures", "Daily medication"])
+
+
+class ClinicalValueCodeTest(SimpleTestCase):
+    def test_uses_free_text_for_other_medication_with_translated_label(self):
+        with (
+            patch(
+                "angelman.dashboard._value",
+                side_effect=[["Yes"], ["Other"], ["Custom medication"], [[]], [[]]],
+            ),
+            patch("angelman.dashboard._display", return_value="Altro"),
+        ):
+            medications = _medications(object())
+
+        self.assertEqual(medications, ["Custom medication - Altro - Altro"])
+
+    def test_classifies_active_condition_from_raw_status_code(self):
+        with (
+            patch(
+                "angelman.dashboard._value",
+                side_effect=[["Anxiety"], "Current"],
+            ),
+            patch(
+                "angelman.dashboard._display",
+                side_effect=["Attuale", "Ansia"],
+            ),
+            patch("angelman.dashboard._illness_system_edit_url", return_value=None),
+        ):
+            row = _condition_row(
+                object(), "Behaviour/psychiatric", "ANGBehPsyList", "Behaviour/ psychiatric", (("Anxiety", "ANGAnxietyStatus"),)
+            )
+
+        self.assertEqual(row["status_css"], "monitoring")
+        self.assertEqual(row["summary"], "Ansia (Attuale)")
+
+    def test_classifies_active_myoclonus_from_raw_status_code(self):
+        with (
+            patch(
+                "angelman.dashboard._value",
+                side_effect=[["Myoclonus"], "Current"],
+            ),
+            patch("angelman.dashboard._display", return_value="Attuale"),
+            patch("angelman.dashboard._illness_system_edit_url", return_value=None),
+        ):
+            row = _brain_row(object())
+
+        self.assertEqual(row["status_css"], "monitoring")
+
+    def test_classifies_uncontrolled_seizures_from_raw_status_code(self):
+        with (
+            patch("angelman.dashboard._has_diagnosis_history", return_value=True),
+            patch("angelman.dashboard._medications", return_value=[]),
+            patch(
+                "angelman.dashboard._value",
+                side_effect=["Uncontrol", None],
+            ),
+            patch(
+                "angelman.dashboard._display",
+                side_effect=["Non controllato", None],
+            ),
+            patch("angelman.dashboard._clinical_section_edit_url", return_value=None),
+            patch("angelman.dashboard._clinical_field_edit_url", return_value=None),
+            patch("angelman.dashboard._condition_row", return_value={}),
+            patch("angelman.dashboard._brain_row", return_value={}),
+        ):
+            snapshot = clinical_snapshot(object(), object())
+
+        seizure_row = snapshot["snapshot"][1]
+        self.assertEqual(seizure_row["status_css"], "critical")
+        self.assertEqual(seizure_row["summary"], "Non controllato")
 
 
 class ClinicalSnapshotEditUrlTest(SimpleTestCase):

@@ -11,8 +11,13 @@ from rdrf.models.definition.models import (
 
 FORM_NAME = "Clinical"
 CONTEXT_GROUP_CODE = "Clinical"
-ACTIVE_STATUSES = {"Current", "Episodic", "Intermittently experiencing/ episodic"}
-RESOLVED_STATUS = "Resolved"
+ACTIVE_STATUS_CODES = {"Current", "Episodic"}
+RESOLVED_STATUS_CODE = "Resolved"
+MEDICATION_OTHER_CODE = "Other"
+SEIZURE_STATUS_UNCONTROLLED = "Uncontrol"
+SEIZURE_STATUS_MOSTLY_CONTROLLED = "Mostcont"
+SEIZURE_STATUS_CONTROLLED = "Controlled"
+SEIZURE_STATUS_UNSURE = "Unsure"
 
 CLINICAL_SNAPSHOT_DESCRIPTIONS = {
     gettext_noop("Growth/feeding"): gettext_noop(
@@ -205,13 +210,14 @@ def _medications(dashboard):
     for current, medication, other_name, reason, frequency in zip_longest(
         *values, fillvalue=None
     ):
-        if _display("curmedscreen2", current) != "Yes":
+        if current != "Yes":
             continue
-        medication = _display("ANGMedIntWhatV2", medication)
+        if medication == MEDICATION_OTHER_CODE and other_name:
+            medication = str(other_name)
+        else:
+            medication = _display("ANGMedIntWhatV2", medication)
         if not medication:
             continue
-        if medication == "Other" and other_name:
-            medication = str(other_name)
         details = []
         for cde_code, value in (
             ("ANGMedIntReason2", reason),
@@ -249,20 +255,18 @@ def _condition_row(
     for condition_code, status_cde_code in conditions:
         if condition_code not in values:
             continue
-        status = _display(
-            status_cde_code,
-            _value(dashboard, "NewIllness", status_cde_code),
-        )
-        listed_statuses.append((condition_code, status))
-        if status in ACTIVE_STATUSES:
+        status_code = _value(dashboard, "NewIllness", status_cde_code)
+        status = _display(status_cde_code, status_code)
+        listed_statuses.append((condition_code, status_code))
+        if status_code in ACTIVE_STATUS_CODES:
             condition = _display(list_cde_code, condition_code)
             active_conditions.append(f"{condition} ({status})")
     summary = ", ".join(active_conditions)
     critical_conditions = critical_conditions or set()
     active_codes = {
         condition_code
-        for condition_code, status in listed_statuses
-        if status in ACTIVE_STATUSES
+        for condition_code, status_code in listed_statuses
+        if status_code in ACTIVE_STATUS_CODES
     }
     if active_codes:
         status_css = (
@@ -272,7 +276,7 @@ def _condition_row(
         )
         status = _("Monitoring required")
     elif listed_statuses and all(
-        status == RESOLVED_STATUS for _, status in listed_statuses
+        status_code == RESOLVED_STATUS_CODE for _, status_code in listed_statuses
     ):
         status_css = "stable"
         status = _("Stable")
@@ -311,10 +315,9 @@ def _brain_row(dashboard):
         for value in values
         if value.casefold() not in {"seizures", "seizures/ epilepsy"}
     ]
-    nem_status = _display(
-        "ANGNEMStatus", _value(dashboard, "NewIllness", "ANGNEMStatus")
-    )
-    if nem_status not in ACTIVE_STATUSES:
+    nem_status_code = _value(dashboard, "NewIllness", "ANGNEMStatus")
+    nem_status = _display("ANGNEMStatus", nem_status_code)
+    if nem_status_code not in ACTIVE_STATUS_CODES:
         brain_conditions = [
             value
             for value in brain_conditions
@@ -327,7 +330,7 @@ def _brain_row(dashboard):
         ]
 
     summary = _display("ANGBrainList", brain_conditions) if brain_conditions else None
-    myoclonus_active = nem_status in ACTIVE_STATUSES
+    myoclonus_active = nem_status_code in ACTIVE_STATUS_CODES
     return {
         "label": _("Brain/nervous system"),
         "description": _clinical_snapshot_description("Brain/nervous system"),
@@ -354,9 +357,8 @@ def clinical_snapshot(dashboard, widget):
         return None
 
     medications = _medications(dashboard)
-    seizure_status = _display(
-        "SeizureStatus2", _value(dashboard, "NewEpilepsy", "SeizureStatus2")
-    )
+    seizure_status_code = _value(dashboard, "NewEpilepsy", "SeizureStatus2")
+    seizure_status = _display("SeizureStatus2", seizure_status_code)
     seizure_management = _display(
         "ANGSEIZUREManaged",
         _value(dashboard, "NewEpilepsy", "ANGSEIZUREManaged"),
@@ -364,16 +366,16 @@ def clinical_snapshot(dashboard, widget):
     seizure_summary = "; ".join(
         value for value in (seizure_status, seizure_management) if value
     )
-    if seizure_status and seizure_status.startswith("Uncontrolled"):
+    if seizure_status_code == SEIZURE_STATUS_UNCONTROLLED:
         seizure_status_css = "critical"
         seizure_status_label = _("Uncontrolled")
-    elif seizure_status and seizure_status.startswith("Mostly controlled"):
+    elif seizure_status_code == SEIZURE_STATUS_MOSTLY_CONTROLLED:
         seizure_status_css = "monitoring"
         seizure_status_label = _("Monitoring required")
-    elif seizure_status and seizure_status.startswith("Controlled"):
+    elif seizure_status_code == SEIZURE_STATUS_CONTROLLED:
         seizure_status_css = "stable"
         seizure_status_label = _("Stable")
-    elif seizure_status == "Unsure":
+    elif seizure_status_code == SEIZURE_STATUS_UNSURE:
         seizure_status_css = "no-issues"
         seizure_status_label = _("Requires monitoring")
     else:
@@ -448,10 +450,8 @@ def clinical_snapshot(dashboard, widget):
 
 def _patient_flags(dashboard):
     flags = []
-    seizure_status = _display(
-        "SeizureStatus2", _value(dashboard, "NewEpilepsy", "SeizureStatus2")
-    )
-    if seizure_status == "Uncontrolled":
+    seizure_status_code = _value(dashboard, "NewEpilepsy", "SeizureStatus2")
+    if seizure_status_code == SEIZURE_STATUS_UNCONTROLLED:
         flags.append(_("Uncontrolled seizures"))
 
     medication_current = _value(
@@ -468,9 +468,7 @@ def _patient_flags(dashboard):
         medication_current, medication_frequency, fillvalue=None
     ):
         if (
-            _display("curmedscreen2", current) == "Yes"
-            and _display("ANGMedOftenSimple", frequency)
-            == "Taken on a regular basis"
+            current == "Yes" and frequency == "1Regular"
         ):
             flags.append(_("Daily medication"))
             break
