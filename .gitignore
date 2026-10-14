@@ -36,6 +36,9 @@ startup
 
 *.po
 *.mo
+# Track combined English translation sources.
+!/translations/locale/en/LC_MESSAGES/django.po
+!/translations/locale/en/LC_MESSAGES/djangojs.po
 .ropeproject
 *.js~
 *.html~
@@ -51,3 +54,5 @@ rdrf/rdrf/static/js/*-bundle*.js
 yarn_cache/
 
 planning
+!docs/planning/
+!docs/planning/*.md
