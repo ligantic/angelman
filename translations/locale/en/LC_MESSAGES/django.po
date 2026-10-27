@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-14 10:06+1000\n"
+"POT-Creation-Date: 2026-10-27 12:59+1000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -723,24 +723,24 @@ msgid "Registry Form not a valid choice for Context Form Group."
 msgstr ""
 
 #: rdrf/rdrf/models/pro_instruments.py:20
-#: rdrf/rdrf/templates/dashboard/widget/module_progress.html:40
-#: rdrf/rdrf/templates/dashboard/widget/module_progress.html:67
+#: rdrf/rdrf/templates/dashboard/widget/module_progress.html:41
+#: rdrf/rdrf/templates/dashboard/widget/module_progress.html:84
 #: rdrf/rdrf/templates/pro_instruments/shell.html:29
 #: rdrf/rdrf/views/dashboard_view.py:241
 msgid "Not started"
 msgstr ""
 
 #: rdrf/rdrf/models/pro_instruments.py:21
-#: rdrf/rdrf/templates/dashboard/widget/module_progress.html:40
-#: rdrf/rdrf/templates/dashboard/widget/module_progress.html:67
+#: rdrf/rdrf/templates/dashboard/widget/module_progress.html:41
+#: rdrf/rdrf/templates/dashboard/widget/module_progress.html:84
 #: rdrf/rdrf/templates/pro_instruments/shell.html:29
 #: rdrf/rdrf/views/dashboard_view.py:247
 msgid "In progress"
 msgstr ""
 
 #: rdrf/rdrf/models/pro_instruments.py:22
-#: rdrf/rdrf/templates/dashboard/widget/module_progress.html:40
-#: rdrf/rdrf/templates/dashboard/widget/module_progress.html:67
+#: rdrf/rdrf/templates/dashboard/widget/module_progress.html:41
+#: rdrf/rdrf/templates/dashboard/widget/module_progress.html:84
 #: rdrf/rdrf/templates/pro_instruments/shell.html:29
 #: rdrf/rdrf/views/dashboard_view.py:244
 msgid "Complete"
@@ -917,7 +917,7 @@ msgstr ""
 
 #: rdrf/rdrf/templates/dashboard/historical_data.html:9
 #: rdrf/rdrf/templates/dashboard/historical_data.html:13
-#: rdrf/rdrf/templates/dashboard/widget/module_progress.html:86
+#: rdrf/rdrf/templates/dashboard/widget/module_progress.html:103
 msgid "Historical Data"
 msgstr ""
 
@@ -938,7 +938,7 @@ msgstr ""
 #: rdrf/rdrf/templates/dashboard/historical_data.html:34
 #: rdrf/rdrf/templates/dashboard/parent_dashboard.html:320
 #: rdrf/rdrf/templates/dashboard/submissions.html:25
-#: rdrf/rdrf/templates/dashboard/widget/module_progress.html:23
+#: rdrf/rdrf/templates/dashboard/widget/module_progress.html:24
 msgid "Action"
 msgstr ""
 
@@ -998,7 +998,7 @@ msgid "Questionnaire"
 msgstr ""
 
 #: rdrf/rdrf/templates/dashboard/parent_dashboard.html:319
-#: rdrf/rdrf/templates/dashboard/widget/module_progress.html:20
+#: rdrf/rdrf/templates/dashboard/widget/module_progress.html:21
 #: rdrf/rdrf/templates/rdrf_cdes/consent_list.html:65
 #: rdrf/rdrf/templates/user/change_email_address.html:92
 msgid "Status"
@@ -1025,8 +1025,8 @@ msgid "Not tracked"
 msgstr ""
 
 #: rdrf/rdrf/templates/dashboard/submissions.html:48
-#: rdrf/rdrf/templates/dashboard/widget/module_progress.html:47
-#: rdrf/rdrf/templates/dashboard/widget/module_progress.html:74
+#: rdrf/rdrf/templates/dashboard/widget/module_progress.html:64
+#: rdrf/rdrf/templates/dashboard/widget/module_progress.html:91
 #: rdrf/report/templates/reports_list.html:78
 msgid "Edit"
 msgstr ""
@@ -1078,67 +1078,85 @@ msgstr ""
 msgid "Update demographics"
 msgstr ""
 
-#: rdrf/rdrf/templates/dashboard/widget/module_progress.html:6
-#: rdrf/rdrf/templates/dashboard/widget/module_progress.html:19
+#: rdrf/rdrf/templates/dashboard/widget/module_progress.html:7
+#: rdrf/rdrf/templates/dashboard/widget/module_progress.html:20
 #: rdrf/rdrf/templates/rdrf_cdes/form.html:332
 msgid "Modules"
 msgstr ""
 
-#: rdrf/rdrf/templates/dashboard/widget/module_progress.html:12
+#: rdrf/rdrf/templates/dashboard/widget/module_progress.html:13
 msgid "Review your module progress and upcoming due dates."
 msgstr ""
 
-#: rdrf/rdrf/templates/dashboard/widget/module_progress.html:21
+#: rdrf/rdrf/templates/dashboard/widget/module_progress.html:22
 msgid "Last completed"
 msgstr ""
 
-#: rdrf/rdrf/templates/dashboard/widget/module_progress.html:22
+#: rdrf/rdrf/templates/dashboard/widget/module_progress.html:23
 msgid "Next due"
 msgstr ""
 
-#: rdrf/rdrf/templates/dashboard/widget/module_progress.html:29
+#: rdrf/rdrf/templates/dashboard/widget/module_progress.html:30
 msgid "One-off modules"
 msgstr ""
 
-#: rdrf/rdrf/templates/dashboard/widget/module_progress.html:36
+#: rdrf/rdrf/templates/dashboard/widget/module_progress.html:37
 msgid "One-off module"
 msgstr ""
 
-#: rdrf/rdrf/templates/dashboard/widget/module_progress.html:40
-#: rdrf/rdrf/templates/dashboard/widget/module_progress.html:67
+#: rdrf/rdrf/templates/dashboard/widget/module_progress.html:41
+#: rdrf/rdrf/templates/dashboard/widget/module_progress.html:84
 msgid "Due now"
 msgstr ""
 
-#: rdrf/rdrf/templates/dashboard/widget/module_progress.html:43
-#: rdrf/rdrf/templates/dashboard/widget/module_progress.html:44
-#: rdrf/rdrf/templates/dashboard/widget/module_progress.html:70
-#: rdrf/rdrf/templates/dashboard/widget/module_progress.html:71
+#: rdrf/rdrf/templates/dashboard/widget/module_progress.html:46
+msgid "Contact curator for changes"
+msgstr ""
+
+#: rdrf/rdrf/templates/dashboard/widget/module_progress.html:49
+#: rdrf/rdrf/templates/dashboard/widget/module_progress.html:50
+#: rdrf/rdrf/templates/dashboard/widget/module_progress.html:87
+#: rdrf/rdrf/templates/dashboard/widget/module_progress.html:88
 msgid "-"
 msgstr ""
 
-#: rdrf/rdrf/templates/dashboard/widget/module_progress.html:47
-#: rdrf/rdrf/templates/dashboard/widget/module_progress.html:74
+#: rdrf/rdrf/templates/dashboard/widget/module_progress.html:56
+#: rdrf/rdrf/templates/dashboard/widget/module_progress.html:58
+msgid "Read-only"
+msgstr ""
+
+#: rdrf/rdrf/templates/dashboard/widget/module_progress.html:60
+#, python-format
+msgid "View %(form_name)s (read-only)"
+msgstr ""
+
+#: rdrf/rdrf/templates/dashboard/widget/module_progress.html:60
+msgid "View"
+msgstr ""
+
+#: rdrf/rdrf/templates/dashboard/widget/module_progress.html:64
+#: rdrf/rdrf/templates/dashboard/widget/module_progress.html:91
 msgid "Start"
 msgstr ""
 
-#: rdrf/rdrf/templates/dashboard/widget/module_progress.html:56
+#: rdrf/rdrf/templates/dashboard/widget/module_progress.html:73
 msgid "Longitudinal modules"
 msgstr ""
 
-#: rdrf/rdrf/templates/dashboard/widget/module_progress.html:67
+#: rdrf/rdrf/templates/dashboard/widget/module_progress.html:84
 msgid "Overdue"
 msgstr ""
 
-#: rdrf/rdrf/templates/dashboard/widget/module_progress.html:67
+#: rdrf/rdrf/templates/dashboard/widget/module_progress.html:84
 msgid "Due soon"
 msgstr ""
 
-#: rdrf/rdrf/templates/dashboard/widget/module_progress.html:74
+#: rdrf/rdrf/templates/dashboard/widget/module_progress.html:91
 #: rdrf/rdrf/templates/pro_instruments/shell.html:45
 msgid "Continue"
 msgstr ""
 
-#: rdrf/rdrf/templates/dashboard/widget/module_progress.html:91
+#: rdrf/rdrf/templates/dashboard/widget/module_progress.html:108
 msgid "No modules are currently available for this participant."
 msgstr ""
 
@@ -2945,11 +2963,11 @@ msgstr ""
 msgid "Patient %(patient_name)s not saved due to validation errors"
 msgstr ""
 
-#: rdrf/rdrf/views/dashboard_view.py:580
+#: rdrf/rdrf/views/dashboard_view.py:594
 msgid "parent_id is a required parameter"
 msgstr ""
 
-#: rdrf/rdrf/views/dashboard_view.py:594
+#: rdrf/rdrf/views/dashboard_view.py:608
 msgid "No Dashboards for this user"
 msgstr ""
 
@@ -12911,7 +12929,7 @@ msgstr ""
 msgid "In the past 30 days, did your child use gestures/signs, words/word approximations, or symbols on a device to ask you complex questions (example: Why do I have to brush my teeth?)?"
 msgstr ""
 
-msgid "11 - Think about how your child told you about past events. For example, telling on a sibling or telling you about something that happened at school. Your child might tell you a story through gestures"
+msgid "11 - Think about how your child told you about past events."
 msgstr ""
 
 msgid "In the past 30 days, did your child let you know about past events that you did not see?"

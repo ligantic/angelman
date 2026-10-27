@@ -44765,10 +44765,7 @@ forms:
       - abbreviated_name: ORCApast11
         allow_multiple: false
         code: ORCA11
-        display_name:
-          11 - Think about how your child told you about past events. For
-          example, telling on a sibling or telling you about something that happened at
-          school. Your child might tell you a story through gestures
+        display_name: 11 - Think about how your child told you about past events.
         elements:
           - ORCApast11a
           - ORCApast11b
