@@ -872,10 +872,12 @@ class PatientCountryFilterTests(TestCase):
             self.matching([patient, fallback]), {patient.pk, fallback.pk}
         )
 
-    def test_invalid_used_country_codes_fail_rather_than_allow_fallback(self):
+    def test_invalid_countries_are_skipped_without_address_fallback(self):
         for source in ("Home", "Postal", "Parent"):
             with self.subTest(source=source):
                 patient = self.patient()
+                valid_patient = self.patient()
+                self.address(valid_patient, "AU")
                 if source == "Parent":
                     self.parent(patient, "invalid")
                 else:
@@ -885,10 +887,18 @@ class PatientCountryFilterTests(TestCase):
                         self.home if source == "Home" else self.postal,
                     )
                     self.parent(patient, "AU")
-                with self.assertRaisesMessage(
-                    ValidationError, "Invalid country"
-                ):
-                    self.matching([patient])
+                with self.assertLogs("angelman.report.filters", "WARNING"):
+                    self.assertEqual(
+                        self.matching([patient, valid_patient]),
+                        {valid_patient.pk},
+                    )
+
+    def test_invalid_parent_does_not_prevent_other_parent_matching(self):
+        patient = self.patient()
+        self.parent(patient, "invalid")
+        self.parent(patient, "AU")
+        with self.assertLogs("angelman.report.filters", "WARNING"):
+            self.assertEqual(self.matching([patient]), {patient.pk})
 
     def test_does_not_evaluate_lower_priority_invalid_codes(self):
         patient = self.patient()

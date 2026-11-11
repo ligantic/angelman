@@ -1,3 +1,4 @@
+import logging
 from calendar import isleap
 from dataclasses import dataclass
 from datetime import date, datetime, timezone
@@ -16,6 +17,8 @@ from registry.patients.models import (
     get_countries,
 )
 from report.filter_providers import ReportFilterProvider
+
+logger = logging.getLogger(__name__)
 
 DIAGNOSIS_CHOICES = (
     ("deletion", _("Deletion")),
@@ -330,32 +333,41 @@ class PatientCountryFilter(ReportFilterProvider):
 
         matching = set()
         fallback_ids = set()
+        invalid_count = 0
         for patient_id in patient_ids:
             country = addresses.get((patient_id, "Home")) or addresses.get(
                 (patient_id, "Postal")
             )
             if country is None:
                 fallback_ids.add(patient_id)
-            elif self._country_code(country, valid_codes) in selected:
-                matching.add(patient_id)
+            else:
+                code = self._country_code(country, valid_codes)
+                if code is None:
+                    invalid_count += 1
+                elif code in selected:
+                    matching.add(patient_id)
 
         if fallback_ids:
             for patient_id, country in ParentGuardian.objects.filter(
                 patient__pk__in=fallback_ids
             ).values_list("patient__pk", "country"):
-                if (
-                    country
-                    and country.strip()
-                    and self._country_code(country, valid_codes) in selected
-                ):
+                if not country or not country.strip():
+                    continue
+                code = self._country_code(country, valid_codes)
+                if code is None:
+                    invalid_count += 1
+                elif code in selected:
                     matching.add(patient_id)
+        if invalid_count:
+            logger.warning(
+                "Country report filter skipped %d invalid country record(s).",
+                invalid_count,
+            )
         return matching
 
     @staticmethod
     def _country_code(country, valid_codes):
         code = country.strip().upper()
         if code not in valid_codes:
-            raise ValidationError(
-                _("Invalid country code in patient or parent/guardian address.")
-            )
+            return None
         return code
