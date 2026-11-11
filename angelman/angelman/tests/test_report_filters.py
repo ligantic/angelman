@@ -1,11 +1,13 @@
 import csv
 import io
 import json
-from datetime import date
+from datetime import date, datetime, timezone
+from fractions import Fraction
+from unittest.mock import patch
 
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError
-from django.test import RequestFactory, TestCase
+from django.test import RequestFactory, SimpleTestCase, TestCase
 from rdrf.models.definition.models import (
     ClinicalData,
     ContextFormGroup,
@@ -13,7 +15,13 @@ from rdrf.models.definition.models import (
     Registry,
 )
 from registry.groups.models import CustomUser
-from registry.patients.models import Patient
+from registry.patients.models import (
+    AddressType,
+    ParentGuardian,
+    Patient,
+    PatientAddress,
+    get_countries,
+)
 from report.filter_providers import (
     get_report_filter_providers,
     validate_report_filter_parameters,
@@ -30,6 +38,8 @@ from angelman.report.filters import (
     HISTORY_CODES,
     REGISTRATION_CODES,
     AngelmanDiagnosisFilter,
+    PatientAgeFilter,
+    PatientCountryFilter,
 )
 
 
@@ -106,7 +116,9 @@ class AngelmanDiagnosisFilterTests(TestCase):
         form_class = self.provider.parameter_form_class
         self.assertEqual(form_class()["quality"].value(), "verified")
         self.assertEqual(
-            form_class(initial={"quality": "best_available"})["quality"].value(),
+            form_class(initial={"quality": "best_available"})[
+                "quality"
+            ].value(),
             "best_available",
         )
         self.assertIsInstance(
@@ -327,8 +339,18 @@ class AngelmanDiagnosisFilterTests(TestCase):
         self,
     ):
         matching, excluded = self.patient(), self.patient()
+        too_young = self.patient()
+        too_young.date_of_birth = date.today()
+        too_young.save()
         self.record(matching, ADMIN, "RegistrationDiagnosisUPD")
         self.record(excluded, SIGNUP, "RegistrationDiagnosisUPD")
+        self.record(too_young, ADMIN, "RegistrationDiagnosisUPD")
+        wrong_country = self.patient()
+        self.record(wrong_country, ADMIN, "RegistrationDiagnosisUPD")
+        parent = ParentGuardian.objects.create(country="AU")
+        parent.patient.add(matching, excluded, too_young)
+        other_parent = ParentGuardian.objects.create(country="GB")
+        other_parent.patient.add(wrong_country)
         design = ReportDesign.objects.create(
             registry=self.registry,
             title="Verified diagnosis",
@@ -346,6 +368,11 @@ class AngelmanDiagnosisFilterTests(TestCase):
                 "custom_filter_enabled_0": "on",
                 "custom_filter_0-diagnoses": ["upd", "mosaic"],
                 "custom_filter_0-quality": "verified",
+                "custom_filter_enabled_1": "on",
+                "custom_filter_1-minimum_age": "20.5",
+                "custom_filter_1-maximum_age": "",
+                "custom_filter_enabled_2": "on",
+                "custom_filter_2-countries": ["AU", "NZ"],
             },
         )
         self.assertTrue(form.is_valid(), form.errors)
@@ -375,6 +402,27 @@ class AngelmanDiagnosisFilterTests(TestCase):
             ["upd", "mosaic"],
         )
         self.assertIn('value="verified" selected', html)
+        age_form = restored.custom_filter_groups[0]["filters"][1][
+            "parameter_form"
+        ]
+        self.assertEqual(age_form["minimum_age"].value(), "20.5")
+        self.assertIsNone(age_form["maximum_age"].value())
+        self.assertEqual(
+            design.custom_filters["filters"]["angelman.patient_age"][
+                "parameters"
+            ],
+            {"minimum_age": "20.5", "maximum_age": None},
+        )
+        self.assertEqual(
+            design.custom_filters["filters"]["angelman.patient_country"][
+                "parameters"
+            ],
+            {"countries": ["AU", "NZ"]},
+        )
+        country_form = restored.custom_filter_groups[0]["filters"][2][
+            "parameter_form"
+        ]
+        self.assertEqual(country_form["countries"].value(), ["AU", "NZ"])
         request = RequestFactory().get("/")
         request.user = CustomUser.objects.create(
             username="diagnosis-admin",
@@ -387,6 +435,12 @@ class AngelmanDiagnosisFilterTests(TestCase):
         self.assertContains(response, "Filter by Angelman Diagnosis")
         self.assertContains(response, "Verified (Admin)")
         self.assertContains(response, "Best available")
+        self.assertContains(response, "Filter by Patient Age")
+        self.assertContains(response, "Minimum age (years)")
+        self.assertContains(response, "Maximum age (years)")
+        self.assertContains(response, "Filter by Country")
+        self.assertContains(response, "Australia")
+        self.assertContains(response, "New Zealand")
         report = ReportBuilder(design)
         valid, errors = report.validate_query(request)
         self.assertTrue(valid, errors)
@@ -436,3 +490,456 @@ class AngelmanDiagnosisFilterTests(TestCase):
         valid, errors = ReportBuilder(design).validate_query(request)
         self.assertFalse(valid)
         self.assertIn("Invalid diagnosis code", str(errors))
+
+
+class PatientAgeParametersTests(SimpleTestCase):
+    def setUp(self):
+        self.provider = PatientAgeFilter()
+
+    def test_optional_bounds_are_json_serialisable_and_revalidate(self):
+        for raw, expected in (
+            ({}, {"minimum_age": None, "maximum_age": None}),
+            (
+                {"minimum_age": "", "maximum_age": ""},
+                {"minimum_age": None, "maximum_age": None},
+            ),
+            (
+                {"minimum_age": "0", "maximum_age": "10.5"},
+                {"minimum_age": "0", "maximum_age": "10.5"},
+            ),
+            (
+                {"minimum_age": "10.5000000000000000001"},
+                {"minimum_age": "10.5000000000000000001", "maximum_age": None},
+            ),
+            (
+                {"maximum_age": "0.25"},
+                {"minimum_age": None, "maximum_age": "0.25"},
+            ),
+        ):
+            with self.subTest(raw=raw):
+                parameters = validate_report_filter_parameters(
+                    self.provider, raw
+                )
+                self.assertEqual(parameters, expected)
+                self.assertEqual(
+                    validate_report_filter_parameters(
+                        self.provider, json.loads(json.dumps(parameters))
+                    ),
+                    expected,
+                )
+
+    def test_invalid_bounds_are_rejected(self):
+        for parameters in (
+            {"minimum_age": "-0.1"},
+            {"maximum_age": "-1"},
+            {"minimum_age": "10", "maximum_age": "9.99"},
+            {"minimum_age": "invalid"},
+            {"minimum_age": "NaN"},
+            {"maximum_age": "Infinity"},
+            {"maximum_age": "-Infinity"},
+            {"minimum_age": "1", "unexpected": "value"},
+        ):
+            with self.subTest(parameters=parameters):
+                with self.assertRaises(ValidationError):
+                    validate_report_filter_parameters(self.provider, parameters)
+
+    def test_equal_bounds_and_arbitrary_decimal_input_step(self):
+        parameters = validate_report_filter_parameters(
+            self.provider, {"minimum_age": "10.5", "maximum_age": "10.5"}
+        )
+        self.assertEqual(parameters["minimum_age"], parameters["maximum_age"])
+        html = str(self.provider.parameter_form_class())
+        self.assertEqual(html.count('step="any"'), 2)
+        self.assertNotIn("required", html)
+
+    def test_calendar_fraction_uses_birthday_interval_without_rounding(self):
+        for born, on, expected in (
+            (date(2014, 1, 1), date(2024, 1, 1), Fraction(10)),
+            (date(2014, 1, 1), date(2024, 7, 2), Fraction(21, 2)),
+            (date(2014, 1, 1), date(2023, 7, 2), 9 + Fraction(182, 365)),
+            (date(2014, 7, 2), date(2024, 7, 1), 9 + Fraction(365, 366)),
+            (date(2024, 7, 2), date(2024, 7, 2), Fraction(0)),
+            (date(2024, 1, 1), date(2024, 7, 2), Fraction(1, 2)),
+        ):
+            with self.subTest(born=born, on=on):
+                self.assertEqual(
+                    self.provider._age_in_years(born, on), expected
+                )
+
+    def test_leap_day_birthdays_follow_patient_age_march_first_convention(self):
+        born = date(2020, 2, 29)
+        for on, expected in (
+            (date(2021, 2, 28), Fraction(365, 366)),
+            (date(2021, 3, 1), Fraction(1)),
+            (date(2024, 2, 28), 3 + Fraction(364, 365)),
+            (date(2024, 2, 29), Fraction(4)),
+            (date(2025, 2, 28), 4 + Fraction(365, 366)),
+            (date(2025, 3, 1), Fraction(5)),
+        ):
+            with self.subTest(on=on):
+                self.assertEqual(
+                    self.provider._age_in_years(born, on), expected
+                )
+
+    def test_future_birth_dates_fail_explicitly_when_calculating_age(self):
+        with self.assertRaisesMessage(
+            ValidationError, "Date of birth is after"
+        ):
+            self.provider._age_in_years(date(2025, 1, 1), date(2024, 1, 1))
+
+
+class PatientAgeFilterTests(TestCase):
+    def setUp(self):
+        self.registry = Registry.objects.create(code="ang", name="Angelman")
+        self.provider = PatientAgeFilter()
+        date_mock = patch("angelman.report.filters.datetime", wraps=datetime)
+        date_mock.start().now.return_value = datetime(
+            2024, 7, 2, tzinfo=timezone.utc
+        )
+        self.addCleanup(date_mock.stop)
+        self.ten = self.patient(date(2014, 7, 2))
+        self.ten_and_half = self.patient(date(2014, 1, 1))
+        self.eleven = self.patient(date(2013, 7, 2))
+        self.newborn = self.patient(date(2024, 7, 2))
+        self.patients = [self.ten, self.ten_and_half, self.eleven, self.newborn]
+
+    def patient(self, born, died=None):
+        patient = Patient.objects.create(
+            consent=True, date_of_birth=born, date_of_death=died
+        )
+        patient.rdrf_registry.add(self.registry)
+        return patient
+
+    def matching(self, minimum=None, maximum=None, patients=None):
+        parameters = validate_report_filter_parameters(
+            self.provider, {"minimum_age": minimum, "maximum_age": maximum}
+        )
+        return self.provider.get_matching_patient_ids(
+            self.registry,
+            [
+                p.pk
+                for p in (patients if patients is not None else self.patients)
+            ],
+            parameters,
+        )
+
+    def test_registered_for_actual_registry(self):
+        self.assertIsInstance(
+            get_report_filter_providers(self.registry)["angelman.patient_age"],
+            PatientAgeFilter,
+        )
+
+    def test_new_designer_can_save_restore_and_disable_open_age_range(self):
+        blank = ReportDesignerForm()
+        self.assertEqual(len(blank.custom_filter_groups[0]["filters"]), 3)
+        data = {
+            "title": "Age range",
+            "registry": self.registry.code,
+            "cde_heading_format": ReportCdeHeadingFormat.CODE.value,
+            "demographic_fields": [
+                get_demographic_field_value("patient", "id")
+            ],
+            "custom_filter_enabled_1": "on",
+            "custom_filter_1-minimum_age": "",
+            "custom_filter_1-maximum_age": "10.5",
+        }
+        form = ReportDesignerForm(data=data)
+        self.assertTrue(form.is_valid(), form.errors)
+        form.save_to_model()
+        configuration = {
+            "schema_version": 1,
+            "filters": {
+                "angelman.patient_age": {
+                    "version": 1,
+                    "parameters": {
+                        "minimum_age": None,
+                        "maximum_age": "10.5",
+                    },
+                },
+            },
+        }
+        self.assertEqual(form.instance.custom_filters, configuration)
+        restored = ReportDesignerForm(instance=form.instance)
+        age_form = restored.custom_filter_groups[0]["filters"][1][
+            "parameter_form"
+        ]
+        self.assertIsNone(age_form["minimum_age"].value())
+        self.assertEqual(age_form["maximum_age"].value(), "10.5")
+        data.pop("custom_filter_enabled_1")
+        disabled = ReportDesignerForm(data=data, instance=form.instance)
+        self.assertTrue(disabled.is_valid(), disabled.errors)
+        disabled.save_to_model()
+        self.assertEqual(disabled.instance.custom_filters, {})
+
+    def test_inclusive_decimal_range_and_equal_bounds(self):
+        self.assertEqual(
+            self.matching("10", "10.5"), {self.ten.pk, self.ten_and_half.pk}
+        )
+        self.assertEqual(self.matching("10.5", "10.5"), {self.ten_and_half.pk})
+        self.assertEqual(self.matching("0", "0"), {self.newborn.pk})
+
+    def test_empty_minimum_or_maximum_is_an_open_bound(self):
+        self.assertEqual(
+            self.matching("10.5"), {self.ten_and_half.pk, self.eleven.pk}
+        )
+        self.assertEqual(
+            self.matching(maximum="10"), {self.ten.pk, self.newborn.pk}
+        )
+
+    def test_no_bounds_is_no_restriction_or_database_query(self):
+        with self.assertNumQueries(0):
+            self.assertEqual(self.matching(), {p.pk for p in self.patients})
+        with self.assertNumQueries(0):
+            self.assertEqual(self.matching("10", patients=[]), set())
+
+    def test_decimal_precision_is_not_rounded_to_the_boundary(self):
+        self.assertNotIn(
+            self.ten_and_half.pk, self.matching("10.5000000000000000001")
+        )
+        self.assertNotIn(
+            self.ten_and_half.pk,
+            self.matching(maximum="10.4999999999999999999"),
+        )
+
+    def test_age_stops_at_date_of_death(self):
+        deceased = self.patient(date(2000, 1, 1), date(2010, 1, 1))
+        self.assertEqual(self.matching("10", "10", [deceased]), {deceased.pk})
+        self.assertEqual(self.matching("24", patients=[deceased]), set())
+
+    def test_bulk_query_is_bounded_and_batch_and_order_independent(self):
+        with self.assertNumQueries(1):
+            together = self.matching("10", "10.5")
+        separate = set()
+        for patient in reversed(self.patients):
+            separate.update(self.matching("10", "10.5", [patient]))
+        self.assertEqual(together, separate)
+
+    def test_does_not_add_patients_outside_registry_or_input(self):
+        other = self.patient(date(2014, 7, 2))
+        other.rdrf_registry.clear()
+        self.assertEqual(self.matching("10", patients=[other]), set())
+        self.assertEqual(
+            self.matching("10", patients=[self.ten]), {self.ten.pk}
+        )
+
+
+class PatientCountryParametersTests(SimpleTestCase):
+    def test_requires_valid_country_codes_and_serialises_selections(self):
+        provider = PatientCountryFilter()
+        parameters = validate_report_filter_parameters(
+            provider, {"countries": ["AU", "NZ"]}
+        )
+        self.assertEqual(json.loads(json.dumps(parameters)), parameters)
+        self.assertEqual(parameters, {"countries": ["AU", "NZ"]})
+        form = provider.parameter_form_class()
+        self.assertEqual(
+            list(form.fields["countries"].choices), get_countries()
+        )
+        self.assertIn("multiple", str(form["countries"]))
+        for invalid in (
+            {},
+            {"countries": []},
+            {"countries": ["XX"]},
+            {"countries": ["Australia"]},
+            {"countries": ["AU"], "extra": True},
+        ):
+            with self.subTest(parameters=invalid):
+                with self.assertRaises(ValidationError):
+                    validate_report_filter_parameters(provider, invalid)
+
+
+class PatientCountryFilterTests(TestCase):
+    def setUp(self):
+        self.registry = Registry.objects.create(code="ang", name="Angelman")
+        self.home = AddressType.objects.create(type="Home")
+        self.postal = AddressType.objects.create(type="Postal")
+        self.provider = PatientCountryFilter()
+
+    def patient(self):
+        patient = Patient.objects.create(
+            consent=True, date_of_birth=date(2000, 1, 1)
+        )
+        patient.rdrf_registry.add(self.registry)
+        return patient
+
+    def address(self, patient, country, address_type=None):
+        return PatientAddress.objects.create(
+            patient=patient,
+            country=country,
+            address_type=address_type or self.home,
+        )
+
+    def parent(self, patient, country, user=None):
+        parent = ParentGuardian.objects.create(country=country, user=user)
+        parent.patient.add(patient)
+        return parent
+
+    def matching(self, patients, countries=None):
+        parameters = validate_report_filter_parameters(
+            self.provider, {"countries": countries or ["AU"]}
+        )
+        return self.provider.get_matching_patient_ids(
+            self.registry, [p.pk for p in patients], parameters
+        )
+
+    def test_registered_for_actual_registry(self):
+        self.assertIsInstance(
+            get_report_filter_providers(self.registry)[
+                "angelman.patient_country"
+            ],
+            PatientCountryFilter,
+        )
+
+    def test_multiple_selected_countries_match_either_home_country(self):
+        australia, nz, uk = [self.patient() for _ in range(3)]
+        for patient, country in ((australia, "AU"), (nz, "NZ"), (uk, "GB")):
+            self.address(patient, country)
+        self.assertEqual(
+            self.matching([australia, nz, uk], ["AU", "NZ"]),
+            {australia.pk, nz.pk},
+        )
+
+    def test_home_precedes_postal_and_parent_even_when_it_does_not_match(self):
+        patient = self.patient()
+        self.address(patient, "GB")
+        self.address(patient, "AU", self.postal)
+        self.parent(patient, "AU")
+        self.assertEqual(self.matching([patient]), set())
+        self.assertEqual(self.matching([patient], ["GB"]), {patient.pk})
+
+    def test_postal_precedes_parent_if_no_home_country(self):
+        patient = self.patient()
+        self.address(patient, " ")
+        self.address(patient, "NZ", self.postal)
+        self.parent(patient, "AU")
+        self.assertEqual(self.matching([patient]), set())
+        self.assertEqual(self.matching([patient], ["NZ"]), {patient.pk})
+
+    def test_falls_back_to_parent_for_missing_or_blank_patient_countries(self):
+        missing, blank = self.patient(), self.patient()
+        self.address(blank, "")
+        self.address(blank, "  ", self.postal)
+        self.parent(missing, "AU")
+        self.parent(blank, "AU")
+        self.assertEqual(
+            self.matching([missing, blank]), {missing.pk, blank.pk}
+        )
+
+    def test_fallback_matches_any_linked_parent_country_and_deduplicates(self):
+        patient = self.patient()
+        self.parent(patient, "GB")
+        self.parent(patient, "")
+        self.parent(patient, "AU")
+        self.parent(patient, "AU")
+        self.assertEqual(self.matching([patient]), {patient.pk})
+        self.assertEqual(self.matching([patient], ["GB"]), {patient.pk})
+
+    def test_uses_current_registration_parent_user_address(self):
+        patient = self.patient()
+        user = CustomUser.objects.create(username="country-parent")
+        parent = self.parent(patient, "AU", user)
+        self.assertEqual(self.matching([patient]), {patient.pk})
+        parent.country = "NZ"
+        parent.save()
+        self.assertEqual(self.matching([patient]), set())
+        self.assertEqual(self.matching([patient], ["NZ"]), {patient.pk})
+
+    def test_shared_parent_only_returns_input_patients(self):
+        first, second = self.patient(), self.patient()
+        parent = self.parent(first, "AU")
+        parent.patient.add(second)
+        self.assertEqual(self.matching([first]), {first.pk})
+
+    def test_missing_countries_and_unrelated_parents_do_not_match(self):
+        patient, other = self.patient(), self.patient()
+        self.parent(patient, "")
+        self.parent(other, "AU")
+        self.assertEqual(self.matching([patient]), set())
+
+    def test_uses_first_nonblank_address_of_each_type_by_record_id(self):
+        patient = self.patient()
+        self.address(patient, "")
+        self.address(patient, "GB")
+        self.address(patient, "AU")
+        self.assertEqual(self.matching([patient]), set())
+        self.assertEqual(self.matching([patient], ["GB"]), {patient.pk})
+
+    def test_normalises_case_and_whitespace_in_saved_country_codes(self):
+        patient, fallback = self.patient(), self.patient()
+        self.address(patient, " au ")
+        self.parent(fallback, "au")
+        self.assertEqual(
+            self.matching([patient, fallback]), {patient.pk, fallback.pk}
+        )
+
+    def test_invalid_used_country_codes_fail_rather_than_allow_fallback(self):
+        for source in ("Home", "Postal", "Parent"):
+            with self.subTest(source=source):
+                patient = self.patient()
+                if source == "Parent":
+                    self.parent(patient, "invalid")
+                else:
+                    self.address(
+                        patient,
+                        "invalid",
+                        self.home if source == "Home" else self.postal,
+                    )
+                    self.parent(patient, "AU")
+                with self.assertRaisesMessage(
+                    ValidationError, "Invalid country"
+                ):
+                    self.matching([patient])
+
+    def test_does_not_evaluate_lower_priority_invalid_codes(self):
+        patient = self.patient()
+        self.address(patient, "AU")
+        self.address(patient, "invalid", self.postal)
+        self.parent(patient, "invalid")
+        self.assertEqual(self.matching([patient]), {patient.pk})
+
+    def test_bounded_queries_and_batch_and_order_independence(self):
+        patients = [self.patient() for _ in range(6)]
+        for index, patient in enumerate(patients):
+            if index % 2:
+                self.parent(patient, "AU")
+            else:
+                self.address(patient, "GB")
+        with self.assertNumQueries(2):
+            together = self.matching(patients)
+        separate = set()
+        for patient in reversed(patients):
+            separate.update(self.matching([patient]))
+        self.assertEqual(together, separate)
+        self.assertEqual(together, {p.pk for p in patients[1::2]})
+        with self.assertNumQueries(1):
+            self.matching(patients[::2])
+        with self.assertNumQueries(0):
+            self.assertEqual(self.matching([]), set())
+
+    def test_new_designer_requires_selection_and_can_disable_country_filter(
+        self,
+    ):
+        data = {
+            "title": "Country filter",
+            "registry": self.registry.code,
+            "cde_heading_format": ReportCdeHeadingFormat.CODE.value,
+            "demographic_fields": [
+                get_demographic_field_value("patient", "id")
+            ],
+            "custom_filter_enabled_2": "on",
+        }
+        invalid = ReportDesignerForm(data=data)
+        self.assertFalse(invalid.is_valid())
+        data["custom_filter_2-countries"] = ["AU", "NZ"]
+        form = ReportDesignerForm(data=data)
+        self.assertTrue(form.is_valid(), form.errors)
+        form.save_to_model()
+        self.assertEqual(
+            form.instance.custom_filters["filters"]["angelman.patient_country"],
+            {"version": 1, "parameters": {"countries": ["AU", "NZ"]}},
+        )
+        data.pop("custom_filter_enabled_2")
+        disabled = ReportDesignerForm(data=data, instance=form.instance)
+        self.assertTrue(disabled.is_valid(), disabled.errors)
+        disabled.save_to_model()
+        self.assertEqual(disabled.instance.custom_filters, {})

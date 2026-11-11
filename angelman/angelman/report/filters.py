@@ -1,12 +1,20 @@
+from calendar import isleap
 from dataclasses import dataclass
-from datetime import datetime, timezone
+from datetime import date, datetime, timezone
+from fractions import Fraction
 
 from django import forms
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError
+from django.utils.timezone import get_current_timezone
 from django.utils.translation import gettext_lazy as _
 from rdrf.models.definition.models import ClinicalData, RDRFContext
-from registry.patients.models import Patient
+from registry.patients.models import (
+    ParentGuardian,
+    Patient,
+    PatientAddress,
+    get_countries,
+)
 from report.filter_providers import ReportFilterProvider
 
 DIAGNOSIS_CHOICES = (
@@ -197,3 +205,157 @@ class AngelmanDiagnosisFilter(ReportFilterProvider):
                 params={"form": source.form},
             )
         return codes[value]
+
+
+class PatientAgeParametersForm(forms.Form):
+    minimum_age = forms.DecimalField(
+        label=_("Minimum age (years)"),
+        required=False,
+        min_value=0,
+        widget=forms.NumberInput(
+            attrs={"class": "form-control", "step": "any"}
+        ),
+        help_text=_("Inclusive. Leave empty for no minimum age."),
+    )
+    maximum_age = forms.DecimalField(
+        label=_("Maximum age (years)"),
+        required=False,
+        min_value=0,
+        widget=forms.NumberInput(
+            attrs={"class": "form-control", "step": "any"}
+        ),
+        help_text=_("Inclusive. Leave empty for no maximum age."),
+    )
+
+    def clean(self):
+        cleaned = super().clean()
+        minimum = cleaned.get("minimum_age")
+        maximum = cleaned.get("maximum_age")
+        if minimum is not None and maximum is not None and minimum > maximum:
+            self.add_error(
+                "maximum_age",
+                _("Maximum age must be greater than or equal to minimum age."),
+            )
+        # Preserve decimal precision in the JSON provider configuration.
+        return {
+            key: str(value) if value is not None else None
+            for key, value in cleaned.items()
+        }
+
+
+class PatientAgeFilter(ReportFilterProvider):
+    configuration_version = 1
+    label = _("Filter by Patient Age")
+    parameter_form_class = PatientAgeParametersForm
+
+    def get_matching_patient_ids(self, registry, patient_ids, parameters):
+        minimum = parameters["minimum_age"]
+        maximum = parameters["maximum_age"]
+        if not patient_ids or (minimum is None and maximum is None):
+            return set(patient_ids)
+        minimum = Fraction(minimum) if minimum is not None else None
+        maximum = Fraction(maximum) if maximum is not None else None
+        today = datetime.now(tz=get_current_timezone()).date()
+        matching = set()
+        patients = Patient.objects.filter(
+            pk__in=patient_ids, rdrf_registry=registry
+        ).values_list("pk", "date_of_birth", "date_of_death")
+        for patient_id, born, died in patients:
+            if born is None:
+                continue
+            age = self._age_in_years(born, died or today)
+            if (minimum is None or age >= minimum) and (
+                maximum is None or age <= maximum
+            ):
+                matching.add(patient_id)
+        return matching
+
+    @staticmethod
+    def _birthday(born: date, year: int) -> date:
+        # Match Patient.age: leap-day birthdays fall on March 1 otherwise.
+        if born.month == 2 and born.day == 29 and not isleap(year):
+            return date(year, 3, 1)
+        return born.replace(year=year)
+
+    @classmethod
+    def _age_in_years(cls, born: date, on: date) -> Fraction:
+        if born > on:
+            raise ValidationError(
+                _("Date of birth is after the age comparison date.")
+            )
+        birthday_year = on.year
+        birthday = cls._birthday(born, birthday_year)
+        if birthday > on:
+            birthday_year -= 1
+            birthday = cls._birthday(born, birthday_year)
+        next_birthday = cls._birthday(born, birthday_year + 1)
+        return Fraction(birthday_year - born.year) + Fraction(
+            (on - birthday).days, (next_birthday - birthday).days
+        )
+
+
+class PatientCountryParametersForm(forms.Form):
+    countries = forms.MultipleChoiceField(
+        label=_("Countries"),
+        choices=get_countries,
+        widget=forms.SelectMultiple(attrs={"class": "form-select", "size": 10}),
+        help_text=_(
+            "Select one or more countries. Uses patient Home country, then "
+            "Postal country, then linked parent/guardian countries."
+        ),
+    )
+
+
+class PatientCountryFilter(ReportFilterProvider):
+    configuration_version = 1
+    label = _("Filter by Country")
+    parameter_form_class = PatientCountryParametersForm
+
+    def get_matching_patient_ids(self, registry, patient_ids, parameters):
+        if not patient_ids:
+            return set()
+        selected = set(parameters["countries"])
+        valid_codes = {code for code, _name in get_countries()}
+        addresses = {}
+        for patient_id, address_type, country in (
+            PatientAddress.objects.filter(
+                patient_id__in=patient_ids,
+                address_type__type__in=("Home", "Postal"),
+            )
+            .order_by("pk")
+            .values_list("patient_id", "address_type__type", "country")
+        ):
+            if country and country.strip():
+                addresses.setdefault((patient_id, address_type), country)
+
+        matching = set()
+        fallback_ids = set()
+        for patient_id in patient_ids:
+            country = addresses.get((patient_id, "Home")) or addresses.get(
+                (patient_id, "Postal")
+            )
+            if country is None:
+                fallback_ids.add(patient_id)
+            elif self._country_code(country, valid_codes) in selected:
+                matching.add(patient_id)
+
+        if fallback_ids:
+            for patient_id, country in ParentGuardian.objects.filter(
+                patient__pk__in=fallback_ids
+            ).values_list("patient__pk", "country"):
+                if (
+                    country
+                    and country.strip()
+                    and self._country_code(country, valid_codes) in selected
+                ):
+                    matching.add(patient_id)
+        return matching
+
+    @staticmethod
+    def _country_code(country, valid_codes):
+        code = country.strip().upper()
+        if code not in valid_codes:
+            raise ValidationError(
+                _("Invalid country code in patient or parent/guardian address.")
+            )
+        return code

@@ -76,6 +76,8 @@ REPORT_CONFIG_METHOD_GET = "get_angelman_configuration"
 REGISTRY_REPORT_FILTER_PROVIDERS = {
     "ang": {
         "angelman.diagnosis": "angelman.report.filters.AngelmanDiagnosisFilter",
+        "angelman.patient_age": "angelman.report.filters.PatientAgeFilter",
+        "angelman.patient_country": "angelman.report.filters.PatientCountryFilter",
     },
 }
 

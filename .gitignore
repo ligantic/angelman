@@ -33,6 +33,7 @@ startup
 *.mo
 *.po
 .env
+.DS_Store
 
 *.po
 *.mo
